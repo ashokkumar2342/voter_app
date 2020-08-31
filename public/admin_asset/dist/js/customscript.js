@@ -11,16 +11,10 @@ function callAjax(obj,url,divId,callback){
 			$('#'+divId).html(data);
 			if(obj.getAttribute('no-add-form')!="true")
 				callJqueryDefault(divId);
-			if(obj.getAttribute('multiselect-form')=="true")
-				$("#"+divId).find('.multiselect').multiselect({
-					includeSelectAllOption: true,
-           			 maxHeight: 400, 
-            		buttonWidth: '80%',
-            	 
-                     
-            
-             	 enableFiltering: true
-			});
+		 
+			if(obj.getAttribute('multiselect-form')=="true"){
+				$("#"+divId).find('.multiselect').selectpicker();
+			}
 			if(callback)
 				callback();
 			if(obj.getAttribute('data-table'))
@@ -224,20 +218,9 @@ function callPopupLarge(obj,url){
 				'paging':   false,
 				});
 			}
-
-			if(obj.getAttribute('multi-select')=="true")
-				{
-					$("#"+divId).find('.multiselect').multiselect({
-						includeSelectAllOption: true,
-           			 maxHeight: 400, 
-            		buttonWidth: 305,
-            	 
-                     
-            
-             	 enableFiltering: true
-				});
-					
-				}
+			if(obj.getAttribute('multiselect-form')=="true"){
+				$("#"+divId).find('.multiselect').selectpicker();
+			} 
 			if(obj.getAttribute('button-click'))
 			{ 
 			var myStr = obj.getAttribute('button-click');

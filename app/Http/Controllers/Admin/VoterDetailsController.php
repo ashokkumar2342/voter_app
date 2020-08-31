@@ -16,6 +16,7 @@ use App\Model\VoterImage;
 use App\Model\WardVillage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Imagick;
 class VoterDetailsController extends Controller
 {
@@ -174,5 +175,32 @@ class VoterDetailsController extends Controller
       $WardVillages= WardVillage::where('village_id',$request->id)->get(['id','ward_no']);
       return view('admin.master.PrepareVoterList.select_ward_value',compact('WardVillages'));     
     }
-
+    public function PrepareVoterListGenerate(Request $request)
+    {
+      $voterReports=Voter::take(60)->get();
+      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+      $pdf->setPrintHeader(true); 
+      $pdf->SetCreator(PDF_CREATOR); 
+      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+      $pdf->setFontSubsetting(true); 
+      $pdf->SetFont('freesans', '', 11, '', true); 
+      $pdf->AddPage('P', 'A3');
+       
+   $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
+     $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+      ob_end_clean(); 
+      $pdf->Output(); 
+    }
+   public function imageShow()
+   {
+    $voterImage=VoterImage::find(1); 
+    $image = str_replace('data:image/png;base64,', '', base64_encode($voterImage->image));
+           $image = str_replace(' ', '+', $image);
+           $imageName = str_random(10).'.'.'png';
+        return  \File::put(public_path(). '/images/' . $imageName, base64_decode($image));
+    return storage_path().'/'.$imageName;
+    
+   }
 }

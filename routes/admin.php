@@ -294,10 +294,18 @@ Route::group(['middleware' => 'admin'], function() {
            
            Route::get('PrepareVoterList', 'VoterDetailsController@PrepareVoterList')->name('admin.voter.PrepareVoterList');
            Route::get('VillageWiseWardMultiple', 'VoterDetailsController@VillageWiseWardMultiple')->name('admin.voter.VillageWiseWardMultiple');
+           Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate');
+           Route::get('imageShow', 'VoterDetailsController@imageShow')->name('admin.voter.imageShow');
     });
     Route::group(['prefix' => 'Report'], function() {
            Route::get('/', 'ReportController@index')->name('admin.report.index');
            Route::post('reportGenerate', 'ReportController@reportGenerate')->name('admin.report.reportGenerate');
+	 	 
+    });
+    Route::group(['prefix' => 'VoterListMaster'], function() {
+           Route::get('/', 'VoterListMasterController@index')->name('admin.VoterListMaster.index');
+           Route::post('store', 'VoterListMasterController@store')->name('admin.VoterListMaster.store');
+           
 	 	 
     });       
 

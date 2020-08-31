@@ -32,10 +32,10 @@
   <link rel="stylesheet" href="{{ asset('admin_asset/plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('admin_asset/plugins/multiple-select/css/multi-select.css')}}">
+  {{-- <link rel="stylesheet" href="{{ asset('admin_asset/plugins/multiple-select/css/multi-select.css')}}"> --}}
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-  <link href="{!! asset('admin_asset/dist/css/bootstrap-multiselect.css') !!}"  rel="stylesheet" type="text/css">
+  <link href="{!! asset('admin_asset/bootstrap-select/dist/css/bootstrap-select.css') !!}"  rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="{{ asset('admin_asset/plugins/select2/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{ asset('admin_asset/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
   
@@ -70,6 +70,14 @@
     cursor: pointer !important; 
     color:#2d4e94 !important;
     text-decoration: underline !important;
+   }
+   .select2-container .select2-selection--single{
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    height: 38px;
+    user-select: none;
+    -webkit-user-select: none;
    }
 
   </style>
@@ -111,25 +119,23 @@
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('admin_asset/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
+
 <!-- Bootstrap 4 -->
 <script src="{{ asset('admin_asset/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- ChartJS -->
 <script src="{{ asset('admin_asset/plugins/chart.js/Chart.min.js') }}"></script>
 <!-- Sparkline -->
-<script src="{{ asset('admin_asset/plugins/sparklines/sparkline.js') }}"></script>
+{{-- <script src="{{ asset('admin_asset/plugins/sparklines/sparkline.js') }}"></script> --}}
 <!-- JQVMap -->
-<script src="{{ asset('admin_asset/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-<script src="{{ asset('admin_asset/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+{{-- <script src="{{ asset('admin_asset/plugins/jqvmap/jquery.vmap.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('admin_asset/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script> --}}
 <!-- jQuery Knob Chart -->
-<script src="{{ asset('admin_asset/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+{{-- <script src="{{ asset('admin_asset/plugins/jquery-knob/jquery.knob.min.js') }}"></script> --}}
 <!-- daterangepicker -->
 <script src="{{ asset('admin_asset/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('admin_asset/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="{{ asset('admin_asset/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+{{-- <script src="{{ asset('admin_asset/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script> --}}
 <!-- Summernote -->
 <script src="{{ asset('admin_asset/plugins/summernote/summernote-bs4.min.js') }}"></script>
 <!-- overlayScrollbars -->
@@ -138,16 +144,19 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('admin_asset/dist/js/adminlte.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('admin_asset/dist/js/pages/dashboard.js') }}"></script>
+{{-- <script src="{{ asset('admin_asset/dist/js/pages/dashboard.js') }}"></script> --}}
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('admin_asset/dist/js/demo.js') }}"></script>
 <script src={!! asset('admin_asset/dist/js/validation/common.js?ver=1') !!}></script>
     <script src={!! asset('admin_asset/dist/js/customscript.js?ver=1') !!}></script>
-    <script src={!! asset('admin_asset/dist/js/bootstrap-multiselect.js')!!}> 
+    <script src={!! asset('admin_asset/bootstrap-select/dist/js/bootstrap-select.min.js')!!}> 
     </script>
+  <script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
 
 {{-- <script src="{{ asset('admin_asset/plugins/select2/select2.full.min.js') }}"></script> --}}
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
 <script type="text/javascript" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
  {{-- <script src="{{ asset('admin_asset/plugins/select2/select2.full.min.js') }}"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script> 
@@ -169,18 +178,7 @@
       $('.select2').select2();
        //$('.multiselect').selectpicker(); 
         
-       $('.multiselect').multiselect({
-       
-                    includeSelectAllOption: true,
-                             maxHeight: 400, 
-                          buttonWidth: '80%',
-                         
-                                
-                       
-                           enableFiltering: true
-              
-       
-           });
+    
        
     </script> 
 </body>

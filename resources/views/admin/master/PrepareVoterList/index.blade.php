@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">    
-                        <form action="{{ route('admin.Master.WardBandiStore') }}" method="post"no-reset="true" no-reset="true" class="add_form">
+                        <form action="{{ route('admin.voter.PrepareVoterListGenerate') }}" method="post" target="blank">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">  
@@ -43,7 +43,7 @@
                                             <option selected disabled>Select Village</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-3 form-group" id="value_div_id">
+                                    <div class="col-lg-3 form-group" id="value_div_id"> 
                                         <label for="exampleInputEmail1">Ward No.</label>
                                         <span class="fa fa-asterisk"></span>
                                         <select name="ward" class="form-control multiselect">
@@ -70,13 +70,13 @@
                                    </div>
                                     </div>
                                 </div> 
-                            </div> 
                         </form>
                     </div> 
                 </div>
             </div>
-        </div>
-    </div> 
+      </div>
+  </div>
 </section>
 @endsection
+ 
 

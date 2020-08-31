@@ -16,9 +16,7 @@ npm-debug.log
 yarn-error.log
 .env
 *.zip
-.env.example
-/storage/app/public/barcode
 /demo
 /loksabha
 /policy
-/storage/app/public
+
