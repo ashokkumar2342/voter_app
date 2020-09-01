@@ -115,7 +115,7 @@
     <!-- ./wrapper -->
 
     <!-- jQuery 2.2.3 -->
-<script src="{{ asset('admin_asset/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('admin_asset/plugins/jQuery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('admin_asset/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
