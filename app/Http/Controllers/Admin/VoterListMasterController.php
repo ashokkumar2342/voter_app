@@ -11,8 +11,8 @@ class VoterListMasterController extends Controller
 {
 	public function index()
 	{
-
-		return view('admin.voterlistmaster.index');
+        $VoterListMasters=VoterListMaster::orderBy('id','ASC')->get(); 
+		return view('admin.voterlistmaster.index',compact('VoterListMasters'));
 	}
 	public function store(Request $request)
 	{  
@@ -50,6 +50,19 @@ else {
 	$response=['status'=>1,'msg'=>'Submit Successfully'];
 	return response()->json($response);
 }
+}
+public function default($id)
+{
+ $VoterListMaster =VoterListMaster::all(); 
+          foreach ($VoterListMaster as  $value) {
+             $VoterListMaster =VoterListMaster::find($value->id);
+             $VoterListMaster->status=0;
+             $VoterListMaster->save(); 
+          }
+          $VoterListMaster =VoterListMaster::find($id); 
+          $VoterListMaster->status=1;
+          $VoterListMaster->save();
+          return  redirect()->back()->with(['message'=>'Default Value Set Successfully','class'=>'success']);	 
 }
 
 }

@@ -16,7 +16,7 @@
                 <form action="{{ route('admin.userAccess.add') }}" method="post" class="add_form form-horizontal" accept-charset="utf-8" no-reset="true" select-triger="user_select_box"> 
                     {{ csrf_field() }}
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <div class="form-group">
                                 {{ Form::label('User','User',['class'=>' control-label']) }}                         
                                 <div class="form-group">  
@@ -29,8 +29,8 @@
                                 </div>
                             </div> 
                         </div> 
-                        <div class="col-lg-8" id="menu_list">  
-                         
+                        <div  id="menu_list"> 
+                        </div>                         
                     </div>
                 </form>  
             </div> 

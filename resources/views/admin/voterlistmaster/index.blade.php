@@ -13,7 +13,7 @@
         </div> 
         <div class="card card-info"> 
             <div class="card-body">
-                <form action="{{ route('admin.VoterListMaster.store') }}" method="post" class="add_form">
+                <form action="{{ route('admin.VoterListMaster.store') }}" method="post" class="add_form" content-refresh="voter_list_master">
                 {{ csrf_field() }} 
                 <div class="row">
                     <div class="col-lg-4 form-group">
@@ -65,14 +65,57 @@
                     <div class="col-lg-8 form-group">                        
                           <input type="submit" class="form-control btn-success" style="margin-top: 30px">
                     </div>
-
                 </div>
             </form>
-            </div> 
+            <div class="table-responsive col-lg-12"> 
+            <table class="table table-striped table-bordered" id="voter_list_master">
+               <thead>
+                 <tr>
+                   <th class="text-nowrap">Voter List Name</th>
+                   <th class="text-nowrap">Voter List Type</th>
+                   <th class="text-nowrap">Year Publication</th>
+                   <th class="text-nowrap">Date Publication</th>
+                   <th class="text-nowrap">Year Base</th>
+                   <th class="text-nowrap">Date Base</th>
+                   <th class="text-nowrap">Remarks</th>
+                   <th class="text-nowrap">Action</th>
+                 </tr>
+               </thead>
+               <tbody>
+                @foreach ($VoterListMasters as $VoterListMaster)
+                 <tr style="{{ $VoterListMaster->status==1?'background-color: #95e49b':'' }}">
+                   <td>{{ $VoterListMaster->voter_list_name }}</td>
+                   <td>{{ $VoterListMaster->voter_list_type }}</td>
+                   <td>{{ $VoterListMaster->year_publication }}</td>
+                   <td>{{ $VoterListMaster->date_publication }}</td>
+                   <td>{{ $VoterListMaster->year_base }}</td>
+                   <td>{{ $VoterListMaster->date_base }}</td>
+                   <td>{{ $VoterListMaster->remarks1 }}</td>
+                   <td>
+                    @if ($VoterListMaster->status==1)
+                     <a href="{{ route('admin.VoterListMaster.default',$VoterListMaster->id) }}" title="" class="btn btn-success btn-xs">Default</a>
+                     @else
+                     <a href="{{ route('admin.VoterListMaster.default',$VoterListMaster->id) }}" title="" class="btn btn-default btn-xs">Default</a> 
+                    @endif
+                   </td>
+                 </tr>
+                 @endforeach
+               </tbody>
+             </table>
+           </div>
+             </div> 
         </div>
     </div> 
 </section>
-@endsection
+@endsection 
+@push('scripts')  
+ <script type="text/javascript">
+     $(document).ready(function(){
+        $('#voter_list_master').DataTable();
+    });
+</script> 
+@endpush
+  
 
 
 

@@ -1,4 +1,4 @@
- 
+<div class="row"> 
 <div class="col-lg-12" style="margin-top:10px;">
    @php
        $admin=App\Admin::find($id);
@@ -33,4 +33,5 @@
        @endforeach 
     </tbody>
   </table>
+</div>
 </div>

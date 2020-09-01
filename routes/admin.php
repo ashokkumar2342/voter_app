@@ -269,7 +269,16 @@ Route::group(['middleware' => 'admin'], function() {
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   
 	    Route::get('DistrictWiseBlock', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');   
-	    Route::get('BlockWiseVillage', 'MasterController@BlockWiseVillage')->name('admin.Master.BlockWiseVillage');   
+	    Route::get('BlockWiseVillage', 'MasterController@BlockWiseVillage')->name('admin.Master.BlockWiseVillage');
+
+
+
+
+	    //-----------------onchange-----------------------------//
+	    Route::get('gender', 'MasterController@gender')->name('admin.Master.gender');   
+	    Route::get('gender-edit/{id}', 'MasterController@genderEdit')->name('admin.Master.gender.edit');   
+	    Route::post('gender-update/{id}', 'MasterController@genderUpdate')->name('admin.Master.gender.update');   
+	       
 	    
 	     
 	});
@@ -305,7 +314,7 @@ Route::group(['middleware' => 'admin'], function() {
     Route::group(['prefix' => 'VoterListMaster'], function() {
            Route::get('/', 'VoterListMasterController@index')->name('admin.VoterListMaster.index');
            Route::post('store', 'VoterListMasterController@store')->name('admin.VoterListMaster.store');
-           
+           Route::get('default/{id}', 'VoterListMasterController@default')->name('admin.VoterListMaster.default');           
 	 	 
     });       
 

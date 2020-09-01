@@ -9,6 +9,7 @@ use App\Model\AssemblyPart;
 use App\Model\BlockMc;
 use App\Model\BlocksMc;
 use App\Model\District;
+use App\Model\Gender;
 use App\Model\State;
 use App\Model\Village;
 use App\Model\WardVillage;
@@ -650,5 +651,45 @@ class MasterController extends Controller
             
         }
     }
-    
+    public function gender()
+    {  
+      $genders=Gender::all();   
+      return view('admin.master.gender.index',compact('genders'));
+    }
+    public function genderEdit($id)
+    {
+       $gender=Gender::find($id);
+       return view('admin.master.gender.edit',compact('gender'));     
+    }
+    public function genderUpdate(Request $request,$id)
+   { 
+     
+       $rules=[
+            'gender_english' => 'required', 
+            'gender_local_language' => 'required', 
+            'code_english' => 'required', 
+            'code_local_language' => 'required',  
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else { 
+       $gender=Gender::firstOrNew(['id'=>$id]);          
+       $gender->genders=$request->gender_english;          
+       $gender->genders_l=$request->gender_local_language;          
+       $gender->code=$request->code_english;          
+       $gender->code_l=$request->code_local_language;          
+       $gender->save();          
+       $response=['status'=>1,'msg'=>'Update Successfully'];
+       return response()->json($response);
+      }
+     
+
+    }     
 }
