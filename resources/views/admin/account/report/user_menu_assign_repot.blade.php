@@ -21,7 +21,7 @@
       </tr>
       @foreach ($subMenus as $subMenu)
          @if ($menu->id==$subMenu->menu_type_id )
-      <tr style="{{ in_array($subMenu->id, $usersmenus)?'background-color: #95e49b':'background-color: #ec2020' }}">
+      <tr style="{{ in_array($subMenu->id, $usersmenus)?'background-color: #28a745':'background-color: #dc3545' }}">
         <td>{{ $subMenu->name }}</td>
         <td></td>
             

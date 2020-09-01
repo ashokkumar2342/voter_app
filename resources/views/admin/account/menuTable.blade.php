@@ -1,5 +1,5 @@
 <div class="row"> 
-    <div class="col-md-8">
+    <div class="col-md-4">
         <label for="exampleInputEmail1">Menu</label></br>
         <select class="selectpicker multiselect" multiple data-live-search="true" name="sub_menu[]">
             @foreach ($menus as $menu) 
@@ -13,11 +13,11 @@
             @endforeach                                     
         </select> 
     </div>
-    <div class="col-md-2" style="margin-top: 24px"> 
-        <button type="submit"  class="btn btn-success">Save</button>  
+    <div class="col-md-4" style="margin-top: 30px"> 
+        <button type="submit"  class="btn btn-success form-control">Save</button>  
     </div>  
-    <div class="col-md-2" style="margin-top: 24px"> 
-        <a href="{{ route('admin.account.user.menu.assign.report',Crypt::encrypt($id)) }}" class="btn btn-primary" target="blank" title="">PDF</a> 
+    <div class="col-md-4" style="margin-top: 30px"> 
+        <a href="{{ route('admin.account.user.menu.assign.report',Crypt::encrypt($id)) }}" class="btn btn-primary form-control" target="blank" title="">PDF</a> 
     </div>
 </div> 
 
