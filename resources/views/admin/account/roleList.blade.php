@@ -12,7 +12,7 @@
                 <form action="{{ route('admin.roleAccess.subMenu') }}" call-back="triggerSelectBox" method="post" class="add_form form-horizontal" no-reset="true" >
                 {{ csrf_field() }}
                 <div class="row">
-                    <div class="col-lg-4 form-group">
+                    <div class="col-lg-12 form-group">
                         <label>Role</label>
                         <select class="form-control" id="role_select_box" data-table-without-pagination-disable-sorting="menu_role_table" multiselect-form="true"  name="role"  onchange="callAjax(this,'{{route('admin.account.roleMenuTable')}}'+'?id='+this.value,'menu_list')" > 
                           <option value="" disabled selected>Select User</option>
@@ -21,7 +21,7 @@
                           @endforeach  
                          </select> 
                      </div> 
-                    <div id="menu_list">
+                    <div class="col-lg-12" id="menu_list">
                     </div>
                 </div>
             </form>
