@@ -62,8 +62,12 @@ Route::group(['middleware' => 'admin'], function() {
 		Route::get('role-quick-menu-view', 'AccountController@quickView')->name('admin.roleAccess.quick.view');
 		Route::get('defult-role-menu-show', 'AccountController@defultRoleMenuShow')->name('admin.account.role.default.menu');
 		Route::post('default-role-quick-menu-store', 'AccountController@defaultRoleQuickStore')->name('admin.roleAccess.quick.role.menu.store');
-		Route::get('class-access', 'AccountController@classAccess')->name('admin.account.classAccess'); 
-		Route::get('class-all', 'AccountController@classAllSelect')->name('admin.account.classAllSelect'); 
+		Route::get('class-access', 'AccountController@classAccess')->name('admin.account.classAccess');
+
+		Route::get('Districts-Block-Assign', 'AccountController@DistrictsBlockAssign')->name('admin.account.DistrictsBlockAssign');	 
+		Route::get('Districts-Block-Select', 'AccountController@DistrictsBlockSelect')->name('admin.account.districtAllSelect');
+		 Route::get('DistrictWiseBlockMulti', 'AccountController@DistrictWiseBlockMulti')->name('admin.Master.DistrictWiseBlockMulti');  
+		 Route::post('DistrictsBlockAssignStore', 'AccountController@DistrictsBlockAssignStore')->name('admin.Master.DistrictsBlockAssignStore');  
 		Route::get('reset-password', 'AccountController@resetPassWord')->name('admin.account.reset.password'); 
 		Route::post('reset-password-change', 'AccountController@resetPassWordChange')->name('admin.account.reset.password.change'); 
 		Route::get('menu-ordering', 'AccountController@menuOrdering')->name('admin.account.menu.ordering'); 
@@ -127,15 +131,8 @@ Route::group(['middleware' => 'admin'], function() {
 	});
 	//---------------Class create----------------------------------------
 	 
-		// ---------------User with class----------------------------------------
-	Route::group(['prefix' => 'user-class'], function() {
-	    Route::get('/', 'AccountController@userClass')->name('admin.userClass.list');	   
-	    Route::post('add', 'AccountController@userClassStore')->name('admin.userClass.add');
-	    // Route::get('{manageSectionEdit}/edit', 'SectionController@edit')->name('admin.manageSection.edit');
-	    // Route::post('{manageSection}/update', 'SectionController@update')->name('admin.manageSection.update');
-	    // Route::get('{manageSection}/delete', 'SectionController@destroy')->name('admin.manageSection.delete');        
-	});
-	//---------------Class fee----------------------------------------
+		 
+	 
 	 
     });
 	//---------------Student--------------------------------------------------------------------
@@ -268,7 +265,7 @@ Route::group(['middleware' => 'admin'], function() {
 	     	   
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   
-	    Route::get('DistrictWiseBlock', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');   
+	    Route::get('DistrictWiseBlock', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');  
 	    Route::get('BlockWiseVillage', 'MasterController@BlockWiseVillage')->name('admin.Master.BlockWiseVillage');
 
 

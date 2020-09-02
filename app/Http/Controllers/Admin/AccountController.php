@@ -7,9 +7,12 @@ use App\AdminOtp;
 use App\Events\SmsEvent;
 use App\Helpers\MailHelper;
 use App\Http\Controllers\Controller;
+use App\Model\BlocksMc;
 use App\Model\ClassType;
 use App\Model\DefaultRoleMenu;
 use App\Model\DefaultRoleQuickMenu;
+use App\Model\District;
+use App\Model\DistrictBlockAssign;
 use App\Model\HotMenu;
 use App\Model\Minu;
 use App\Model\MinuType;
@@ -244,43 +247,39 @@ class AccountController extends Controller
     }
 
 
-    Public function userClass(){
-        $classes = ClassType::all();
-        $userClass = UserClassType::all();
+    Public function DistrictsBlockAssign(){
+        // $classes = ClassType::all();
+        // $userClass = UserClassType::all();
         $users = Admin::get(['id','first_name','email','role_id']);     
 
-        return view('admin.account.userClass',compact('users','classes','userClass'));
+        return view('admin.account.districtassign',compact('users','classes','userClass'));
        
     }
 
-    Public function classAllSelect(Request $request){
+    Public function DistrictsBlockSelect(Request $request){  
          $user_id = $request->id;   
-         $classes = ClassType::all(); 
+         $Districts = District::all(); 
          $usersClasses = Admin::find($user_id);
-         $userClassTypes = UserClassType::where('admin_id',$user_id)->where('status',1)->orderBy('class_id','ASC')->orderBy('section_id','ASC')->get();
-         $data= view('admin.account.classAllSelect',compact('classes','user_id','usersClasses','userClassTypes'))->render(); 
+         $DistrictBlockAssigns = DistrictBlockAssign::where('user_id',$user_id)->where('status',1)->orderBy('district_id','ASC')->orderBy('block_id','ASC')->get();
+         $data= view('admin.account.districtAllSelect',compact('Districts','user_id','usersClasses','DistrictBlockAssigns'))->render(); 
         return response($data);
 
     }
 
-    Public function classAccess(Request $request){
-
+    Public function DistrictWiseBlockMulti(Request $request){
          $user_id = $request->id; 
-         $classes = ClassType::where('id',$request->class_id)->get();
-         $sections = Section::where('class_id',$request->class_id)->get();
-         
-        $usersSections = array_pluck(UserClassType::where('admin_id',$request->user_id)->where('class_id',$request->class_id)->where('status',1)->get(['section_id'])->toArray(), 'section_id');
-         $data= view('admin.account.classSelect',compact('classes','sections','user_id','usersSections'))->render(); 
+         $blocks = BlocksMc::where('districts_id',$request->id)->get();         
+         $usersblock = array_pluck(DistrictBlockAssign::where('user_id',$request->user_id)->where('district_id',$request->district_id)->where('status',1)->get(['block_id'])->toArray(), 'block_id');
+         $data= view('admin.account.blockSelect',compact('blocks','sections','user_id','usersblock'))->render(); 
         return response($data);
 
     }
 
-     Public function userClassStore(Request $request){
-       
+     Public function DistrictsBlockAssignStore(Request $request){       
         $rules=[
-         'section' => 'required|max:199',             
-         'class_id' => 'required|max:199',             
-         'user' => 'required|max:1000',  
+         'districts' => 'required',             
+         'block' => 'required',             
+         'user' => 'required',  
         ]; 
         $validator = Validator::make($request->all(),$rules);
         if ($validator->fails()) {
@@ -290,17 +289,15 @@ class AccountController extends Controller
             $response["msg"]=$errors[0];
             return response()->json($response);// response as json
         }
-         $userTypeArrId =UserClassType::where('admin_id',$request->user)->where('class_id',$request->class_id)->where('status',1)->pluck('id')->toArray();
-          $uctOld=UserClassType::whereIn('id',$userTypeArrId)->update(['status'=>0]);
-
-        foreach ($request->section as $key => $value) {
-        $section =UserClassType::firstOrNew(['class_id'=>$request->class_id,'admin_id'=>$request->user,'section_id'=>$value]); 
-           $section->class_id = $request->class_id;  
-           $section->admin_id = $request->user;  
-           $section->section_id = $value; 
+         $userTypeArrId =DistrictBlockAssign::where('user_id',$request->user)->where('district_id',$request->districts)->where('status',1)->pluck('id')->toArray();
+          $uctOld=DistrictBlockAssign::whereIn('id',$userTypeArrId)->delete();
+        foreach ($request->block as $key => $value) {
+           $section =DistrictBlockAssign::firstOrNew(['district_id'=>$request->class_id,'user_id'=>$request->user,'block_id'=>$value]); 
+           $section->district_id = $request->districts;  
+           $section->user_id = $request->user;  
+           $section->block_id = $value; 
            $section->status = 1; 
-           $section->save(); 
-
+           $section->save();
         }
         $response['msg'] = 'Save Successfully';
         $response['status'] = 1;
