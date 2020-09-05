@@ -1,0 +1,48 @@
+<div class="row"> 
+<div class="col-lg-3 form-group">
+<label for="exampleInputEmail1">States</label>
+<span class="fa fa-asterisk"></span>
+<select name="states" id="state_id" class="form-control select2" onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrictAll') }}','district_select_box')">
+<option selected disabled>Select States</option>
+@foreach ($States as $State)
+<option value="{{ $State->id }}">{{ $State->code }}--{{ $State->name_e }}</option>  
+@endforeach
+</select>
+</div>
+<div class="col-lg-3 form-group">
+<label for="exampleInputEmail1">District</label>
+<span class="fa fa-asterisk"></span>
+<select name="district" class="form-control select2" id="district_select_box" onchange="callAjax(this,'{{ route('admin.Master.DistrictWiseBlock') }}','block_select_box')">
+<option selected disabled>Select District</option>
+</select>
+</div>
+<div class="col-lg-3 form-group">
+<label for="exampleInputEmail1">Block MCS</label>
+<span class="fa fa-asterisk"></span>
+<select name="block" class="form-control select2" id="block_select_box" onchange="callAjax(this,'{{ route('admin.Master.BlockWiseVillage') }}','village_select_box')">
+    <option selected disabled>Select Block MCS</option> 
+</select>
+</div>
+<div class="col-lg-3 form-group">
+ <input type="submit" class="form-control btn btn-primary" value="Save" style="margin-top: 30px">
+</div>
+<div class="col-lg-12" style="margin-top: 20px"> 
+<table class="table  table-bordered table-striped" id="class_section_list">
+    <thead>
+        <tr>
+            
+            <th>District</th>
+            <th>Block</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($DistrictBlockAssigns as $DistrictBlockAssign)
+                    <tr>
+                        <td>{{ $DistrictBlockAssign->Districts->name_l or ''}}</td> 
+                        <td>{{ $DistrictBlockAssign->Blocks->name_l or ''}}</td> 
+                    </tr> 
+        @endforeach
+    </tbody>
+</table> 
+ </div>
+</div>

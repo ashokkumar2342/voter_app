@@ -38,6 +38,7 @@
   <link href="{!! asset('admin_asset/bootstrap-select/dist/css/bootstrap-select.css') !!}"  rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="{{ asset('admin_asset/plugins/select2/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{ asset('admin_asset/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('admin_asset/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
   
   
 
@@ -164,6 +165,8 @@
  <script src={!! asset('admin_asset/dist/js/croppie.js?ver=1') !!}></script>
 
 <script src="{{ asset('admin_asset/plugins/select2/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('admin_asset/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
+
 
 
 

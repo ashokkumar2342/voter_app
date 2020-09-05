@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h3>District Block Assign</h3>
+                <h3>District Assign</h3>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right"> 
@@ -18,7 +18,7 @@
               <div class="row"> 
                 <div class="col-md-12"> 
                   {{ Form::label('User','Users',['class'=>' control-label']) }}
-                  <select class="form-control select2"  multiselect-form="true" data-table-all-record="class_section_list" name="user" id="user_id"  onchange="callAjax(this,'{{route('admin.account.districtAllSelect')}}'+'?id='+this.value,'district_select_box')" > 
+                  <select class="form-control select2"  duallistbox="true" data-table-all-record="class_section_list" name="user" id="user_id"  onchange="callAjax(this,'{{route('admin.account.districtAllSelect')}}'+'?id='+this.value,'district_select_box')" > 
                    <option value="" disabled selected>Select User</option>
                   @foreach ($users as $user)
                   @if ($user->role_id!=12) 

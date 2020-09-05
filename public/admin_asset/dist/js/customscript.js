@@ -15,6 +15,9 @@ function callAjax(obj,url,divId,callback){
 			if(obj.getAttribute('multiselect-form')=="true"){
 				$("#"+divId).find('.multiselect').selectpicker();
 			}
+			if(obj.getAttribute('duallistbox')=="true"){
+				$("#"+divId).find('.duallistbox').bootstrapDualListbox();
+			}
 			if(callback)
 				callback();
 			if(obj.getAttribute('data-table'))

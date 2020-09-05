@@ -12,15 +12,18 @@ use App\Model\ClassType;
 use App\Model\DefaultRoleMenu;
 use App\Model\DefaultRoleQuickMenu;
 use App\Model\District;
-use App\Model\DistrictBlockAssign;
 use App\Model\HotMenu;
 use App\Model\Minu;
 use App\Model\MinuType;
 use App\Model\Role;
 use App\Model\Section;
+use App\Model\State;
 use App\Model\SubMenu;
+use App\Model\UserBlockAssign;
 use App\Model\UserClass;
 use App\Model\UserClassType;
+use App\Model\UserDistrictAssign;
+use App\Model\UserVillageAssign;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -247,38 +250,26 @@ class AccountController extends Controller
     }
 
 
-    Public function DistrictsBlockAssign(){
-        // $classes = ClassType::all();
-        // $userClass = UserClassType::all();
-        $users = Admin::get(['id','first_name','email','role_id']);     
-
-        return view('admin.account.districtassign',compact('users','classes','userClass'));
+    Public function DistrictsAssign(){
+        $admin=Auth::guard('admin')->user(); 
+        $users=DB::select(DB::raw("select * from `admins` where `role_id` =2 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id);")); 
+        return view('admin.account.assign.district.index',compact('users','classes','userClass'));
        
     }
 
-    Public function DistrictsBlockSelect(Request $request){  
-         $user_id = $request->id;   
-         $Districts = District::all(); 
-         $usersClasses = Admin::find($user_id);
-         $DistrictBlockAssigns = DistrictBlockAssign::where('user_id',$user_id)->where('status',1)->orderBy('district_id','ASC')->orderBy('block_id','ASC')->get();
-         $data= view('admin.account.districtAllSelect',compact('Districts','user_id','usersClasses','DistrictBlockAssigns'))->render(); 
-        return response($data);
+    Public function StateDistrictsSelect(Request $request){  
+     $States = State::all();   
+     $DistrictBlockAssigns = UserDistrictAssign::where('user_id',$request->id)->where('status',1)->get();
+     $data= view('admin.account.assign.district.select_box',compact('DistrictBlockAssigns','States'))->render(); 
+    return response($data);
 
     }
 
-    Public function DistrictWiseBlockMulti(Request $request){
-         $user_id = $request->id; 
-         $blocks = BlocksMc::where('districts_id',$request->id)->get();         
-         $usersblock = array_pluck(DistrictBlockAssign::where('user_id',$request->user_id)->where('district_id',$request->district_id)->where('status',1)->get(['block_id'])->toArray(), 'block_id');
-         $data= view('admin.account.blockSelect',compact('blocks','sections','user_id','usersblock'))->render(); 
-        return response($data);
+     
 
-    }
-
-     Public function DistrictsBlockAssignStore(Request $request){       
+     Public function DistrictsAssignStore(Request $request){    
         $rules=[
-         'districts' => 'required',             
-         'block' => 'required',             
+         'district' => 'required', 
          'user' => 'required',  
         ]; 
         $validator = Validator::make($request->all(),$rules);
@@ -289,20 +280,105 @@ class AccountController extends Controller
             $response["msg"]=$errors[0];
             return response()->json($response);// response as json
         }
-         $userTypeArrId =DistrictBlockAssign::where('user_id',$request->user)->where('district_id',$request->districts)->where('status',1)->pluck('id')->toArray();
-          $uctOld=DistrictBlockAssign::whereIn('id',$userTypeArrId)->delete();
-        foreach ($request->block as $key => $value) {
-           $section =DistrictBlockAssign::firstOrNew(['district_id'=>$request->class_id,'user_id'=>$request->user,'block_id'=>$value]); 
-           $section->district_id = $request->districts;  
-           $section->user_id = $request->user;  
-           $section->block_id = $value; 
-           $section->status = 1; 
-           $section->save();
-        }
+          
+       $UserDistrictAssign =UserDistrictAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district]); 
+       $UserDistrictAssign->district_id = $request->district;  
+       $UserDistrictAssign->user_id = $request->user;   
+       $UserDistrictAssign->status = 1; 
+       $UserDistrictAssign->save(); 
         $response['msg'] = 'Save Successfully';
         $response['status'] = 1;
         return response()->json($response);  
     }
+
+
+    //-----------block-assign----------------------------------//
+
+    Public function BlockAssign(){
+        $admin=Auth::guard('admin')->user(); 
+        $users=DB::select(DB::raw("select * from `admins` where `role_id` =3 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id);")); 
+        return view('admin.account.assign.block.index',compact('users','classes','userClass'));
+       
+    }
+    Public function DistrictBlockAssign(Request $request){ 
+     $States = State::all();   
+     $DistrictBlockAssigns = UserBlockAssign::where('user_id',$request->id)->where('status',1)->get();
+     $data= view('admin.account.assign.block.select_box',compact('DistrictBlockAssigns','States'))->render(); 
+    return response($data);
+
+    }
+    Public function DistrictBlockAssignStore(Request $request){     
+        $rules=[
+         'district' => 'required', 
+         'block' => 'required', 
+         'user' => 'required',  
+        ]; 
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+            return response()->json($response);// response as json
+        }
+          
+       $UserDistrictAssign =UserBlockAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district,'block_id'=>$request->block]); 
+       $UserDistrictAssign->district_id = $request->district;  
+       $UserDistrictAssign->user_id = $request->user;   
+       $UserDistrictAssign->block_id = $request->block;   
+       $UserDistrictAssign->status = 1; 
+       $UserDistrictAssign->save(); 
+        $response['msg'] = 'Save Successfully';
+        $response['status'] = 1;
+        return response()->json($response);  
+    }
+
+
+///------village-Assign-----------------------------------
+   Public function VillageAssign(){
+        $admin=Auth::guard('admin')->user(); 
+        $users=DB::select(DB::raw("select * from `admins` where `role_id` =4 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id);")); 
+        return view('admin.account.assign.village.index',compact('users'));
+       
+    }
+    Public function DistrictBlockVillageAssign(Request $request){ 
+     $States = State::all();   
+     $DistrictBlockAssigns = UserVillageAssign::where('user_id',$request->id)->where('status',1)->get();
+     $data= view('admin.account.assign.village.select_box',compact('DistrictBlockAssigns','States'))->render(); 
+    return response($data);
+
+    }
+    Public function DistrictBlockVillageAssignStore(Request $request){   
+        $rules=[
+         'district' => 'required', 
+         'block' => 'required', 
+         'village' => 'required', 
+         'user' => 'required',  
+        ]; 
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+            return response()->json($response);// response as json
+        }
+          
+       $UserDistrictAssign =UserVillageAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village]); 
+       $UserDistrictAssign->district_id = $request->district;  
+       $UserDistrictAssign->user_id = $request->user;   
+       $UserDistrictAssign->village_id = $request->village;   
+       $UserDistrictAssign->block_id = $request->block;   
+       $UserDistrictAssign->status = 1; 
+       $UserDistrictAssign->save(); 
+        $response['msg'] = 'Save Successfully';
+        $response['status'] = 1;
+        return response()->json($response);  
+    }
+
+
+
+
     public function ClassUserAssignReportGenerate($user_id)
     {
        $usersName = Admin::find($user_id);

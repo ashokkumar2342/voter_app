@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DistrictBlockAssign extends Model
+class UserDistrictAssign extends Model
 {
       protected $fillable=['id'];
       public $timestamps=false;

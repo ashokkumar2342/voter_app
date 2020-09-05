@@ -36,3 +36,19 @@
 	</tbody>
 </table> 
  </div>
+
+ {{-- <div class="col-12">
+                <div class="form-group">
+                  <label>Multiple</label>
+                  <select class="duallistbox" multiple="multiple">
+                    <option selected>Alabama</option>
+                    <option value="1">Alaska</option>
+                    <option value="2">California</option>
+                    <option>Delaware</option>
+                    <option>Tennessee</option>
+                    <option>Texas</option>
+                    <option>Washington</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+              </div> --}}

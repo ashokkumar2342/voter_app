@@ -64,10 +64,22 @@ Route::group(['middleware' => 'admin'], function() {
 		Route::post('default-role-quick-menu-store', 'AccountController@defaultRoleQuickStore')->name('admin.roleAccess.quick.role.menu.store');
 		Route::get('class-access', 'AccountController@classAccess')->name('admin.account.classAccess');
 
-		Route::get('Districts-Block-Assign', 'AccountController@DistrictsBlockAssign')->name('admin.account.DistrictsBlockAssign');	 
-		Route::get('Districts-Block-Select', 'AccountController@DistrictsBlockSelect')->name('admin.account.districtAllSelect');
-		 Route::get('DistrictWiseBlockMulti', 'AccountController@DistrictWiseBlockMulti')->name('admin.Master.DistrictWiseBlockMulti');  
-		 Route::post('DistrictsBlockAssignStore', 'AccountController@DistrictsBlockAssignStore')->name('admin.Master.DistrictsBlockAssignStore');  
+		Route::get('DistrictsAssign', 'AccountController@DistrictsAssign')->name('admin.account.DistrictsAssign'); 
+		Route::get('StateDistrictsSelect', 'AccountController@StateDistrictsSelect')->name('admin.account.StateDistrictsSelect'); 
+		 Route::post('DistrictsAssignStore', 'AccountController@DistrictsAssignStore')->name('admin.Master.DistrictsAssignStore');
+
+
+		 Route::get('BlockAssign', 'AccountController@BlockAssign')->name('admin.account.BlockAssign'); 
+		Route::get('DistrictBlockAssign', 'AccountController@DistrictBlockAssign')->name('admin.account.DistrictBlockAssign'); 
+		 Route::post('DistrictBlockAssignStore', 'AccountController@DistrictBlockAssignStore')->name('admin.Master.DistrictBlockAssignStore');
+
+		 Route::get('VillageAssign', 'AccountController@VillageAssign')->name('admin.account.VillageAssign'); 
+		Route::get('DistrictBlockVillageAssign', 'AccountController@DistrictBlockVillageAssign')->name('admin.account.DistrictBlockVillageAssign'); 
+		 Route::post('DistrictBlockVillageAssignStore', 'AccountController@DistrictBlockVillageAssignStore')->name('admin.Master.DistrictBlockVillageAssignStore');
+
+
+
+
 		Route::get('reset-password', 'AccountController@resetPassWord')->name('admin.account.reset.password'); 
 		Route::post('reset-password-change', 'AccountController@resetPassWordChange')->name('admin.account.reset.password.change'); 
 		Route::get('menu-ordering', 'AccountController@menuOrdering')->name('admin.account.menu.ordering'); 
@@ -85,40 +97,9 @@ Route::group(['middleware' => 'admin'], function() {
 	Route::prefix('user-report')->group(function () {
 		    Route::get('/', 'UserReportController@index')->name('admin.user.report');
 		    Route::get('report-type-filter', 'UserReportController@reportTypeFilter')->name('admin.user.report.type.filter');
-		    Route::post('filter', 'UserReportController@filter')->name('admin.user.report.filter');
-		    
-		     
-		});
-	//---------------master-----------------------------------------	
-	Route::prefix('master-minu')->group(function () {
-		Route::prefix('academic-year')->group(function () {
-		    Route::get('list', 'AcademicYearController@index')->name('admin.academicYear.list');
-		    Route::post('store', 'AcademicYearController@store')->name('admin.academicYear.store');
-		    Route::get('edit/{id?}', 'AcademicYearController@edit')->name('admin.academicYear.edit');
-		    Route::get('default-value/{id}', 'AcademicYearController@defaultValue')->name('admin.academicYear.default.value');
-		    Route::get('pdf-generate', 'AcademicYearController@pdfGenerate')->name('admin.academicYear.pdf.generate');
-		    Route::post('update/{id?}', 'AcademicYearController@update')->name('admin.academicYear.update');
-		    Route::get('delete/{id}', 'AcademicYearController@destroy')->name('admin.academicYear.delete');
-		    Route::get('document-type', 'DocumentTypeController@index')->name('admin.document.type');
-		    Route::post('document-store', 'DocumentTypeController@store')->name('admin.document.store');
-		    Route::get('document-edit/{id?}', 'DocumentTypeController@edit')->name('admin.document.type.edit');
-		    Route::post('document-update/{id?}', 'DocumentTypeController@update')->name('admin.document.type.update');
-		    Route::get('document-delete/{id}', 'DocumentTypeController@destroy')->name('admin.document.type.delete');
-		    Route::get('report', 'DocumentTypeController@report')->name('admin.document.type.report');
-		     
-		});
-		Route::prefix('payment-mode')->group(function () {
-		    Route::get('list', 'PaymentModeController@index')->name('admin.paymentMode.list');
-		    Route::post('store', 'PaymentModeController@store')->name('admin.paymentMode.store');
-		    Route::get('edit/{id?}', 'PaymentModeController@edit')->name('admin.paymentMode.edit');
-		    Route::post('update/{id?}', 'PaymentModeController@update')->name('admin.paymentMode.update');
-		    Route::get('delete/{id}', 'PaymentModeController@destroy')->name('admin.paymentMode.delete');
-		    Route::get('pdf-generate', 'PaymentModeController@pdfGenerate')->name('admin.paymentMode.pdf.generate');
-		     
+		    Route::post('filter', 'UserReportController@filter')->name('admin.user.report.filter'); 
 		});
 	 
-	     
-	});
 		//---------------minu-----------------------------------------	
 	Route::prefix('minu')->group(function () {
 	    
@@ -129,89 +110,8 @@ Route::group(['middleware' => 'admin'], function() {
 		Route::get('minu/{minu}', 'MinuController@minu')->name('admin.minu.minu');
 		Route::post('menu-permission-check', 'MinuController@menuPermissionCheck')->name('admin.account.menu.permission.check'); 	 
 	});
-	//---------------Class create----------------------------------------
 	 
-		 
-	 
-	 
-    });
-	//---------------Student--------------------------------------------------------------------
-	 Route::group(['prefix' => 'student'], function() {
-	     Route::get('add', 'StudentController@create')->name('admin.student.form');	
-	     Route::get('view/{student}', 'StudentController@show')->name('admin.student.view');	   
-	     Route::get('preview/{id}', 'StudentController@previewshow')->name('admin.student.preview');	   
-	     Route::get('pdf/{id}', 'StudentController@pdfGenerate')->name('admin.student.pdf.generate');	   
-	     Route::get('{student}/edit', 'StudentController@edit')->name('admin.student.edit');
-	     Route::get('{student}/delete', 'StudentController@destroy')->name('admin.student.delete');
-	     Route::get('{student}/profileedit', 'StudentController@profileedit')->name('admin.student.profileedit');
-	     Route::get('{student}/totalfeeedit', 'StudentController@totalfeeedit')->name('admin.student.totalfeeedit');
-	     Route::post('{student}/totalfeeupdate', 'StudentController@totalfeeupdate')->name('admin.student.totalfeeupdate');
-	     Route::post('add', 'StudentController@store')->name('admin.student.post');
-	     Route::post('{student}/update', 'StudentController@update')->name('admin.student.update');
-	     Route::post('{student}/view-update', 'StudentController@viewUpdate')->name('admin.student.view-update');
-	     Route::post('{student}/profileupdate', 'StudentController@profileupdate')->name('admin.student.profileupdate');
-	     Route::post('list/{menuPermission}', 'StudentController@index')->name('admin.student.list'); 
-	     Route::get('show-form', 'StudentController@showForm')->name('admin.student.show');
-	     Route::get('student-image-upload', 'StudentController@studentImageUpload')->name('admin.student.image.upload');
-	     Route::get('student-image-upload-list/{id?}', 'StudentController@studentImageUploadList')->name('admin.student.image.upload.list');
-	     Route::post('student-image-upload-store/{id}', 'StudentController@studentImageUploadStore')->name('admin.student.image.upload.store');
-	     Route::get('student-document-verify', 'StudentController@studentDocumentVerify')->name('admin.student.document.verify');
-	     Route::get('student-document-verify-list/{id}', 'StudentController@studentDocumentVerifyList')->name('admin.student.document.verify.list');
-	     Route::get('student-document-verify-view/{id}', 'StudentController@studentDocumentVerifyView')->name('admin.student.document.verify.view');
-	     Route::get('student-document-verify-print/{id}', 'StudentController@studentDocumentVerifyPrint')->name('admin.student.document.verify.print');
-	    
-	     Route::get('{student}/password-reset', 'StudentController@passwordReset')->name('admin.student.passwordreset'); 
-	     Route::get('image/{image}', 'StudentController@image')->name('admin.student.image');
-	     Route::post('image/{student}/update', 'StudentController@imageUpdate')->name('admin.student.profilepic.update');
-	     Route::post('imageweb', 'StudentController@imageWebUpdate')->name('admin.student.profilepic.webupdate');
-	     Route::get('camera/{id}', 'StudentController@camera')->name('admin.student.camera');
-	     Route::get('export', 'StudentController@excelData')->name('admin.student.excel');
-	     Route::get('import-view', 'StudentController@importview')->name('admin.student.excel.import');	      
-	     Route::get('import-show', 'StudentController@importshow')->name('admin.student.excel.show');	      
-	     Route::get('birthday', 'StudentController@birthday')->name('admin.student.birthday.list');	      
-	     Route::post('birthday-search', 'StudentController@birthdaySearch')->name('admin.birthday.search'); 
-	     Route::get('birthday-card/{id}', 'StudentController@birthdayPrint')->name('admin.birthday.card.pdf'); 
-	     Route::get('birthday-sms-send/{student_id}{id}', 'StudentController@birthdaySmsSend')->name('admin.birthday.card.sms.send'); 
-	     Route::post('birthday-card-all', 'StudentController@birthdayPrintAll')->name('admin.birthday.card.pdfAll');   
-	     Route::post('import', 'StudentController@importStudent')->name('admin.student.excel.store');	      
-	     Route::get('birthday-dashboard', 'StudentController@birthdayDashboard')->name('admin.student.birthday.dashboard');	      
-	     Route::get('birthday-upcoming', 'StudentController@birthdayDashboardUpcoming')->name('admin.student.birthday.dashboard.upcoming');	      
-	     
-		 Route::get('new-admission', 'StudentController@newAdmission')->name('admin.student.new.adminssion');
-		 Route::get('new-admission-status-change/{id}', 'StudentController@newAdmissionStatusChange')->name('admin.new.student.status.change');
-		 Route::get('reset-admission', 'StudentController@resetAdmission')->name('admin.student.reset.adminssion');
-		 Route::post('reset-admission-student-show', 'StudentController@resetAdmissionStudentShow')->name('admin.student.reset.adminssion.student.show');	      
-		 
-		Route::get('reset-roll-no', 'StudentController@resetRollNo')->name('admin.student.reset.roll');
-		Route::post('reset-roll-no-show', 'StudentController@resetRollNoshow')->name('admin.student.reset.roll.no.show');
-		Route::post('reset-roll-no-show-update', 'StudentController@resetRollNoshowUpdate')->name('admin.student.reset.roll.no.show.update');
-		Route::post('reset-roll-no-update', 'StudentController@resetRollNoUpdate')->name('admin.student.reset.roll.no.update');
-		Route::get('student-request-update', 'StudentController@studentRequestUpdate')->name('admin.student.request.update');
-		Route::get('student-serach/{menu_id}', 'StudentController@studentSearch')->name('admin.student.view.search');
-		Route::get('student-serach-by-register-no/', 'StudentController@studentSearchByRegisterNo')->name('admin.student.details.show');
-		//----------student role url -------------------
-		Route::get('registration-form', 'StudentController@registrationForm')->name('admin.student.registration.form');	
-		Route::get('admission-class-avalval', 'StudentController@academicYearOnchange')->name('admin.student.registration.academicYear'); 
-		Route::post('registration-store', 'StudentController@registrationStore')->name('admin.student.registration.store');	
-		Route::get('registration-list', 'StudentController@registrationList')->name('admin.student.registration.list'); 
-		Route::get('registration-list-filter/{id?}', 'StudentController@registrationListFilter')->name('admin.student.registration.list.filter'); 
-		Route::get('final-submit/{id?}', 'StudentController@registrationFinalSubmit')->name('admin.student.registration.final.submit'); 
-		Route::get('profile-view/{id?}', 'StudentController@registrationProfileView')->name('admin.student.registration.profile.view'); 
-        //-----------student school wise admission-------- 
-        Route::get('school-wise-admission', 'StudentController@schoolWiseAdmission')->name('admin.student.school.wise.admission');	
-        Route::post('school-wise-admission-store', 'StudentController@schoolWiseAdmissionStore')->name('admin.student.school.wise.admission.store');
-        //-----------admission-test-marks-------- 
-        Route::get('admission-test-marks', 'StudentController@admissionTestMarks')->name('admin.student.admission.test.marks');	 
-        Route::post('admission-test-marks-search', 'StudentController@admissionTestMarksSearch')->name('admin.student.admission.test.marks.search'); 
-        Route::get('admission-test-marks-filter/{class_id}/{academicYear_id}/{condition_id}', 'StudentController@admissionTestMarksfilter')->name('admin.student.admission.test.marks.filter');	 
-        Route::post('admission-test-marks-store', 'StudentController@admissionTestMarksStore')->name('admin.student.admission.test.marks.store');	 
-        //-----------admission-test-marks-------- 
-        Route::get('take-admission', 'StudentController@takeAdmission')->name('admin.student.take.admission'); 
-        Route::post('take-admission-store', 'StudentController@takeAdmissionStore')->name('admin.student.take.admission.store'); //-----------new-application-report-------- 
-        Route::get('new-application-report', 'StudentController@newApplicationReport')->name('admin.student.new.application.report'); 
-        Route::post('new-application-filter', 'StudentController@newApplicationReportFilter')->name('admin.student.new.application.report.filter'); 
-		});
-
+	 // 
 
     Route::group(['prefix' => 'Master'], function() {
     	//-states-//
@@ -265,7 +165,12 @@ Route::group(['middleware' => 'admin'], function() {
 	     	   
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   
-	    Route::get('DistrictWiseBlock', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');  
+	    Route::get('stateWiseDistrictAll', 'MasterController@stateWiseDistrictAll')->name('admin.Master.stateWiseDistrictAll');
+
+
+	    Route::get('DistrictWiseBlock', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');
+	    Route::get('DistrictWiseBlockAll', 'MasterController@DistrictWiseBlockAll')->name('admin.Master.DistrictWiseBlockAll');
+
 	    Route::get('BlockWiseVillage', 'MasterController@BlockWiseVillage')->name('admin.Master.BlockWiseVillage');
 
 
@@ -315,4 +220,4 @@ Route::group(['middleware' => 'admin'], function() {
 	 	 
     });       
 
- 
+ });

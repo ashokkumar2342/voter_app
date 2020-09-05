@@ -177,20 +177,32 @@ class VoterDetailsController extends Controller
     }
     public function PrepareVoterListGenerate(Request $request)
     {
-      $voterReports=Voter::take(60)->get();
-      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setPrintHeader(true); 
-      $pdf->SetCreator(PDF_CREATOR); 
+      $voterReports=Voter::take(30)->get();
+      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+      $pdf->SetCreator(PDF_CREATOR);
+      $pdf->SetPrintHeader(false);  
       $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
       $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
       $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
       $pdf->setFontSubsetting(true); 
       $pdf->SetFont('freesans', '', 11, '', true); 
-      $pdf->AddPage('P', 'A3');
-       
-   $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
-     $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-      ob_end_clean(); 
+      $pdf->AddPage(); 
+      $html = view('admin.master.PrepareVoterList.first_page',compact('voterReports'));
+      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+      $pdf->AddPage(); 
+      $html = '';
+      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+      $header='<h1>संतोश Dilip kumar Ashok Kumar</h1>';
+      $pdf->setHeaderFont(Array('freesans', '', 11, '', true));
+      $pdf->SetPrintHeader(true);
+      $pdf->SetHeaderData('', PDF_HEADER_LOGO_WIDTH,$header); 
+      $pdf->SetHeaderMargin(4); 
+      $pdf->SetMargins(3,12,3,2); 
+      $pdf->AddPage(); 
+      $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
+      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+      
       $pdf->Output(); 
     }
    public function imageShow()

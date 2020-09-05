@@ -627,25 +627,47 @@ class MasterController extends Controller
     public function stateWiseDistrict(Request $request)
     {
        try{ 
-          $Districts=District::where('state_id',$request->id)->get();   
+          $admin=Auth::guard('admin')->user(); 
+          $Districts=DB::select(DB::raw("call up_fetch_district_access ($admin->id, '$request->id')"));   
           return view('admin.master.districts.value_select_box',compact('Districts'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function stateWiseDistrictAll(Request $request)
+    {
+       try{  
+          $Districts=District::all();   
+          return view('admin.master.districts.value_select_box_all',compact('Districts'));
         } catch (Exception $e) {
             
         }
     }
     public function DistrictWiseBlock(Request $request)
     {
-       try{ 
-          $BlocksMcs=BlocksMc::where('districts_id',$request->id)->get();   
+       try{
+          $admin=Auth::guard('admin')->user(); 
+          $BlocksMcs=DB::select(DB::raw("call up_fetch_block_access ($admin->id, '$request->id')"));  
           return view('admin.master.block.value_select_box',compact('BlocksMcs'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function DistrictWiseBlockAll(Request $request)
+    {
+       try{
+           
+          $BlocksMcs=BlocksMc::all();  
+          return view('admin.master.block.value_select_box_all',compact('BlocksMcs'));
         } catch (Exception $e) {
             
         }
     }
     public function BlockWiseVillage(Request $request)
     {
-       try{ 
-          $Villages=Village::where('blocks_id',$request->id)->get();   
+       try{  
+          $admin=Auth::guard('admin')->user(); 
+          $Villages=DB::select(DB::raw("call up_fetch_village_access ($admin->id, '$request->district_id','$request->id','0')"));  
           return view('admin.master.village.value_select_box',compact('Villages'));
         } catch (Exception $e) {
             
