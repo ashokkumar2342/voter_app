@@ -43,8 +43,8 @@ class AccountController extends Controller
     }
 
     Public function form(Request $request){
-           
-    	$roles = Role::orderBy('name','ASC')->get();
+        $admin=Auth::guard('admin')->user();       
+    	$roles =DB::select(DB::raw("select `id`, `name` from `roles` where `id`  >= (Select `role_id` from `admins` where `id` =$admin->id) Order By `name`;"));
     	return view('admin.account.form',compact('roles'));
     }
     public function listUserGenerate(Request $request)
@@ -65,7 +65,7 @@ class AccountController extends Controller
         "mobile" => 'required|unique:admins|numeric|digits:10',
         "role_id" => 'required',
         "password" => 'required|min:6|max:15', 
-        "dob" => 'required',  
+        
         ];
 
         $validator = Validator::make($request->all(),$rules);
@@ -83,20 +83,21 @@ class AccountController extends Controller
     	$accounts->role_id = $request->role_id;
     	$accounts->email = $request->email;
     	$accounts->password = bcrypt($request['password']);
-    	$accounts->mobile = $request->mobile;
-    	$accounts->dob = $request->dob == null ? $request->dob : date('Y-m-d',strtotime($request->dob));
-    	 $accounts->password_plain=$request->password;          
-       $accounts->status=1;          
-       $accounts->save();          
-      
-     $response=['status'=>1,'msg'=>'Account Created Successfully'];
+    	$accounts->mobile = $request->mobile; 
+    	$accounts->password_plain=$request->password;          
+        $accounts->status=1;          
+        $accounts->save();
+        $userNewId=$accounts->id;
+        DB::select(DB::raw("call up_AssignPermission_NewUser ('$userNewId')"));      
+        $response=['status'=>1,'msg'=>'Account Created Successfully'];
             return response()->json($response);   
     }
 
     
 
     Public function edit(Request $request, Admin $account){
-        $roles = Role::all();
+        $admin=Auth::guard('admin')->user();       
+        $roles =DB::select(DB::raw("select `id`, `name` from `roles` where `id`  >= (Select `role_id` from `admins` where `id` =$admin->id) Order By `name`;"));
         
         
       
@@ -112,7 +113,7 @@ class AccountController extends Controller
                "mobile" => 'required|numeric|digits:10',
                "role_id" => 'required',
                "password" => 'nullable|min:6|max:15',             
-               "dob" => 'required',             
+                     
            ]);          
         
         
@@ -123,7 +124,7 @@ class AccountController extends Controller
             $account->password = bcrypt($request['password']);
         } 
         $account->mobile = $request->mobile;
-        $account->dob = $request->dob == null ? $request->dob : date('Y-m-d',strtotime($request->dob));
+        
         if ($account->save())
          {
           return redirect()->route('admin.account.list')->with(['message'=>'Account Updated Successfully.','class'=>'success']);        

@@ -16,20 +16,20 @@
                 <form action="{{ route('admin.account.post') }}" method="post" class="add_form" >
                 {{ csrf_field() }}
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="exampleInputEmail1">First Name</label>
                             <span class="fa fa-asterisk"></span>
                             <input Name="first_name" class="form-control"  placeholder="Enter First Name" required="" maxlength="50">
                         </div>                                
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Last Name</label> 
                             <input Name="last_name" class="form-control"  placeholder="Enter Last Name" maxlength="50">
                         </div>                                
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label>Role</label>
                             <span class="fa fa-asterisk"></span>
@@ -40,7 +40,7 @@
                             </select>
                         </div>                               
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label>Email ID</label>
                             <span class="fa fa-asterisk"></span> 
@@ -52,7 +52,7 @@
                             </div> 
                         </div>
                     </div> 
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label>Password (Min 6 Max 15 Characters )</label>
                             <span class="fa fa-asterisk"></span> 
@@ -64,7 +64,7 @@
                             </div> 
                         </div>
                     </div> 
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label>Mobile No.</label>
                             <span class="fa fa-asterisk"></span> 
@@ -76,16 +76,10 @@
                             </div> 
                         </div>
                     </div> 
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Date Of Birth</label>
-                            <span class="fa fa-asterisk"></span>
-                            {{ Form::date('dob','',['class'=>'form-control', 'placeholder'=>'','required']) }} 
-                        </div>                                
-                    </div>
+                     
                 </div>   
-                <div class="box-footer text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="box-footer text-center" style="margin-top: 30px">
+                    <button type="submit" class="btn btn-primary form-control">Submit</button>
                 </div> 
               </form>  <!-- /.card-body -->
             </div> 
