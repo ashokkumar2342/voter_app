@@ -196,15 +196,17 @@ class AccountController extends Controller
     }
 
     Public function access(Request $request, Admin $account){
-            $menus = MinuType::all();
-             
-            $users = Admin::all();   
+     $admin=Auth::guard('admin')->user(); 
+     $menus = MinuType::all();
+     $users = DB::select(DB::raw("select `id`, `first_name`, `last_name`, `email`, `mobile` from `admins`where `status` = 1 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id)Order By `first_name`")); 
         return view('admin.account.access',compact('menus','users')); 
     } 
 
     Public function accessHotMenu(Request $request, Admin $account){
-            $menus = MinuType::all(); 
-            $users = Admin::all();   
+    $admin=Auth::guard('admin')->user();    
+    $menus = MinuType::all();
+    $users = DB::select(DB::raw("select `id`, `first_name`, `last_name`, `email`, `mobile` from `admins`where `status` = 1 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id)Order By `first_name`")); 
+       
         return view('admin.account.accessHotMenu',compact('menus','users')); 
     } 
     Public function accessHotMenuShow(Request $request){  
@@ -467,7 +469,8 @@ class AccountController extends Controller
     }
 
     public function role(){
-        $roles = Role::orderBy('name','ASC')->get();
+        $admin=Auth::guard('admin')->user();       
+        $roles =DB::select(DB::raw("select `id`, `name` from `roles` where `id`  >= (Select `role_id` from `admins` where `id` =$admin->id) Order By `name`;"));
         return view('admin.account.roleList',compact('roles'));
     }
 
@@ -641,7 +644,8 @@ class AccountController extends Controller
   }
   public function quickView()
   {
-    $roles = Role::orderBy('name','ASC')->get();
+    $admin=Auth::guard('admin')->user();       
+    $roles =DB::select(DB::raw("select `id`, `name` from `roles` where `id`  >= (Select `role_id` from `admins` where `id` =$admin->id) Order By `name`;"));
      return view('admin.account.quick_view',compact('roles'));
   } 
 
