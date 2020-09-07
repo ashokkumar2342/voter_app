@@ -21,9 +21,9 @@
               <select class="form-control select2"  duallistbox="true" data-table-all-record="class_section_list" name="user" id="user_id"  onchange="callAjax(this,'{{route('admin.account.StateDistrictsSelect')}}'+'?id='+this.value,'state_select_box')" > 
                 <option value="" disabled selected>Select User</option>
                 @foreach ($users as $user)
-                @if ($user->role_id!=12) 
+               
                 <option value="{{ $user->id }}">{{ $user->email }} &nbsp;&nbsp;&nbsp;&nbsp;( {{ $user->first_name }} )</option>
-                @endif      
+              
                 @endforeach  
               </select> 
               <p class="text-danger">{{ $errors->first('user') }}</p>

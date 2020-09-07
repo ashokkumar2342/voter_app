@@ -254,7 +254,7 @@ class AccountController extends Controller
 
     Public function DistrictsAssign(){
         $admin=Auth::guard('admin')->user(); 
-        $users=DB::select(DB::raw("select * from `admins` where `role_id` =2 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id);")); 
+        $users=DB::select(DB::raw("select `id`, `first_name`, `last_name`, `email`, `mobile` from `admins`where `status` = 1 and `role_id` = 2 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id)Order By `first_name`")); 
         return view('admin.account.assign.district.index',compact('users','classes','userClass'));
        
     }
@@ -305,7 +305,7 @@ class AccountController extends Controller
 
     Public function BlockAssign(){
         $admin=Auth::guard('admin')->user(); 
-        $users=DB::select(DB::raw("select * from `admins` where `role_id` =3 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id);")); 
+        $users=DB::select(DB::raw("select `id`, `first_name`, `last_name`, `email`, `mobile` from `admins`where `status` = 1 and `role_id` = 3 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id)Order By `first_name`")); 
         return view('admin.account.assign.block.index',compact('users','classes','userClass'));
        
     }
@@ -355,7 +355,7 @@ class AccountController extends Controller
 ///------village-Assign-----------------------------------
    Public function VillageAssign(){
         $admin=Auth::guard('admin')->user(); 
-        $users=DB::select(DB::raw("select * from `admins` where `role_id` =4 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id);")); 
+        $users=DB::select(DB::raw("select `id`, `first_name`, `last_name`, `email`, `mobile` from `admins`where `status` = 1 and `role_id` = 4 and `role_id` >= (Select `role_id` from `admins` where `id` =$admin->id)Order By `first_name`")); 
         return view('admin.account.assign.village.index',compact('users'));
        
     }
