@@ -36,8 +36,9 @@ use Symfony\Component\HttpKernel\DataCollector\collect;
 class AccountController extends Controller
 {
     Public function index(){
-    	
-    	$accounts = Admin::orderBy('first_name','ASC')->get();
+    $admin=Auth::guard('admin')->user();	
+    $accounts = DB::select(DB::raw("select `a`.`id`, `a`.`first_name`, `a`.`last_name`, `a`.`email`, `a`.`mobile`, `a`.`status`, `r`.`name`
+             from `admins` `a`Inner Join `roles` `r` on `a`.`role_id` = `r`.`id`where`a`.`status` = 1 and `a`.`role_id` >= (Select `role_id` from `admins` where `id` = $admin->id)Order By `a`.`first_name`;")); 
     	return view('admin.account.list',compact('accounts'));
     }
 

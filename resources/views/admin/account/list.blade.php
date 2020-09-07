@@ -44,10 +44,10 @@
                 <tr>
                   <td>{{ $arrayId ++ }}</td>
                   <input type="hidden" name="user_id[]" value="{{ $account->id }}"> 
-                  <td>{{ $account->first_name }} {{ $account->first_last}}</td>
+                  <td>{{ $account->first_name }} {{ $account->last_name}}</td>
                   <td>{{ $account->mobile }}</td> 
                   <td>{{ $account->email }}</td>
-                  <td>{{ $account->roles->name or '' }}</td>
+                  <td>{{ $account->name or '' }}</td>
                   {{-- <td>
                    
                   <a href="{{ route('admin.account.r_status',$account->id) }}" data-parent="tr" class="label {{ ($account->r_status == 1) ?'btn-success':'btn-danger'}} btn btn-xs">{{ ($account->r_status == 1)? 'A' : 'D' }}</a>
