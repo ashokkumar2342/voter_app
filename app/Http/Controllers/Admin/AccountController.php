@@ -291,7 +291,14 @@ class AccountController extends Controller
         return response()->json($response);  
     }
 
-
+     public function DistrictsAssignDelete($id)
+     {
+         $UserDistrictAssign =UserDistrictAssign::find(Crypt::decrypt($id));
+         $UserDistrictAssign->delete();
+         $response['msg'] = 'Delete Successfully';
+         $response['status'] = 1;
+         return response()->json($response);   
+     }
     //-----------block-assign----------------------------------//
 
     Public function BlockAssign(){
@@ -322,16 +329,25 @@ class AccountController extends Controller
             return response()->json($response);// response as json
         }
           
-       $UserDistrictAssign =UserBlockAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district,'block_id'=>$request->block]); 
-       $UserDistrictAssign->district_id = $request->district;  
-       $UserDistrictAssign->user_id = $request->user;   
-       $UserDistrictAssign->block_id = $request->block;   
-       $UserDistrictAssign->status = 1; 
-       $UserDistrictAssign->save(); 
+       $UserBlockAssign =UserBlockAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district,'block_id'=>$request->block]); 
+       $UserBlockAssign->district_id = $request->district;  
+       $UserBlockAssign->user_id = $request->user;   
+       $UserBlockAssign->block_id = $request->block;   
+       $UserBlockAssign->status = 1; 
+       $UserBlockAssign->save(); 
         $response['msg'] = 'Save Successfully';
         $response['status'] = 1;
         return response()->json($response);  
     }
+
+    public function DistrictBlockAssignDelete($id)
+     {
+         $UserBlockAssign =UserBlockAssign::find(Crypt::decrypt($id));
+         $UserBlockAssign->delete();
+         $response['msg'] = 'Delete Successfully';
+         $response['status'] = 1;
+         return response()->json($response);   
+     }
 
 
 ///------village-Assign-----------------------------------
@@ -364,20 +380,27 @@ class AccountController extends Controller
             return response()->json($response);// response as json
         }
           
-       $UserDistrictAssign =UserVillageAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village]); 
-       $UserDistrictAssign->district_id = $request->district;  
-       $UserDistrictAssign->user_id = $request->user;   
-       $UserDistrictAssign->village_id = $request->village;   
-       $UserDistrictAssign->block_id = $request->block;   
-       $UserDistrictAssign->status = 1; 
-       $UserDistrictAssign->save(); 
+       $UserVillageAssign =UserVillageAssign::firstOrNew(['user_id'=>$request->user,'district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village]); 
+       $UserVillageAssign->district_id = $request->district;  
+       $UserVillageAssign->user_id = $request->user;   
+       $UserVillageAssign->village_id = $request->village;   
+       $UserVillageAssign->block_id = $request->block;   
+       $UserVillageAssign->status = 1; 
+       $UserVillageAssign->save(); 
         $response['msg'] = 'Save Successfully';
         $response['status'] = 1;
         return response()->json($response);  
     }
 
-
-
+    public function DistrictBlockVillageAssignDelete($id)
+     {
+         $UserVillageAssign =UserVillageAssign::find(Crypt::decrypt($id));
+         $UserVillageAssign->delete();
+         $response['msg'] = 'Delete Successfully';
+         $response['status'] = 1;
+         return response()->json($response);   
+     }
+    
 
     public function ClassUserAssignReportGenerate($user_id)
     {

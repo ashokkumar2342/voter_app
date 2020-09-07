@@ -5,7 +5,7 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      @includeIf('admin.include.hot_menu_top', ['menu_type_id' =>1])      
+      @includeIf('admin.include.hot_menu_top')      
     </ul> 
     <ul class="navbar-nav ml-auto">       
       <li class="nav-item">

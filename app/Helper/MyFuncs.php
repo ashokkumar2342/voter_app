@@ -84,11 +84,9 @@ class MyFuncs {
 
 
    // hot menu 
-  public static function hotMenu($menu_type_id){ 
-      $hotMenus = HotMenu::where('admin_id',Auth::guard('admin')->user()->id)
-                          ->where('minu_id',$menu_type_id)
-                          ->get(['sub_menu_id']); 
-        
+  public static function hotMenu(){ 
+      $hotMenus = HotMenu::where('status',1)->where('admin_id',Auth::guard('admin')->user()->id)
+      ->get(['sub_menu_id']); 
        return $subMenus = SubMenu::whereIn('id',$hotMenus)->take('7') 
                           ->get(); 
     

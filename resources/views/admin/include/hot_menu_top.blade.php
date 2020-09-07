@@ -1,6 +1,6 @@
  
   @php
-   $hotMenus =App\Helper\MyFuncs::hotMenu($menu_type_id); 
+   $hotMenus =App\Helper\MyFuncs::hotMenu(); 
   @endphp
   @foreach($hotMenus as $hotMenu)
 

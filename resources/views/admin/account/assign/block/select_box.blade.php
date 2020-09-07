@@ -2,7 +2,7 @@
 <div class="col-lg-3 form-group">
 <label for="exampleInputEmail1">States</label>
 <span class="fa fa-asterisk"></span>
-<select name="states" id="state_id" class="form-control select2" onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrictAll') }}','district_select_box')">
+<select name="states" id="state_id" class="form-control select2" onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrict') }}','district_select_box')">
 <option selected disabled>Select States</option>
 @foreach ($States as $State)
 <option value="{{ $State->id }}">{{ $State->code }}--{{ $State->name_e }}</option>  
@@ -33,6 +33,7 @@
             
             <th>District</th>
             <th>Block</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -40,6 +41,9 @@
                     <tr>
                         <td>{{ $DistrictBlockAssign->Districts->name_l or ''}}</td> 
                         <td>{{ $DistrictBlockAssign->Blocks->name_l or ''}}</td> 
+                        <td>
+                         <a title="Delete" class="btn btn-xs btn-danger" select-triger="user_id" onclick="if (confirm('Are you Sure delete')){callAjax(this,'{{ route('admin.Master.DistrictBlockAssignDelete',Crypt::encrypt($DistrictBlockAssign->id)) }}') } else{console_Log('cancel') }"  ><i class="fa fa-trash"></i></a>
+                        </td> 
                     </tr> 
         @endforeach
     </tbody>

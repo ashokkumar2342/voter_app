@@ -285,11 +285,11 @@ class MasterController extends Controller
         }
    }
    public function wardStore(Request $request,$id=null)
-   {  
+   { 
        $rules=[
             'states' => 'required', 
             'district' => 'required', 
-            'block_mcs' => 'required', 
+            'block' => 'required', 
             'village' => 'required', 
             
       ];
@@ -532,11 +532,11 @@ class MasterController extends Controller
     }
     public function WardBandiStore(Request $request)
    { 
-     
+      
        $rules=[
             'states' => 'required', 
             'district' => 'required', 
-            'block_mcs' => 'required', 
+            'block' => 'required', 
             'village' => 'required', 
             'assembly_part' => 'required', 
             'from_sr_no' => 'required', 
@@ -634,15 +634,7 @@ class MasterController extends Controller
             
         }
     }
-    public function stateWiseDistrictAll(Request $request)
-    {
-       try{  
-          $Districts=District::all();   
-          return view('admin.master.districts.value_select_box_all',compact('Districts'));
-        } catch (Exception $e) {
-            
-        }
-    }
+    
     public function DistrictWiseBlock(Request $request)
     {
        try{
@@ -653,16 +645,7 @@ class MasterController extends Controller
             
         }
     }
-    public function DistrictWiseBlockAll(Request $request)
-    {
-       try{
-           
-          $BlocksMcs=BlocksMc::all();  
-          return view('admin.master.block.value_select_box_all',compact('BlocksMcs'));
-        } catch (Exception $e) {
-            
-        }
-    }
+    
     public function BlockWiseVillage(Request $request)
     {
        try{  
