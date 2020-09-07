@@ -19,42 +19,42 @@
                     <div class="col-lg-4 form-group">
                         <label for="exampleInputEmail1">Voter List Name</label>
                           <input type="text" name="voter_list_name" class="
-                          form-control" maxlength="50">
+                          form-control" maxlength="200">
                     </div>
                     <div class="col-lg-4 form-group">
                         <label for="exampleInputEmail1">Voter List Type</label>
                           <input type="text" name="voter_list_type" class="
-                          form-control" maxlength="50">
+                          form-control" maxlength="200">
                     </div>
                     <div class="col-lg-4 form-group">
-                        <label for="exampleInputEmail1">Year Publication</label>
-                          <input type="text" name="year_publication" class="form-control" maxlength="50" {{-- onkeypress='return event.charCode >= 48 && event.charCode <= 57' --}} >
+                        <label for="exampleInputEmail1">Publication Year</label>
+                          <input type="text" name="publication_year" class="form-control" maxlength="4" {{-- onkeypress='return event.charCode >= 48 && event.charCode <= 57' --}} >
                     </div>
                     <div class="col-lg-4 form-group">
-                        <label for="exampleInputEmail1">Date Publication</label>
-                          <input type="text" name="date_publication" class="form-control" maxlength="50">
+                        <label for="exampleInputEmail1">Date of Publication</label>
+                          <input type="text" name="date_of_publication" class="form-control" maxlength="20">
                     </div>
                     <div class="col-lg-4 form-group">
-                        <label for="exampleInputEmail1">Year Base</label>
-                          <input type="text" name="year_base" class="form-control"
-                          maxlength="50">
+                        <label for="exampleInputEmail1">Base Year</label>
+                          <input type="text" name="base_year" class="form-control"
+                          maxlength="4">
                     </div>
                     <div class="col-lg-4 form-group">
-                        <label for="exampleInputEmail1">Date Base</label>
-                          <input type="text" name="date_base" class="form-control"
-                          maxlength="50">
+                        <label for="exampleInputEmail1">Base Date</label>
+                          <input type="text" name="base_date" class="form-control"
+                          maxlength="20">
                     </div>
                     <div class="col-lg-4 form-group">
                         <label for="exampleInputEmail1">Remarks1</label>
-                          <input type="text" name="remarks1" class="form-control">
+                          <input type="text" name="remarks1" class="form-control" maxlength="100">
                     </div>
                     <div class="col-lg-4 form-group">
                         <label for="exampleInputEmail1">Remarks2</label>
-                          <input type="text" name="remarks2" class="form-control">
+                          <input type="text" name="remarks2" class="form-control" maxlength="100">
                     </div>
                     <div class="col-lg-4 form-group">
                         <label for="exampleInputEmail1">Remarks3</label>
-                          <input type="text" name="remarks3" class="form-control">
+                          <input type="text" name="remarks3" class="form-control" maxlength="100">
                     </div>
                     <div class="col-lg-4 text-center" style="margin-top: 30px">  
                     <div class="icheck-primary d-inline">

@@ -15,7 +15,7 @@ class VoterListMasterController extends Controller
 		return view('admin.voterlistmaster.index',compact('VoterListMasters'));
 	}
 	public function store(Request $request)
-	{  
+	{   
 		$rules=[
 
 // 'syllabus' => 'required', 
@@ -33,10 +33,10 @@ else {
 	$voterlistmaster=new VoterListMaster();
 	$voterlistmaster->voter_list_name=$request->voter_list_name;
 	$voterlistmaster->voter_list_type=$request->voter_list_type;
-	$voterlistmaster->year_publication=$request->year_publication;
-	$voterlistmaster->year_base=$request->year_base;
-	$voterlistmaster->date_publication=$request->date_publication;
-	$voterlistmaster->date_base=$request->date_base;
+	$voterlistmaster->year_publication=$request->publication_year;
+	$voterlistmaster->year_base=$request->base_year;
+	$voterlistmaster->date_publication=$request->date_of_publication;
+	$voterlistmaster->date_base=$request->base_date;
 	$voterlistmaster->remarks1=$request->remarks1;
 	$voterlistmaster->remarks2=$request->remarks2;
 	$voterlistmaster->remarks3=$request->remarks3;
