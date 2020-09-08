@@ -278,7 +278,7 @@ class MasterController extends Controller
         $Village= Village::find($village_id);
         return view('admin.master.village.add_ward',compact('Village'));
     }
-    public function villageSampleExport(Request $request)
+    public function villageSampleExport()
     { 
       $user=Auth::guard('admin')->user();
       $TmpImportVillages = DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
