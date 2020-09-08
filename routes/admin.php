@@ -139,6 +139,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('village-edit/{id}', 'MasterController@villageEdit')->name('admin.Master.village.edit');
 	    Route::get('village-delete/{id}', 'MasterController@villageDelete')->name('admin.Master.village.delete');
 	    Route::get('village-ward-add/{id}', 'MasterController@villageWardAdd')->name('admin.Master.village.ward.add');
+	    Route::get('villageSampleExport', 'MasterController@villageSampleExport')->name('admin.Master.villageSampleExport');
 	    Route::get('villageImport', 'MasterController@villageImport')->name('admin.Master.villageImport');
 	    Route::post('villageImportStore', 'MasterController@villageImportStore')->name('admin.Master.villageImportStore');
 	    //-village--//
@@ -147,6 +148,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    //-Assembly--//
 	    Route::get('Assembly', 'MasterController@Assembly')->name('admin.Master.Assembly');	   
 	    Route::post('Assembly-store{id?}', 'MasterController@AssemblyStore')->name('admin.Master.Assembly.store');	   
+	    Route::get('AssemblyTable', 'MasterController@AssemblyTable')->name('admin.Master.AssemblyTable');
 	    Route::get('Assembly-edit/{id}', 'MasterController@AssemblyEdit')->name('admin.Master.Assembly.edit');
 	    Route::get('Assembly-delete/{id}', 'MasterController@AssemblyDelete')->name('admin.Master.Assembly.delete');
 	    Route::get('AssemblyImport', 'MasterController@AssemblyImport')->name('admin.Master.AssemblyImport');

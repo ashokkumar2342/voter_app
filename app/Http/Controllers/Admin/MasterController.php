@@ -278,7 +278,19 @@ class MasterController extends Controller
         $Village= Village::find($village_id);
         return view('admin.master.village.add_ward',compact('Village'));
     }
-
+    public function villageSampleExport(Request $request)
+    { 
+      $user=Auth::guard('admin')->user();
+      $TmpImportVillages = DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
+        foreach($TmpImportVillages as $TmpImportVillage){
+            $data[] =['state_name'=>$TmpImportVillage->state_name,'state_id'=>$TmpImportVillage->state_id,'district_name'=>$TmpImportVillage->district_name,'district_id'=>$TmpImportVillage->district_id,'block_name'=>$TmpImportVillage->block_name,'block _id'=>$TmpImportVillage->block_id,'village_code'=>'','village_name_eng'=>'','village_name_hindi'=>'','total_ward'=>''];
+        }
+        Excel::create('village_list', function($excel) use ($data) {
+            $excel->sheet('sheet', function($sheet) use ($data) {
+                $sheet->fromArray($data);
+            });
+        })->download('xls'); 
+    }
     public function villageImport(Request $request)
     {  $state_id=$request->state_id;
        $district_id=$request->district_id;
@@ -286,27 +298,31 @@ class MasterController extends Controller
        return view('admin.master.village.import');
     }
     public function villageImportStore(Request $request){          
-        $results = Excel::load('files/'.$request->import_file,function($reader){
-            $reader->all();
-        })->get();
+     if($request->hasFile('import_file')){  
+        $path = $request->file('import_file')->getRealPath();
+        $results = Excel::load($path, function($reader) {})->get();
         $user = Auth::guard('admin')->user();
         $tmp_import_villages=TmpImportVillage::where('userid',$user->id)->pluck('userid')->toArray();
         $Old_tmp_import_villages=TmpImportVillage::whereIn('userid',$tmp_import_villages)->delete();
-       foreach ($results as $key => $value) { 
-        if ($value->district_id!=null) { 
-         $SaveResult=DB::select(DB::raw("call up_create_village_excel ('$user->id','$value->state_id','$value->district_id','$value->block_id','$value->village_code','$value->village_name_e','$value->village_name_l','$value->total_ward')")); 
+       foreach ($results as $key => $value) {          
+             if (!empty($value->district_id)) {
+             $SaveResult=DB::select(DB::raw("call up_create_village_excel ('$user->id','$value->state_id','$value->district_id','$value->block_id','$value->village_code','$value->village_name_eng','$value->village_name_hindi','$value->total_ward')"));      
          } 
        }
-       $TmpImportVillages = TmpImportVillage::all();
-        foreach($TmpImportVillages as $TmpImportVillage){
-            $data[] =['state name eng'=>$TmpImportVillage->States->name_e,'state name hindi'=>$TmpImportVillage->States->name_l,'district name eng'=>$TmpImportVillage->Districts->name_e,'district name hindi'=>$TmpImportVillage->Districts->name_l,'block name eng'=>$TmpImportVillage->Blocks->name_e,'block name hindi'=>$TmpImportVillage->Blocks->name_l,'village Code'=>$TmpImportVillage->vcode,'village name eng'=>$TmpImportVillage->vname_e,'village name hindi'=>$TmpImportVillage->vname_l,'total ward'=>$TmpImportVillage->total_ward,'save status'=>$TmpImportVillage->save_status];
+        $TmpImportVillages = TmpImportVillage::all();
+        foreach($TmpImportVillages as $TmpImportVillage){ 
+            $exportdata[] =['state_name_eng'=>$TmpImportVillage->States->name_e,'state_name_hindi'=>$TmpImportVillage->States->name_l,'district_name_eng'=>$TmpImportVillage->Districts->name_e,'district_name_hindi'=>$TmpImportVillage->Districts->name_l,'block_name_eng'=>$TmpImportVillage->Blocks->name_e,'block_name_hindi'=>$TmpImportVillage->Blocks->name_l,'village_code'=>$TmpImportVillage->vcode,'village_name_eng'=>$TmpImportVillage->vname_e,'village_name_hindi'=>$TmpImportVillage->vname_l,'total_ward'=>$TmpImportVillage->total_ward,'save_status'=>$TmpImportVillage->save_status];
         }
-        Excel::create('village_list', function($excel) use ($data) {
-            $excel->sheet('sheet', function($sheet) use ($data) {
-                $sheet->fromArray($data);
+        Excel::create('village_list', function($excel) use ($exportdata) {
+            $excel->sheet('sheet', function($sheet) use ($exportdata) {
+                $sheet->fromArray($exportdata);
             });
         })->download('xls'); 
-       } 
+         
+      }
+
+    return back()->with('error','Please Check your file, Something is wrong there.');   
+    } 
      //------------ward-village----------------------------//
 
     public function ward(Request $request)
@@ -390,6 +406,11 @@ class MasterController extends Controller
        return response()->json($response);
       }
     }
+    public function AssemblyTable(Request $request)
+    {
+      $assemblys=Assembly::where('district_id',$request->id)->orderBy('district_id','ASC')->get();
+      return view('admin.master.assembly.assembly_table',compact('assemblys')); 
+    }
     public function AssemblyEdit($id)
     {
        try {
@@ -413,10 +434,9 @@ class MasterController extends Controller
     }
     public function AssemblyImportStore(Request $request)
     {  
-       $results = Excel::load('files/'.$request->import_file,function($reader){
-            $reader->all();
-        })->get();
-
+       if($request->hasFile('import_file')){  
+        $path = $request->file('import_file')->getRealPath();
+        $results = Excel::load($path, function($reader) {})->get();
         $user = Auth::guard('admin')->user();
         $tmp_import_assembly=TmpImportAssembly::where('userid',$user->id)->pluck('userid')->toArray();
         $Old_tmp_import_assembly=TmpImportAssembly::whereIn('userid',$tmp_import_assembly)->delete();
@@ -433,7 +453,11 @@ class MasterController extends Controller
             $excel->sheet('sheet', function($sheet) use ($data) {
                 $sheet->fromArray($data);
             });
-        })->download('xls'); 
+        })->download('xls');
+         
+      }
+
+    return back()->with('error','Please Check your file, Something is wrong there.');
         
     }
     //------------AssemblyPart----------------------------//

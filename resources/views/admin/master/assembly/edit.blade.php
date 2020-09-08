@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <form action="{{ route('admin.Master.Assembly.store',$assembly->id) }}" method="post" class="add_form" content-refresh="district_table" button-click="btn_close">
+      <form action="{{ route('admin.Master.Assembly.store',$assembly->id) }}" method="post" class="add_form" select-triger="district_select_box" button-click="btn_close">
         {{ csrf_field() }}
         <div class="card-body"> 
           <div class="form-group">

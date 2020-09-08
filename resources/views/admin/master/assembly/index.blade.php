@@ -18,13 +18,13 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.Assembly.store') }}" method="post" class="add_form" content-refresh="district_table">
+                            <form action="{{ route('admin.Master.Assembly.store') }}" method="post" class="add_form" select-triger="district_select_box" no-reset="true">
                                 {{ csrf_field() }}
                                 <div class="card-body"> 
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" class="form-control">
+                                        <select name="district" id="district_select_box" class="form-control" onchange="callAjax(this,'{{ route('admin.Master.AssemblyTable') }}','assembly_table')">
                                             <option selected disabled>Select District</option>
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
@@ -68,25 +68,8 @@
                                           
                                      </tr>
                                  </thead>
-                                 <tbody>
-                                    @foreach ($assemblys as $assembly)
-                                    @php
-                                        $part_no=App\Model\AssemblyPart::where('assembly_id',$assembly->id)->count('part_no'); 
-                                    @endphp
-                                     <tr>
-                                          
-                                         <td>{{ $assembly->district->name_e or '' }}</td>
-                                         <td>{{ $assembly->code }}</td>
-                                         <td>{{ $assembly->name_e }}</td>
-                                         <td>{{ $assembly->name_l }}</td>
-                                         <td>{{ $part_no }}</td>
-                                         <td class="text-nowrap">
-                                             <a onclick="callPopupLarge(this,'{{ route('admin.Master.AssemblyPart.edit',$assembly->id) }}')" title="" class="btn btn-primary btn-xs" style="color: #fff">Add Part</a>
-                                             <a onclick="callPopupLarge(this,'{{ route('admin.Master.Assembly.edit',$assembly->id) }}')" title="" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
-                                             <a href="{{ route('admin.Master.Assembly.delete',$assembly->id) }}" title="Delete" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                         </td>
-                                     </tr> 
-                                    @endforeach
+                                 <tbody id="assembly_table">
+                                    
                                  </tbody>
                              </table>
                         </div> 

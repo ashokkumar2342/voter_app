@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <form action="{{ route('admin.Master.villageImportStore') }}" method="post"  content-refresh="district_table" button-click="btn_close">
+      <form action="{{ route('admin.Master.villageImportStore') }}" method="post"  content-refresh="district_table" button-click="btn_close" enctype="multipart/form-data">
       {{ csrf_field() }}
       <div class="card-body">
           <div class="row">  
