@@ -255,6 +255,11 @@ class MasterController extends Controller
        return response()->json($response);
       }
     }
+    public function villageTable(Request $request)
+    {
+      $Villages= Village::where('blocks_id',$request->id)->orderBy('states_id','ASC')->orderBy('districts_id','ASC')->orderBy('blocks_id','ASC')->orderBy('code','ASC')->get();
+      return view('admin.master.village.village_table',compact('Villages')); 
+    }
     public function villageEdit($id)
     {
        try {

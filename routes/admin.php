@@ -135,6 +135,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    //-village--//
 	    Route::get('village', 'MasterController@village')->name('admin.Master.village');	   
 	    Route::post('village-store{id?}', 'MasterController@villageStore')->name('admin.Master.village.store');	   
+	    Route::get('villageTable', 'MasterController@villageTable')->name('admin.Master.villageTable');
 	    Route::get('village-edit/{id}', 'MasterController@villageEdit')->name('admin.Master.village.edit');
 	    Route::get('village-delete/{id}', 'MasterController@villageDelete')->name('admin.Master.village.delete');
 	    Route::get('village-ward-add/{id}', 'MasterController@villageWardAdd')->name('admin.Master.village.ward.add');

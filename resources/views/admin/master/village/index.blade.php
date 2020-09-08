@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.village.store') }}" method="post" class="add_form" content-refresh="district_table">
+                            <form action="{{ route('admin.Master.village.store') }}" method="post" class="add_form" select-triger="block_select_box" no-reset="true">
                                 {{ csrf_field() }}
                                 <div class="card-body">
                                     <div class="row"> 
@@ -42,7 +42,7 @@
                                     <div class="col-lg-4 form-group">
                                         <label for="exampleInputEmail1">Block MCS</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="block_mcs" class="form-control" id="block_select_box">
+                                        <select name="block_mcs" class="form-control" id="block_select_box" data-table="district_table" onchange="callAjax(this,'{{ route('admin.Master.villageTable') }}','village_table')">
                                             <option selected disabled>Select Block MCS</option>
                                              
                                         </select>
@@ -70,45 +70,8 @@
                             </form>
                         </div> 
                     </div>
-                    <div class="col-lg-12">
-                        <div class="card card-primary table-responsive"> 
-                             <table id="district_table" class="table table-striped table-hover control-label">
-                                 <thead>
-                                     <tr>
-                                         <th class="text-nowrap">States</th>
-                                         <th class="text-nowrap">District</th>
-                                         <th class="text-nowrap">Block MCS</th>
-                                         <th class="text-nowrap">Code</th>
-                                         <th class="text-nowrap">Name (Eng.)</th>
-                                         <th class="text-nowrap">Name (Local Lang.)</th>
-                                         <th class="text-nowrap">(Total Ward)</th>
-                                         <th class="text-nowrap">Action</th>
-                                          
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                    @foreach ($Villages as $Village)
-                                    @php
-                                        $WardVillage=App\Model\WardVillage::where('village_id',$Village->id)->count('ward_no'); 
-                                    @endphp
-                                     <tr>
-                                         <td>{{ $Village->states->name_e or '' }}</td>
-                                         <td>{{ $Village->district->name_e or '' }}</td>
-                                         <td>{{ $Village->blockMCS->name_e or '' }}</td>
-                                         <td>{{ $Village->code }}</td>
-                                         <td>{{ $Village->name_e }}</td>
-                                         <td>{{ $Village->name_l }}</td>
-                                         <td>{{ $WardVillage }}</td>
-                                         <td class="text-nowrap">
-                                            <button type="button" class="btn btn-primary btn-xs" onclick="callPopupLarge(this,'{{ route('admin.Master.village.ward.add',$Village->id) }}')">Add Ward</button>
-                                             <a onclick="callPopupLarge(this,'{{ route('admin.Master.village.edit',$Village->id) }}')" title="" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                                             <a href="{{ route('admin.Master.village.delete',$Village->id) }}" title="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                                         </td>
-                                     </tr> 
-                                    @endforeach
-                                 </tbody>
-                             </table>
-                        </div> 
+                    <div class="col-lg-12" id="village_table">
+                        
                     </div> 
                 </div>
             </div> 
