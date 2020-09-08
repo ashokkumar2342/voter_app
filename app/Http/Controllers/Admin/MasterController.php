@@ -339,7 +339,7 @@ class MasterController extends Controller
         DB::select(DB::raw("call up_create_village_ward ('$request->village','$request->ward','0')"));
 
         
-       $response=['status'=>1,'msg'=>'Submit prepared'];
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
     }

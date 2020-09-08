@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <form action="{{ route('admin.Master.ward.store') }}" method="post" class="add_form" content-refresh="state_table" button-click="btn_close">
+      <form action="{{ route('admin.Master.ward.store') }}" method="post" class="add_form" content-refresh="district_table" button-click="btn_close">
         {{ csrf_field() }}
         <div class="card-body">
           <div class="col-lg-12 form-group">
@@ -15,7 +15,7 @@
             <span class="fa fa-asterisk"></span>
             <input type="text" name="states" class="form-control" placeholder="" hidden maxlength="5" value="{{ $Village->states_id }}">
             <input type="text" name="district" class="form-control" placeholder="" hidden maxlength="5" value="{{ $Village->districts_id }}">
-            <input type="text" name="block_mcs" class="form-control" placeholder="" hidden maxlength="5" value="{{ $Village->blocks_id }}">
+            <input type="text" name="block" class="form-control" placeholder="" hidden maxlength="5" value="{{ $Village->blocks_id }}">
             <input type="text" name="village" class="form-control" placeholder="" hidden maxlength="5" value="{{ $Village->id }}">
             <input type="text" name="ward" class="form-control" placeholder="" maxlength="5">
         </div> 
