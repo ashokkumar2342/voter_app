@@ -11,12 +11,16 @@ use App\Model\BlocksMc;
 use App\Model\District;
 use App\Model\Gender;
 use App\Model\State;
+use App\Model\TmpImportAssembly;
+use App\Model\TmpImportVillage;
 use App\Model\Village;
 use App\Model\WardVillage;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use PDF;
 
@@ -268,7 +272,36 @@ class MasterController extends Controller
     {
         $Village= Village::find($village_id);
         return view('admin.master.village.add_ward',compact('Village'));
-    } 
+    }
+
+    public function villageImport(Request $request)
+    {  $state_id=$request->state_id;
+       $district_id=$request->district_id;
+       $block_id=$request->block_id;
+       return view('admin.master.village.import');
+    }
+    public function villageImportStore(Request $request){          
+        $results = Excel::load('files/'.$request->import_file,function($reader){
+            $reader->all();
+        })->get();
+        $user = Auth::guard('admin')->user();
+        $tmp_import_villages=TmpImportVillage::where('userid',$user->id)->pluck('userid')->toArray();
+        $Old_tmp_import_villages=TmpImportVillage::whereIn('userid',$tmp_import_villages)->delete();
+       foreach ($results as $key => $value) { 
+        if ($value->district_id!=null) { 
+         $SaveResult=DB::select(DB::raw("call up_create_village_excel ('$user->id','$value->state_id','$value->district_id','$value->block_id','$value->village_code','$value->village_name_e','$value->village_name_l','$value->total_ward')")); 
+         } 
+       }
+       $TmpImportVillages = TmpImportVillage::all();
+        foreach($TmpImportVillages as $TmpImportVillage){
+            $data[] =['state name eng'=>$TmpImportVillage->States->name_e,'state name hindi'=>$TmpImportVillage->States->name_l,'district name eng'=>$TmpImportVillage->Districts->name_e,'district name hindi'=>$TmpImportVillage->Districts->name_l,'block name eng'=>$TmpImportVillage->Blocks->name_e,'block name hindi'=>$TmpImportVillage->Blocks->name_l,'village Code'=>$TmpImportVillage->vcode,'village name eng'=>$TmpImportVillage->vname_e,'village name hindi'=>$TmpImportVillage->vname_l,'total ward'=>$TmpImportVillage->total_ward,'save status'=>$TmpImportVillage->save_status];
+        }
+        Excel::create('village_list', function($excel) use ($data) {
+            $excel->sheet('sheet', function($sheet) use ($data) {
+                $sheet->fromArray($data);
+            });
+        })->download('xls'); 
+       } 
      //------------ward-village----------------------------//
 
     public function ward(Request $request)
@@ -369,6 +402,35 @@ class MasterController extends Controller
        $assembly->delete();
        return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);     
     }
+    public function AssemblyImport()
+    {
+       return view('admin.master.assembly.import');
+    }
+    public function AssemblyImportStore(Request $request)
+    {  
+       $results = Excel::load('files/'.$request->import_file,function($reader){
+            $reader->all();
+        })->get();
+
+        $user = Auth::guard('admin')->user();
+        $tmp_import_assembly=TmpImportAssembly::where('userid',$user->id)->pluck('userid')->toArray();
+        $Old_tmp_import_assembly=TmpImportAssembly::whereIn('userid',$tmp_import_assembly)->delete();
+       foreach ($results as $key => $value) { 
+        if ($value->district_id!=null) { 
+         $SaveResult=DB::select(DB::raw("call up_create_assembly_excel ('$user->id','$value->district_id','$value->assembly_code','$value->assembly_name_e','$value->assembly_name_l','$value->total_part')")); 
+         } 
+       }
+       $TmpImportAssemblys = TmpImportAssembly::all();
+        foreach($TmpImportAssemblys as $TmpImportAssembly){
+            $data[] =['district name eng'=>$TmpImportAssembly->Districts->name_e,'district name hindi'=>$TmpImportAssembly->Districts->name_l,'assembly Code'=>$TmpImportAssembly->acode,'assembly name eng'=>$TmpImportAssembly->aname_e,'assembly name hindi'=>$TmpImportAssembly->aname_l,'total Part'=>$TmpImportAssembly->total_parts,'save status'=>$TmpImportAssembly->save_status];
+        }
+        Excel::create('assembly_list', function($excel) use ($data) {
+            $excel->sheet('sheet', function($sheet) use ($data) {
+                $sheet->fromArray($data);
+            });
+        })->download('xls'); 
+        
+    }
     //------------AssemblyPart----------------------------//
 
     public function AssemblyPart(Request $request)
@@ -382,7 +444,7 @@ class MasterController extends Controller
         }
    }
    public function AssemblyPartStore(Request $request,$id=null)
-   {   
+   {    
        $rules=[
             
             'Assembly' => 'required', 
@@ -408,9 +470,8 @@ class MasterController extends Controller
     public function AssemblyPartEdit($id)
     {
        try {
-          $Districts= District::orderBy('name_e','ASC')->get();  
-          $assembly= Assembly::find($id);  
-          return view('admin.master.assembly.edit',compact('Districts','States','assembly'));
+          $assembly_id=$id;  
+          return view('admin.master.assemblypart.edit',compact('assembly_id'));
         } catch (Exception $e) {
             
         }

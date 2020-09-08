@@ -7,7 +7,9 @@
                 <h3>Add Village</h3>
             </div>
             <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right"> 
+                <ol class="breadcrumb float-sm-right">
+                <a href="{{ asset('sample.csv') }}" style="margin-top: 10px"><i class="fa fa-download"></i> Download Sample</a> 
+                <a class="btn btn-info" style="margin: 5px;width: 150px" onclick="callPopupLarge(this,'{{ route('admin.Master.villageImport') }}'+'?state_id='+$('#state_id').val()+'&district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val())"><i class="fa fa-import"></i>Import</a> 
                 </ol>
             </div>
         </div> 
@@ -23,7 +25,7 @@
                                     <div class="col-lg-4 form-group">
                                         <label for="exampleInputEmail1">States</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="states" class="form-control" onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrict') }}','district_select_box')">
+                                        <select name="states" id="state_id" class="form-control" onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrict') }}','district_select_box')">
                                             <option selected disabled>Select States</option>
                                             @foreach ($States as $State)
                                             <option value="{{ $State->id }}">{{ $State->code }}--{{ $State->name_e }}</option>  
@@ -63,7 +65,7 @@
                                     
                                 </div> 
                                 <div class="card-footer text-center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary form-control">Submit</button>
                                 </div>
                             </form>
                         </div> 
