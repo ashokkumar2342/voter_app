@@ -125,6 +125,7 @@ Route::group(['middleware' => 'admin'], function() {
         //-districts-//
 	    Route::get('Districts', 'MasterController@districts')->name('admin.Master.districts');	   
 	    Route::post('Districts-Store{id?}', 'MasterController@districtsStore')->name('admin.Master.districtsStore');	   
+	    Route::get('DistrictsTable', 'MasterController@DistrictsTable')->name('admin.Master.DistrictsTable');
 	    Route::get('Districts-Edit/{id}', 'MasterController@districtsEdit')->name('admin.Master.districtsEdit');
 	    Route::get('Districts-delete/{id}', 'MasterController@districtsDelete')->name('admin.Master.districtsDelete');
 	    //-block-mcs-//
@@ -139,9 +140,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('village-edit/{id}', 'MasterController@villageEdit')->name('admin.Master.village.edit');
 	    Route::get('village-delete/{id}', 'MasterController@villageDelete')->name('admin.Master.village.delete');
 	    Route::get('village-ward-add/{id}', 'MasterController@villageWardAdd')->name('admin.Master.village.ward.add');
-	    Route::get('villageexportsampale', 'MasterController@villageSampleExport')->name('admin.Master.villageexportsampale');
-	    Route::get('villageImport', 'MasterController@villageImport')->name('admin.Master.villageImport');
-	    Route::post('villageImportStore', 'MasterController@villageImportStore')->name('admin.Master.villageImportStore');
+	    Route::get('villageexportsampale', 'MasterController@villageSampleExport')->name('admin.Master.villageexportsampale'); 
 	    //-village--//
 	    Route::get('ward', 'MasterController@ward')->name('admin.Master.ward');	   
 	    Route::post('ward-store{id?}', 'MasterController@wardStore')->name('admin.Master.ward.store');	 
@@ -150,12 +149,11 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::post('Assembly-store{id?}', 'MasterController@AssemblyStore')->name('admin.Master.Assembly.store');	   
 	    Route::get('AssemblyTable', 'MasterController@AssemblyTable')->name('admin.Master.AssemblyTable');
 	    Route::get('Assembly-edit/{id}', 'MasterController@AssemblyEdit')->name('admin.Master.Assembly.edit');
-	    Route::get('Assembly-delete/{id}', 'MasterController@AssemblyDelete')->name('admin.Master.Assembly.delete');
-	    Route::get('AssemblyImport', 'MasterController@AssemblyImport')->name('admin.Master.AssemblyImport');
-	    Route::post('AssemblyImportStore', 'MasterController@AssemblyImportStore')->name('admin.Master.AssemblyImportStore');
+	    Route::get('Assembly-delete/{id}', 'MasterController@AssemblyDelete')->name('admin.Master.Assembly.delete'); 
 	    //-Assembly--//
 	    Route::get('AssemblyPart', 'MasterController@AssemblyPart')->name('admin.Master.AssemblyPart');	   
 	    Route::post('AssemblyPart-store{id?}', 'MasterController@AssemblyPartStore')->name('admin.Master.AssemblyPart.store');	   
+	    Route::get('AssemblyPartTable', 'MasterController@AssemblyPartTable')->name('admin.Master.AssemblyPartTable');
 	    Route::get('AssemblyPart-edit/{id}', 'MasterController@AssemblyPartEdit')->name('admin.Master.AssemblyPart.edit');
 	    Route::get('AssemblyPart-delete/{id}', 'MasterController@AssemblyPartDelete')->name('admin.Master.AssemblyPart.delete');
 	    //-Mapping---//
@@ -226,6 +224,19 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('/', 'VoterListMasterController@index')->name('admin.VoterListMaster.index');
            Route::post('store', 'VoterListMasterController@store')->name('admin.VoterListMaster.store');
            Route::get('default/{id}', 'VoterListMasterController@default')->name('admin.VoterListMaster.default');           
+	 	 
+    });
+    Route::group(['prefix' => 'import'], function() {
+           Route::get('', 'ImportExportController@index')->name('admin.import.index');
+           Route::get('DistrictImportForm', 'ImportExportController@DistrictImportForm')->name('admin.import.DistrictImportForm');
+           Route::post('DistrictImportStore', 'ImportExportController@DistrictImportStore')->name('admin.import.DistrictImportStore');
+
+           Route::get('AssemblyImportForm', 'ImportExportController@AssemblyImportForm')->name('admin.import.AssemblyImportForm');
+           Route::post('AssemblyImportStore', 'ImportExportController@AssemblyImportStore')->name('admin.import.AssemblyImportStore');
+
+           Route::get('VillageImportForm', 'ImportExportController@VillageImportForm')->name('admin.import.VillageImportForm');
+           Route::post('VillageImportStore', 'ImportExportController@VillageImportStore')->name('admin.import.VillageImportStore');
+                     
 	 	 
     });       
 

@@ -8,8 +8,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                <a href="{{ asset('assembly.csv') }}" style="margin-top: 10px"><i class="fa fa-download"></i> Download Sample</a> 
-                <a class="btn btn-info" style="margin: 5px;width: 150px" onclick="callPopupLarge(this,'{{ route('admin.Master.AssemblyImport') }}'+'?state_id='+$('#state_id').val()+'&district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val())"><i class="fa fa-import"></i>Import</a> 
+                
                 </ol>
             </div>
         </div> 
@@ -45,6 +44,11 @@
                                         <label for="exampleInputPassword1">Assembly Name (Local Language)</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="name_local_language" class="form-control" placeholder="Enter Name (Local Language)" maxlength="50">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">How Many Part No. To Create </label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <input type="text" name="part_no" class="form-control" placeholder="Enter Code" maxlength="5">
                                     </div> 
                                 </div> 
                                 <div class="card-footer text-center">
