@@ -9,7 +9,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     
-                 <a href="{{ route('admin.Master.villageSampleExport') }}" style="margin-right: 5px"><i class="fa fa-download"></i> Download Sample</a>
+                 <a href="{{ route('admin.Master.villageexportsampale') }}" style="margin-right: 5px"><i class="fa fa-download"></i> Download Sample</a>
 
                 <a class="btn btn-info" style="width: 150px" onclick="callPopupLarge(this,'{{ route('admin.Master.villageImport') }}'+'?state_id='+$('#state_select_box').val()+'&district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val())"><i class="fa fa-import"></i>Import</a> 
                 </ol>

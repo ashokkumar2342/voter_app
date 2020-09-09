@@ -139,7 +139,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('village-edit/{id}', 'MasterController@villageEdit')->name('admin.Master.village.edit');
 	    Route::get('village-delete/{id}', 'MasterController@villageDelete')->name('admin.Master.village.delete');
 	    Route::get('village-ward-add/{id}', 'MasterController@villageWardAdd')->name('admin.Master.village.ward.add');
-	    Route::get('villageSampleExport', 'MasterController@villageSampleExport')->name('admin.Master.villageSampleExport');
+	    Route::get('villageexportsampale', 'MasterController@villageSampleExport')->name('admin.Master.villageexportsampale');
 	    Route::get('villageImport', 'MasterController@villageImport')->name('admin.Master.villageImport');
 	    Route::post('villageImportStore', 'MasterController@villageImportStore')->name('admin.Master.villageImportStore');
 	    //-village--//
