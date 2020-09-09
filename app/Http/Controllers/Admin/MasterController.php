@@ -279,7 +279,7 @@ class MasterController extends Controller
         return view('admin.master.village.add_ward',compact('Village'));
     }
     public function villageSampleExport()
-    { 
+    { return'dd';
       $user=Auth::guard('admin')->user();
       $TmpImportVillages = DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
         foreach($TmpImportVillages as $TmpImportVillage){
