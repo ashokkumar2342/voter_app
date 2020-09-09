@@ -284,7 +284,7 @@ class MasterController extends Controller
       $TmpImportVillages = DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
         foreach($TmpImportVillages as $TmpImportVillage){
             $data[] =['state_name'=>$TmpImportVillage->state_name,'state_id'=>$TmpImportVillage->state_id,'district_name'=>$TmpImportVillage->district_name,'district_id'=>$TmpImportVillage->district_id,'block_name'=>$TmpImportVillage->block_name,'block _id'=>$TmpImportVillage->block_id,'village_code'=>'','village_name_eng'=>'','village_name_hindi'=>'','total_ward'=>''];
-        }dd($TmpImportVillages);
+        }
         Excel::create('village_list', function($excel) use ($data) {
             $excel->sheet('sheet', function($sheet) use ($data) {
                 $sheet->fromArray($data);
