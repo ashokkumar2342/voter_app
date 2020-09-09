@@ -285,14 +285,11 @@ class MasterController extends Controller
         foreach($TmpImportVillages as $TmpImportVillage){
             $data[] =['state_name'=>$TmpImportVillage->state_name,'state_id'=>$TmpImportVillage->state_id,'district_name'=>$TmpImportVillage->district_name,'district_id'=>$TmpImportVillage->district_id,'block_name'=>$TmpImportVillage->block_name,'block _id'=>$TmpImportVillage->block_id,'village_code'=>'','village_name_eng'=>'','village_name_hindi'=>'','total_ward'=>''];
         }
-        ob_end_clean();
-         ob_start();
-        Excel::create('village_list', function($excel) use ($data) {
-            $excel->sheet('01', function($sheet) use ($data) {
-                $sheet->rows($data);
-                $sheet->setAutoSize(true);
+       return Excel::create('village_list', function($excel) use ($data) {
+            $excel->sheet('sheet', function($sheet) use ($data) {
+                $sheet->fromArray($data);
             });
-        })->download('xlsx'); 
+        })->download('xls'); 
     }
     public function villageImport(Request $request)
     {  $state_id=$request->state_id;
