@@ -45,20 +45,25 @@
                                              
                                         </select>
                                     </div> 
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Village Code</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="code" class="form-control" placeholder="Enter Code" maxlength="5">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="exampleInputPassword1">Village Name (English)</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="name_english" class="form-control" placeholder="Enter Name (English)" maxlength="50">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="exampleInputPassword1">Village Name (Local Language)</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="name_local_language" class="form-control" placeholder="Enter Name (Local Language)" maxlength="50">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <label for="exampleInputPassword1">How Many Ward To Create</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <input type="text" name="ward" class="form-control"maxlength="50">
                                     </div>
                                     
                                 </div> 
@@ -69,6 +74,26 @@
                         </div> 
                     </div>
                     <div class="col-lg-12" id="village_table">
+                        <div class="card card-primary table-responsive"> 
+                            <table id="village_table" class="table table-striped table-hover control-label">
+                                <thead>
+                                    <tr>
+                                        <th class="text-nowrap">States</th>
+                                        <th class="text-nowrap">District</th>
+                                        <th class="text-nowrap">Block MCS</th>
+                                        <th class="text-nowrap">Code</th>
+                                        <th class="text-nowrap">Name (Eng.)</th>
+                                        <th class="text-nowrap">Name (Local Lang.)</th>
+                                        <th class="text-nowrap">(Total Ward)</th>
+                                        <th class="text-nowrap">Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div> 
                         
                     </div> 
                 </div>
@@ -77,16 +102,8 @@
     </section>
     @endsection
     @push('scripts')
-    <script type="text/javascript">
-         
-        $(document).ready(function () {
-         $("#calculate").click(function () { 
-          $("#state_id").val($("#state_select_box").val());
-          $("#district_id").val($("#district_select_box").val());
-          $("#block_id").val($("#block_select_box").val());
-
-    });
-}); 
+    <script type="text/javascript"> 
+        
     </script> 
   @endpush  
 

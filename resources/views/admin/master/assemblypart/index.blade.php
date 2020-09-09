@@ -16,13 +16,13 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.AssemblyPart.store') }}" method="post" class="add_form" content-refresh="district_table">
+                            <form action="{{ route('admin.Master.AssemblyPart.store') }}" method="post" class="add_form" no-reset="true" select-triger="assembly_select_box">
                                 {{ csrf_field() }}
                                 <div class="card-body"> 
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" class="form-control" id="district_select_box" onchange="callAjax(this,'{{ route('admin.voter.districtWiseAssembly') }}','assembly_select_box');callAjax(this,'{{ route('admin.Master.AssemblyPartTable') }}'+'?assembly_id='+$('#assembly_select_box').val(),'part_no_table')">
+                                        <select name="district" class="form-control" id="district_select_box" data-table="part_no_datatable" onchange="callAjax(this,'{{ route('admin.voter.districtWiseAssembly') }}','assembly_select_box');callAjax(this,'{{ route('admin.Master.AssemblyPartTable') }}'+'?assembly_id='+$('#assembly_select_box').val(),'part_no_table')">
                                             <option selected disabled>Select District</option>
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
@@ -32,7 +32,7 @@
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Assembly</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="assembly" class="form-control" id="assembly_select_box" onchange="callAjax(this,'{{ route('admin.Master.AssemblyPartTable') }}'+'?assembly_id='+$('#assembly_select_box').val(),'part_no_table')">
+                                        <select name="assembly" class="form-control" id="assembly_select_box" data-table="part_no_datatable" onchange="callAjax(this,'{{ route('admin.Master.AssemblyPartTable') }}'+'?assembly_id='+$('#assembly_select_box').val(),'part_no_table')">
                                             <option selected disabled>Select Assembly</option>
                                              
                                         </select>
@@ -51,7 +51,7 @@
                         </div> 
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary table-responsive"> 
+                        <div class="card card-primary table-responsive" id="part_no_table"> 
                              <table id="part_no_datatable" class="table table-striped table-hover control-label">
                                  <thead>
                                      <tr>
@@ -62,7 +62,7 @@
                                           
                                      </tr>
                                  </thead>
-                                 <tbody id="part_no_table">
+                                 <tbody>
                                     
                                  </tbody>
                              </table>

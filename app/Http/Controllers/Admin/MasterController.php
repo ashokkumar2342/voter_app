@@ -15,6 +15,7 @@ use App\Model\TmpImportAssembly;
 use App\Model\TmpImportVillage;
 use App\Model\Village;
 use App\Model\WardVillage;
+use App\Model\ZilaParishad;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -141,7 +142,70 @@ class MasterController extends Controller
        $District->delete();
        return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
     }
+    public function DistrictsZpWard($districts_id)
+    {
+      return view('admin.master.districts.zp_ward',compact('districts_id')); 
+    }
+    public function DistrictsZpWardStore(Request $request)
+   { 
+       $rules=[ 
+            'district_id' => 'required',  
+      ]; 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        DB::select(DB::raw("call up_create_zp_ward ('$request->district_id','$request->zp_ward','0')")); 
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
      
+    //------------z-p-ward---------------------------//
+
+    public function ZilaParishad($value='')
+    {
+      try {             
+          $States= State::orderBy('name_e','ASC')->get();   
+          return view('admin.master.zpward.index',compact('States'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function ZilaParishadStore(Request $request)
+   {  
+       $rules=[ 
+            'district' => 'required',  
+            'zp_ward_no' => 'required',  
+      ]; 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        DB::select(DB::raw("call up_create_zp_ward ('$request->district','$request->zp_ward_no','0')")); 
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
+    public function ZilaParishadTable(Request $request)
+    {
+      try {             
+          $ZilaParishads= ZilaParishad::where('districts_id',$request->district_id)->orderBy('states_id','ASC')->orderBy('districts_id','ASC')->orderBy('ward_no','ASC')->get();   
+          return view('admin.master.zpward.table',compact('ZilaParishads'));
+        } catch (Exception $e) {
+            
+        }
+    }
     //------------block-mcs----------------------------//
 
     public function BlockMCS(Request $request)
@@ -175,16 +239,22 @@ class MasterController extends Controller
           return response()->json($response);// response as json
       }
       else {
-       $States= BlocksMc::firstOrNew(['id'=>$id]);
-       $States->states_id=$request->states;
-       $States->districts_id=$request->district;
-       $States->code=$request->code;
-       $States->name_e=$request->name_english;
-       $States->name_l=$request->name_local_language; 
-       $States->save();
+       $BlocksMc= BlocksMc::firstOrNew(['id'=>$id]);
+       $BlocksMc->states_id=$request->states;
+       $BlocksMc->districts_id=$request->district;
+       $BlocksMc->code=$request->code;
+       $BlocksMc->name_e=$request->name_english;
+       $BlocksMc->name_l=$request->name_local_language; 
+       $BlocksMc->save();
+       $psWard = DB::select(DB::raw("call up_create_ps_ward ('$BlocksMc->id','$request->ps_ward','0')")); 
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
+    }
+    public function BlockMCSTable(Request $request)
+    {  
+       $BlocksMcs= BlocksMc::where('districts_id',$request->district_id)->orderBy('name_e','ASC')->get(); 
+       return view('admin.master.block.block_table',compact('Districts','States','BlocksMcs'));
     }
     public function BlockMCSEdit($id)
     {
@@ -203,7 +273,29 @@ class MasterController extends Controller
        $BlocksMc->delete();
        return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
     }
-
+     public function BlockMCSpsWard($block_id)
+     {
+       return view('admin.master.block.ps_ward',compact('block_id'));  
+     }
+     public function BlockMCSpsWardStore(Request $request)
+     {  
+       $rules=[ 
+            'block_id' => 'required',  
+      ]; 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        DB::select(DB::raw("call up_create_ps_ward ('$request->block_id','$request->ps_ward','0')")); 
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
     //
     //------------village----------------------------//
 
@@ -240,18 +332,8 @@ class MasterController extends Controller
           return response()->json($response);// response as json
       }
       else {
-       $States= Village::firstOrNew(['id'=>$id]);
-       $States->states_id=$request->states;
-       $States->districts_id=$request->district;
-       $States->blocks_id=$request->block_mcs;
-       $States->code=$request->code;
-       $States->name_e=$request->name_english;
-       $States->name_l=$request->name_local_language; 
-       $States->draft_processed=0; 
-       $States->final_processed=0; 
-       $States->print_prepared=0; 
-       $States->is_locked=0; 
-       $States->save();
+        $user=Auth::guard('admin')->user();
+        DB::select(DB::raw("call up_create_village_excel ('$user->id','$request->states','$request->district','$request->block_mcs','$request->code','$request->name_english','$request->name_local_language','$request->ward')")); 
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
@@ -288,9 +370,8 @@ class MasterController extends Controller
           $Districts= District::orderBy('name_e','ASC')->get();   
           $States= State::orderBy('name_e','ASC')->get();   
           $BlocksMcs= BlocksMc::orderBy('name_e','ASC')->get();   
-          $Villages= Village::orderBy('name_e','ASC')->get();
-          $wards= WardVillage::orderBy('ward_no','ASC')->get();    
-          return view('admin.master.wards.index',compact('Districts','States','BlocksMcs','Villages','wards'));
+          $Villages= Village::orderBy('name_e','ASC')->get(); 
+          return view('admin.master.wards.index',compact('Districts','States','BlocksMcs','Villages'));
         } catch (Exception $e) {
             
         }
@@ -320,6 +401,11 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
+    }
+    public function wardTable(Request $request)
+    {
+      $wards= WardVillage::where('village_id',$request->id)->orderBy('ward_no','ASC')->get();
+      return view('admin.master.wards.ward_table',compact('wards'));
     }
     //------------Assembly----------------------------//
 
@@ -403,7 +489,7 @@ class MasterController extends Controller
    {    
        $rules=[
             
-            'Assembly' => 'required', 
+            'assembly' => 'required', 
             'part_no' => 'required', 
            
             
@@ -418,7 +504,7 @@ class MasterController extends Controller
           return response()->json($response);// response as json
       }
       else {
-       DB::select(DB::raw("call up_create_assembly_part ('$request->Assembly','$request->part_no','0')"));
+       DB::select(DB::raw("call up_create_assembly_part ('$request->assembly','$request->part_no','0')"));
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }

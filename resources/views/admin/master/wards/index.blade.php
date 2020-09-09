@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.ward.store') }}" method="post" class="add_form" content-refresh="district_table">
+                            <form action="{{ route('admin.Master.ward.store') }}" method="post" class="add_form" no-reset="true" select-triger="village_select_box">
                                 {{ csrf_field() }}
                                 <div class="card-body">
                                     <div class="row"> 
@@ -47,7 +47,7 @@
                                     <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Village</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="village" class="form-control select2" id="village_select_box" select2="true" onchange="callAjax(this,'{{ route('admin.Master.WardBandiFilter') }}','value_div_id')">
+                                        <select name="village" class="form-control select2" id="village_select_box" select2="true" data-table="ward_datatable" onchange="callAjax(this,'{{ route('admin.Master.ward.table') }}','ward_table')">
                                             <option selected disabled>Select Village</option>
                                             
                                         </select>
@@ -63,7 +63,7 @@
                             </form>
                         </div> 
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-12" id="ward_table">
                         <div class="card card-primary table-responsive"> 
                              <table id="district_table" class="table table-striped table-hover control-label">
                                  <thead>
@@ -74,24 +74,11 @@
                                          <th class="text-nowrap">Village MCS</th>
                                          <th class="text-nowrap">Ward No.</th>
                                          <th class="text-nowrap">Ward Name (Eng)</th>
-                                         <th class="text-nowrap">Ward Name (Local Lang)</th>
-                                          
-                                          
+                                         <th class="text-nowrap">Ward Name (Local Lang)</th> 
                                      </tr>
                                  </thead>
                                  <tbody>
-                                    @foreach ($wards as $ward)
-                                     <tr>
-                                         <td>{{ $ward->states->name_e or '' }}</td>
-                                         <td>{{ $ward->district->name_e or '' }}</td>
-                                         <td>{{ $ward->blockMCS->name_e or '' }}-{{ $ward->blockMCS->name_l or '' }}</td>
-                                         <td>{{ $ward->village->name_e or '' }}-{{ $ward->village->name_l or '' }}</td>
-                                         <td>{{ $ward->ward_no }}</td>
-                                         <td>{{ $ward->name_e }}</td>
-                                         <td>{{ $ward->name_l }}</td>
-                                         
-                                     </tr> 
-                                    @endforeach
+                                     
                                  </tbody>
                              </table>
                         </div> 

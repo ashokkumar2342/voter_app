@@ -23,7 +23,7 @@
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" id="district_select_box" class="form-control" onchange="callAjax(this,'{{ route('admin.Master.AssemblyTable') }}','assembly_table')">
+                                        <select name="district" id="district_select_box" class="form-control" data-table="district_table" onchange="callAjax(this,'{{ route('admin.Master.AssemblyTable') }}','assembly_table')">
                                             <option selected disabled>Select District</option>
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
@@ -58,7 +58,7 @@
                         </div> 
                     </div>
                     <div class="col-lg-8">
-                        <div class="card card-primary table-responsive"> 
+                        <div class="card card-primary table-responsive" id="assembly_table"> 
                              <table id="district_table" class="table table-striped table-hover control-label">
                                  <thead>
                                      <tr>

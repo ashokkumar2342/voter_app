@@ -128,11 +128,20 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('DistrictsTable', 'MasterController@DistrictsTable')->name('admin.Master.DistrictsTable');
 	    Route::get('Districts-Edit/{id}', 'MasterController@districtsEdit')->name('admin.Master.districtsEdit');
 	    Route::get('Districts-delete/{id}', 'MasterController@districtsDelete')->name('admin.Master.districtsDelete');
+	    Route::get('DistrictsZpWard/{id}', 'MasterController@DistrictsZpWard')->name('admin.Master.DistrictsZpWard');
+	    Route::post('DistrictsZpWardStore', 'MasterController@DistrictsZpWardStore')->name('admin.Master.DistrictsZpWardStore');
+	    //-z-p-ward//
+        Route::get('ZilaParishad', 'MasterController@ZilaParishad')->name('admin.Master.ZilaParishad');
+        Route::post('ZilaParishadStore', 'MasterController@ZilaParishadStore')->name('admin.Master.ZilaParishadStore');
+        Route::get('ZilaParishadTable', 'MasterController@ZilaParishadTable')->name('admin.Master.ZilaParishadTable');
 	    //-block-mcs-//
 	    Route::get('BlockMCS', 'MasterController@BlockMCS')->name('admin.Master.blockmcs');	   
 	    Route::post('BlockMCSStore{id?}', 'MasterController@BlockMCSStore')->name('admin.Master.BlockMCSStore');	   
 	    Route::get('BlockMCSEdit/{id}', 'MasterController@BlockMCSEdit')->name('admin.Master.BlockMCSEdit');
+	    Route::get('BlockMCSTable', 'MasterController@BlockMCSTable')->name('admin.Master.BlockMCSTable');
 	    Route::get('BlockMCSDelete/{id}', 'MasterController@BlockMCSDelete')->name('admin.Master.BlockMCSDelete');
+	    Route::get('BlockMCSpsWard/{id}', 'MasterController@BlockMCSpsWard')->name('admin.Master.BlockMCSpsWard');
+	    Route::post('BlockMCSpsWardStore', 'MasterController@BlockMCSpsWardStore')->name('admin.Master.BlockMCSpsWardStore');
 	    //-village--//
 	    Route::get('village', 'MasterController@village')->name('admin.Master.village');	   
 	    Route::post('village-store{id?}', 'MasterController@villageStore')->name('admin.Master.village.store');	   
@@ -144,6 +153,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    //-village--//
 	    Route::get('ward', 'MasterController@ward')->name('admin.Master.ward');	   
 	    Route::post('ward-store{id?}', 'MasterController@wardStore')->name('admin.Master.ward.store');	 
+	    Route::get('wardTable', 'MasterController@wardTable')->name('admin.Master.ward.table');	 
 	    //-Assembly--//
 	    Route::get('Assembly', 'MasterController@Assembly')->name('admin.Master.Assembly');	   
 	    Route::post('Assembly-store{id?}', 'MasterController@AssemblyStore')->name('admin.Master.Assembly.store');	   
