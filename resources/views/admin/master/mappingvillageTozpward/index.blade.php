@@ -13,7 +13,7 @@
 		</div> 
 		<div class="card card-info"> 
 			<div class="card-body"> 
-				<form action="{{ route('admin.Master.ZilaParishadStore') }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box">
+				<form action="{{ route('admin.Master.MappingVillageToZPWardStore') }}" method="post" class="add_form" no-reset="true">
 					{{ csrf_field() }}
 					<div class="card-body row">
 						<div class="col-lg-4 form-group">

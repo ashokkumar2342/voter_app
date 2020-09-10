@@ -6,6 +6,7 @@
              <th>Z.P.Ward No.</th>
              <th>Z.P.Ward No.(Eng)</th>
              <th>Z.P.Ward No.(Local Lung)</th>
+             <th>Action</th>
               
               
          </tr>
@@ -18,6 +19,10 @@
      		<td>{{ $ZilaParishad->ward_no }}</td>
      		<td>{{ $ZilaParishad->name_e }}</td>
      		<td>{{ $ZilaParishad->name_l }}</td>
+            <td>
+                <a href="#" class="btn btn-xs btn-info" onclick="callPopupLarge(this,'{{ route('admin.Master.ZilaParishadEdit',$ZilaParishad->id) }}')"><i class="fa fa-edit"></i></a>
+                <a href="" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+            </td>
      	</tr>	 
      	@endforeach 
      </tbody>

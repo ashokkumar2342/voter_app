@@ -113,9 +113,18 @@ class MasterController extends Controller
           return response()->json($response);// response as json
       }
       else {
+        if (!empty($id)) {
+        $district=District::firstOrNew(['id'=>$id]);
+        $district->state_id=$request->states;
+        $district->code=$request->code;
+        $district->name_e=$request->name_english;
+        $district->name_l=$request->name_local_language;
+        $district->save(); 
+        }
+        elseif (empty($id)) {
         $user=Auth::guard('admin')->user(); 
         $zpWard = DB::select(DB::raw("call up_create_district_excel ('$user->id','$request->states','$request->code','$request->name_english','$request->name_local_language','$request->zp_ward')")); 
-        
+        }
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
@@ -143,8 +152,9 @@ class MasterController extends Controller
        return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
     }
     public function DistrictsZpWard($districts_id)
-    {
-      return view('admin.master.districts.zp_ward',compact('districts_id')); 
+    { 
+      $DistrictName= District::find($districts_id);
+      return view('admin.master.districts.zp_ward',compact('DistrictName')); 
     }
     public function DistrictsZpWardStore(Request $request)
    { 
@@ -206,6 +216,10 @@ class MasterController extends Controller
             
         }
     }
+    public function ZilaParishadEdit($id)
+    {
+      return view('admin.master.zpward.edit',compact('ZilaParishads'));
+    }
     //------------block-mcs----------------------------//
 
     public function BlockMCS(Request $request)
@@ -219,8 +233,12 @@ class MasterController extends Controller
             
         }
    }
+   public function BlockbtnClickByForm($value='')
+   {
+     return view('admin.master.block.block_form_div');
+   }
    public function BlockMCSStore(Request $request,$id=null)
-   {  
+   {   
        $rules=[
             'states' => 'required', 
             'district' => 'required', 
@@ -246,7 +264,9 @@ class MasterController extends Controller
        $BlocksMc->name_e=$request->name_english;
        $BlocksMc->name_l=$request->name_local_language; 
        $BlocksMc->save();
+       if (empty($id)) { 
        $psWard = DB::select(DB::raw("call up_create_ps_ward ('$BlocksMc->id','$request->ps_ward','0')")); 
+       }
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
@@ -275,7 +295,8 @@ class MasterController extends Controller
     }
      public function BlockMCSpsWard($block_id)
      {
-       return view('admin.master.block.ps_ward',compact('block_id'));  
+       $Block= BlocksMc::find($block_id);  
+       return view('admin.master.block.ps_ward',compact('Block'));  
      }
      public function BlockMCSpsWardStore(Request $request)
      {  
@@ -420,7 +441,7 @@ class MasterController extends Controller
         }
    }
    public function AssemblyStore(Request $request,$id=null)
-   {   
+   {    
        $rules=[
             
             'district' => 'required', 
@@ -445,7 +466,9 @@ class MasterController extends Controller
        $Assembly->name_e=$request->name_english;
        $Assembly->name_l=$request->name_local_language; 
        $Assembly->save();
+       if (empty($id)) { 
        DB::select(DB::raw("call up_create_assembly_part ('$Assembly->id','$request->part_no','0')"));
+       }
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
@@ -485,6 +508,10 @@ class MasterController extends Controller
             
         }
    }
+   public function AssemblyPartbtnclickBypartNo($value='')
+   {
+     return view('admin.master.assemblypart.part_no_div');
+   }
    public function AssemblyPartStore(Request $request,$id=null)
    {    
        $rules=[
@@ -517,8 +544,8 @@ class MasterController extends Controller
     public function AssemblyPartEdit($id)
     {
        try {
-          $assembly_id=$id;  
-          return view('admin.master.assemblypart.edit',compact('assembly_id'));
+          $assembly= Assembly::find($id);  
+          return view('admin.master.assemblypart.edit',compact('assembly'));
         } catch (Exception $e) {
             
         }
@@ -610,8 +637,26 @@ class MasterController extends Controller
         return view('admin.master.zpward.value_select_box',compact('zpwards'));    
      }
      public function districtOrZpwardWiseVillage(Request $request)
-     { return $request;
-       return view('admin.master.mappingvillageTozpward.village_move_select_box',compact('zpwards'));    
+     {   
+       $villages=DB::select(DB::raw("select `id`, `name_e` from `villages`where `is_locked` = 0 and `districts_id` =$request->district_id Order By `name_e`;")); 
+       $selectedvillage=DB::select(DB::raw("select `id`, `name_e` from `villages`where `is_locked` = 0 and `districts_id` =$request->district_id and `zp_ward_id` =$request->id Order By `name_e`;"));
+       if (empty($selectedvillage)) {
+         $village_id[]=0;
+       }elseif(!empty($selectedvillage)) {
+         foreach ($selectedvillage as $key => $value) {
+           $village_id[]=$value->id;
+        }
+       } 
+        
+        
+       return view('admin.master.mappingvillageTozpward.village_move_select_box',compact('villages','selectedvillage','village_id'));    
+     }
+     public function MappingVillageToZPWardStore(Request $request)
+     {
+       $village_id=implode(',',$request->village);
+       DB::select(DB::raw("call up_map_villages_zpward ('$request->zp_ward','$village_id')"));
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response); 
      } 
   //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()

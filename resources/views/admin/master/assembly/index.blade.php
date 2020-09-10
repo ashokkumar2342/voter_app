@@ -17,14 +17,13 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.Assembly.store') }}" method="post" class="add_form" select-triger="district_select_box" no-reset="true">
+                            <form action="{{ route('admin.Master.Assembly.store') }}" method="post" class="add_form" select-triger="district_select_box">
                                 {{ csrf_field() }}
                                 <div class="card-body"> 
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" id="district_select_box" class="form-control" data-table="district_table" onchange="callAjax(this,'{{ route('admin.Master.AssemblyTable') }}','assembly_table')">
-                                            <option selected disabled>Select District</option>
+                                        <select name="district" id="district_select_box" class="form-control" data-table="district_table" onchange="callAjax(this,'{{ route('admin.Master.AssemblyTable') }}','assembly_table')"> 
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
                                             @endforeach
@@ -85,6 +84,7 @@
     @endsection
     @push('scripts')
     <script>
+        $('#district_select_box').trigger('change');
         $('#district_table').DataTable();
     </script>
     @endpush

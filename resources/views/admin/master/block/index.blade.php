@@ -16,11 +16,11 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.BlockMCSStore') }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box">
+                            <form action="{{ route('admin.Master.BlockMCSStore') }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box" button-click="btn_click_by_form">
                                 {{ csrf_field() }}
                                 <div class="card-body">
                                     <div class="row"> 
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-6 form-group">
                                         <label for="exampleInputEmail1">States</label>
                                         <span class="fa fa-asterisk"></span>
                                         <select name="states" class="form-control"  onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrict') }}','district_select_box');callAjax(this,'{{ route('admin.Master.BlockMCSTable') }}'+'?district_id='+$('#district_select_box').val(),'block_table')">
@@ -30,32 +30,16 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-6 form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
                                         <select name="district" class="form-control" id="district_select_box" data-table="block_datatable" onchange="callAjax(this,'{{ route('admin.Master.BlockMCSTable') }}'+'?district_id='+$('#district_select_box').val(),'block_table')">
                                             <option selected disabled>Select District</option>
                                         </select>
-                                    </div> 
-                                    <div class="col-lg-4 form-group">
-                                        <label for="exampleInputEmail1">Block MCS Code</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="code" class="form-control" placeholder="Enter Code" maxlength="5">
                                     </div>
-                                    <div class="col-lg-4 form-group">
-                                        <label for="exampleInputPassword1">Block MCS Name (English)</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="name_english" class="form-control" placeholder="Enter Name (English)" maxlength="50">
-                                    </div>
-                                    <div class="col-lg-4 form-group">
-                                        <label for="exampleInputPassword1">Block MCS Name (Local Language)</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="name_local_language" class="form-control" placeholder="Enter Name (Local Language)" maxlength="50">
-                                    </div>
-                                    <div class="col-lg-4 form-group">
-                                        <label for="exampleInputPassword1">How Many P.S.Ward To Create</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="ps_ward" class="form-control" maxlength="50">
+                                    <button type="button" hidden id="btn_click_by_form" onclick="callAjax(this,'{{ route('admin.Master.BlockbtnClickByForm') }}','btn_click_by_form_div')"></button> 
+                                    <div class="col-lg-12" id="btn_click_by_form_div">
+                                        
                                     </div>
                                     
                                 </div> 
@@ -93,6 +77,7 @@
     @endsection
     @push('scripts')
     <script type="text/javascript">
+        $('#btn_click_by_form').click();
         $('#district_table').DataTable();
     </script>
     @endpush 

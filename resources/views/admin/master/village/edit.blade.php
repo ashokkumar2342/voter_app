@@ -50,20 +50,11 @@
               <label for="exampleInputPassword1">Village Name (Local Language)</label>
               <span class="fa fa-asterisk"></span>
               <input type="text" name="name_local_language" class="form-control" placeholder="Enter Name (Local Language)" maxlength="50" value="{{ $village->name_l }}">
-          </div>
-          <div class="col-lg-12 form-group">
-              <label for="exampleInputFile">File input</label>
-              <div class="input-group">
-                  <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="exampleInputFile">
-                      <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                  </div> 
-              </div>
-          </div>
+          </div> 
           </div> 
         <div class="modal-footer justify-content-between">
-          <button type="submit" class="btn btn-success">Update</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success form-control">Update</button>
+           
         </div>
       </form>
     </div>

@@ -16,14 +16,14 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.districtsStore') }}" method="post" class="add_form" no-reset="true" select-triger="state_select_box">
+                            <form action="{{ route('admin.Master.districtsStore') }}" method="post" class="add_form"  select-triger="state_select_box">
                                 {{ csrf_field() }}
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">States</label>
                                         <span class="fa fa-asterisk"></span>
                                         <select name="states" class="form-control" id="state_select_box" data-table="district_datatable" onchange="callAjax(this,'{{ route('admin.Master.DistrictsTable') }}','district_table')">
-                                            <option selected disabled>Select States</option>
+                                             
                                             @foreach ($States as $State)
                                             <option value="{{ $State->id }}">{{ $State->code }}--{{ $State->name_e }}</option>  
                                             @endforeach
@@ -85,6 +85,7 @@
     @endsection
     @push('scripts')
     <script type="text/javascript">
+        $('#state_select_box').trigger('change');
         $('#district_datatable').DataTable();
     </script>
     @endpush 

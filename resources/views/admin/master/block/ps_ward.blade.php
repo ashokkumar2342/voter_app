@@ -9,13 +9,17 @@
     <div class="modal-body">
       <form action="{{ route('admin.Master.BlockMCSpsWardStore') }}" method="post" class="add_form" select-triger="district_select_box" button-click="btn_close">
         {{ csrf_field() }}
-        <div class="card-body">
+        <div class="card-body row">
+          <div class="col-lg-6 form-group">
+            <h3>{{ $Block->name_e }}</h3>
+          </div>
           <div class="col-lg-12 form-group">
             <label for="exampleInputEmail1">How Many P.S.Ward To Create</label>
             <span class="fa fa-asterisk"></span> 
             <input type="text" name="ps_ward" class="form-control" placeholder="" maxlength="5">
-            <input type="text" name="block_id" class="form-control" placeholder="" hidden maxlength="5" value="{{ $block_id }}">
+            <input type="text" name="block_id" class="form-control" placeholder="" hidden maxlength="5" value="{{ $Block->id }}">
              
+        </div>
         </div> 
         <div class="modal-footer justify-content-between">
           <button type="submit" class="btn btn-success">Save</button>

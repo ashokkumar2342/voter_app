@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.AssemblyPart.store') }}" method="post" class="add_form" no-reset="true" select-triger="assembly_select_box">
+                            <form action="{{ route('admin.Master.AssemblyPart.store') }}" method="post" class="add_form" no-reset="true" select-triger="assembly_select_box" button-click="btn_click_part_no_div">
                                 {{ csrf_field() }}
                                 <div class="card-body"> 
                                     <div class="form-group">
@@ -36,16 +36,16 @@
                                             <option selected disabled>Select Assembly</option>
                                              
                                         </select>
-                                    </div> 
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">How Many Part No. To Create </label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="part_no" class="form-control" placeholder="Enter Code" maxlength="5">
-                                    </div> 
+                                    </div>
+                                <button type="button" hidden id="btn_click_part_no_div" onclick="callAjax(this,'{{ route('admin.Master.AssemblyPartbtnclickBypartNo') }}','btn_click_part_no_page')"> 
+                                </button>
+                                <div id="btn_click_part_no_page">
+                                      
+                                </div>  
                                     
                                 </div> 
                                 <div class="card-footer text-center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" id="" class="btn btn-primary">Submit</button>
                                 </div>
                             </form>
                         </div> 
@@ -54,8 +54,7 @@
                         <div class="card card-primary table-responsive" id="part_no_table"> 
                              <table id="part_no_datatable" class="table table-striped table-hover control-label">
                                  <thead>
-                                     <tr>
-                                          
+                                     <tr>                                          
                                          <th>Assembly</th>
                                          <th>Part No.</th> 
                                          <th>Action</th>
@@ -80,6 +79,7 @@
  <script type="text/javascript" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
  <script type="text/javascript">
      $(document).ready(function(){
+        $('#btn_click_part_no_div').click();
         $('#part_no_datatable').DataTable();
     });
 </script> 
