@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin; 
 use App\Http\Controllers\Controller;
 use App\Model\TmpImportAssembly;
+use App\Model\TmpImportBlock;
 use App\Model\TmpImportDistrict;
 use App\Model\TmpImportVillage;
 use Illuminate\Http\Request;
@@ -19,8 +20,9 @@ class ImportExportController extends Controller
    	$user=Auth::guard('admin')->user(); 
    	$Districts= DB::select(DB::raw("call up_fetch_import_district_sample ('$user->id')"));
    	$assemblys= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
+    $blocks= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
    	$villages= DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
-      return view('admin.import.index',compact('Districts','assemblys','villages'));
+      return view('admin.import.index',compact('Districts','assemblys','blocks','villages'));
    }
    public function DistrictImportForm($value='')
    { 
@@ -75,7 +77,32 @@ class ImportExportController extends Controller
 
      return back()->with('error','Please Check your file, Something is wrong there.'); 
    }
+   public function BlockImportForm($value='')
+   {
+     return view('admin.import.block_import_form');
+   }
+   public function BlockImportStore(Request $request)
+   {
+     if($request->hasFile('import_file')){  
+        $path = $request->file('import_file')->getRealPath();
+        $results = Excel::load($path, function($reader) {})->get();
+        $user = Auth::guard('admin')->user();
+        $TmpImportBlock=TmpImportBlock::where('userid',$user->id)->pluck('userid')->toArray();
+        $Old_TmpImportBlock=TmpImportBlock::whereIn('userid',$TmpImportBlock)->delete();
+       foreach ($results as $key => $value) {    
+             if (!empty($value->district_id)) {
+             $SaveResult=DB::select(DB::raw("call up_create_block_excel ('$user->id','0','$value->district_id','$value->block_code','$value->block_name_eng','$value->block_name_hindi','$value->total_wards')"));      
+            } 
+        }
+        $BloImportedDatas=TmpImportBlock::all();
+        $response = array();
+        $response['status'] = 1;
+        $response['data'] =view('admin.import.assembly_import_data',compact('BloImportedDatas'))->render();
+        return response()->json($response);  
+      }
 
+     return back()->with('error','Please Check your file, Something is wrong there.'); 
+   }
    public function VillageImportForm($value='')
    {
    	 return view('admin.import.village_import_form');

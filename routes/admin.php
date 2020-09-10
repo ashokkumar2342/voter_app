@@ -244,6 +244,9 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('AssemblyImportForm', 'ImportExportController@AssemblyImportForm')->name('admin.import.AssemblyImportForm');
            Route::post('AssemblyImportStore', 'ImportExportController@AssemblyImportStore')->name('admin.import.AssemblyImportStore');
 
+           Route::get('BlockImportForm', 'ImportExportController@BlockImportForm')->name('admin.import.BlockImportForm');
+           Route::post('BlockImportStore', 'ImportExportController@BlockImportStore')->name('admin.import.BlockImportStore');
+
            Route::get('VillageImportForm', 'ImportExportController@VillageImportForm')->name('admin.import.VillageImportForm');
            Route::post('VillageImportStore', 'ImportExportController@VillageImportStore')->name('admin.import.VillageImportStore');
                      
