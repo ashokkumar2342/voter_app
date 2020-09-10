@@ -10,7 +10,7 @@
       <form action="{{ route('admin.Master.AssemblyPart.store') }}" method="post" class="add_form" select-triger="district_select_box" button-click="btn_close">
                                 {{ csrf_field() }}
                                 <div class="card-body"> 
-                                     <input type="hidden" name="Assembly" value="{{ @$assembly_id}}">
+                                     <input type="hidden" name="assembly" value="{{ @$assembly_id}}">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">How Many Part No. To Create </label>
                                         <span class="fa fa-asterisk"></span>
