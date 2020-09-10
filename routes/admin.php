@@ -172,7 +172,11 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('MappingAssemblyWisePartNo', 'MasterController@MappingAssemblyWisePartNo')->name('admin.Master.MappingAssemblyWisePartNo');
 	    Route::post('MappingVillageAssemblyPartStore', 'MasterController@MappingVillageAssemblyPartStore')->name('admin.Master.MappingVillageAssemblyPartStore');
 	    Route::get('MappingVillageAssemblyPartRemove/{id}', 'MasterController@MappingVillageAssemblyPartRemove')->name('admin.Master.MappingVillageAssemblyPartRemove');
-	    //-Mapping---//
+	    //-mapping-zp-ward---//
+	    Route::get('MappingVillageToZPWard', 'MasterController@MappingVillageToZPWard')->name('admin.Master.MappingVillageToZPWard');
+	    Route::get('districtwiseZPWard', 'MasterController@districtwiseZPWard')->name('admin.Master.districtwiseZPWard');
+	    Route::get('districtOrZpwardWiseVillage', 'MasterController@districtOrZpwardWiseVillage')->name('admin.Master.districtOrZpwardWiseVillage');
+	    //mapping-zp-ward////
 	    Route::get('WardBandi', 'MasterController@WardBandi')->name('admin.Master.WardBandi');	   
 	    Route::get('WardBandiFilter', 'MasterController@WardBandiFilter')->name('admin.Master.WardBandiFilter');	   
 	    Route::get('WardBandiFilterAssemblyPart', 'MasterController@WardBandiFilterAssemblyPart')->name('admin.Master.WardBandiFilterAssemblyPart');	   

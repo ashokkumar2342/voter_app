@@ -21,7 +21,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="card card-primary"> 
+                        <div class="card card-primary" style="border: solid 2px black"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#district_sample">District Sample Export</a>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary"> 
+                        <div class="card card-primary" style="border: solid 2px black"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#assembly_sample">Assembly Sample Export</a>
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary"> 
+                        <div class="card card-primary" style="border: solid 2px black"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#block_sample">Block Sample Export</a>
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary"> 
+                        <div class="card card-primary" style="border: solid 2px black"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#village_sample">Village Sample Export</a>

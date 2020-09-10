@@ -596,8 +596,24 @@ class MasterController extends Controller
         
           $response=['status'=>1,'msg'=>'Remove Successfully'];
           return response()->json($response);
+     }
+
+  //-----MappingVillageAssemblyPart-------------------------------------------------------------
+     public function MappingVillageToZPWard()
+     {
+        $States= State::orderBy('name_e','ASC')->get();   
+        return view('admin.master.mappingvillageTozpward.index',compact('States'));  
+     }
+     public function districtwiseZPWard(Request $request)
+     { 
+       $zpwards= ZilaParishad::where('districts_id',$request->district_id)->orderBy('ward_no','ASC')->get();   
+        return view('admin.master.zpward.value_select_box',compact('zpwards'));    
+     }
+     public function districtOrZpwardWiseVillage(Request $request)
+     { return $request;
+       return view('admin.master.mappingvillageTozpward.village_move_select_box',compact('zpwards'));    
      } 
-  //------------ward-bandi----------WardBandi-------//
+  //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()
     {
        try {
