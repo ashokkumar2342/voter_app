@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helper\MyFuncs;
+use App\Http\Controllers\Admin\PanchayatSamiti;
 use App\Http\Controllers\Controller;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
@@ -14,6 +15,7 @@ use App\Model\State;
 use App\Model\TmpImportAssembly;
 use App\Model\TmpImportVillage;
 use App\Model\Village;
+use App\Model\WardPanchayat;
 use App\Model\WardVillage;
 use App\Model\ZilaParishad;
 use Excel;
@@ -222,6 +224,42 @@ class MasterController extends Controller
     }
     //------------block-mcs----------------------------//
 
+    public function PanchayatSamiti($value='')
+    {
+       $States= State::orderBy('name_e','ASC')->get(); 
+       return view('admin.master.psward.index',compact('States'));
+    }
+    public function PanchayatSamitiTable(Request $request)
+    { 
+      try {             
+          $PanchayatSamitis= WardPanchayat::where('blocks_id',$request->id)->orderBy('states_id','ASC')->orderBy('districts_id','ASC')->orderBy('ward_no','ASC')->get();   
+          return view('admin.master.psward.table',compact('PanchayatSamitis'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function PanchayatSamitiStore(Request $request)
+   {   
+       $rules=[ 
+            'block' => 'required',  
+            'ps_ward' => 'required',  
+      ]; 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        DB::select(DB::raw("call up_create_ps_ward ('$request->block','$request->ps_ward','0')")); 
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
+    //------------block-mcs----------------------------//
+
     public function BlockMCS(Request $request)
    {
       try {
@@ -331,6 +369,10 @@ class MasterController extends Controller
         } catch (Exception $e) {
             
         }
+   }
+   public function BtnClickByvillageForm()
+   {
+     return view('admin.master.village.form_div'); 
    }
    public function villageStore(Request $request,$id=null)
    {  
@@ -638,7 +680,8 @@ class MasterController extends Controller
      }
      public function districtOrZpwardWiseVillage(Request $request)
      {   
-       $villages=DB::select(DB::raw("select `id`, `name_e` from `villages`where `is_locked` = 0 and `districts_id` =$request->district_id Order By `name_e`;")); 
+       $villages=DB::select(DB::raw("select `id`, `name_e` from `villages`where `is_locked` = 0 and `districts_id` =$request->district_id and `zp_ward_id` not in (Select `id` from `ward_zp` where `districts_id` =$request->district_id)Union select `id`, `name_e` from `villages`where `is_locked` = 0 and `districts_id` =$request->district_id and `zp_ward_id` =$request->id Order By `name_e`;"));
+
        $selectedvillage=DB::select(DB::raw("select `id`, `name_e` from `villages`where `is_locked` = 0 and `districts_id` =$request->district_id and `zp_ward_id` =$request->id Order By `name_e`;"));
        if (empty($selectedvillage)) {
          $village_id[]=0;
@@ -652,9 +695,53 @@ class MasterController extends Controller
        return view('admin.master.mappingvillageTozpward.village_move_select_box',compact('villages','selectedvillage','village_id'));    
      }
      public function MappingVillageToZPWardStore(Request $request)
-     {
-       $village_id=implode(',',$request->village);
+     { 
+        if (!empty($request->village)) {
+         $village_id=implode(',',$request->village);  
+        }
+        elseif (empty($request->village)) {
+           $village_id=0;  
+         } 
+       
        DB::select(DB::raw("call up_map_villages_zpward ('$request->zp_ward','$village_id')"));
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response); 
+     } 
+  //------------------------Mapping-Village-To-PS-p-s-Ward----------------------------------//
+    public function MappingVillageToPSWard($value='')
+    {
+       $States= State::orderBy('name_e','ASC')->get();   
+        return view('admin.master.mappingvillageTopsward.index',compact('States')); 
+    }
+    public function blockwisePsWard(Request $request)
+    { 
+       $pswards= WardPanchayat::where('blocks_id',$request->id)->orderBy('ward_no','ASC')->get();   
+        return view('admin.master.psward.value_select_box',compact('pswards'));
+    }
+    public function BlockOrPSwardWiseVillage(Request $request)
+     {   
+       $villages=DB::select(DB::raw("select `id`, `name_e` from `villages` where `is_locked` = 0 and `blocks_id` =$request->block_id and `ps_ward_id` not in (Select `id` from `ward_zp` where `blocks_id` =$request->block_id)union select `id`, `name_e` from `villages` where `is_locked` = 0 and `blocks_id` =$request->block_id and `ps_ward_id` =$request->id Order By `name_e`;"));
+
+       $selectedvillage=DB::select(DB::raw("select `id`, `name_e` from `villages` where `is_locked` = 0 and `blocks_id` =$request->block_id and `ps_ward_id` =$request->id Order By `name_e`;"));
+       if (empty($selectedvillage)) {
+         $village_id[]=0;
+       }elseif(!empty($selectedvillage)) {
+         foreach ($selectedvillage as $key => $value) {
+           $village_id[]=$value->id;
+        }
+       } 
+       return view('admin.master.mappingvillageTozpward.village_move_select_box',compact('villages','selectedvillage','village_id'));    
+     }
+     public function MappingVillageToPSWardStore(Request $request)
+     { 
+        if (!empty($request->village)) {
+         $village_id=implode(',',$request->village);  
+        }
+        elseif (empty($request->village)) {
+           $village_id=0;  
+         } 
+       
+       DB::select(DB::raw("call up_map_villages_psward ('$request->ps_ward','$village_id')"));
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response); 
      } 

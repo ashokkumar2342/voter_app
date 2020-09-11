@@ -136,8 +136,14 @@ Route::group(['middleware' => 'admin'], function() {
         Route::get('ZilaParishadTable', 'MasterController@ZilaParishadTable')->name('admin.Master.ZilaParishadTable');
         Route::get('ZilaParishadEdit/{id}', 'MasterController@ZilaParishadEdit')->name('admin.Master.ZilaParishadEdit');
         Route::post('ZilaParishadStore', 'MasterController@ZilaParishadStore')->name('admin.Master.ZilaParishadStore');
+        //-p-s-ward//
+        Route::get('PanchayatSamiti', 'MasterController@PanchayatSamiti')->name('admin.Master.PanchayatSamiti');
+        Route::post('PanchayatSamitiStore', 'MasterController@PanchayatSamitiStore')->name('admin.Master.PanchayatSamitiStore');
+        Route::get('PanchayatSamitiTable', 'MasterController@PanchayatSamitiTable')->name('admin.Master.PanchayatSamitiTable');
+        Route::get('PanchayatSamitiEdit/{id}', 'MasterController@PanchayatSamitiEdit')->name('admin.Master.PanchayatSamitiEdit');
+        Route::post('PanchayatSamitiStore', 'MasterController@PanchayatSamitiStore')->name('admin.Master.PanchayatSamitiStore');
 	    //-block-mcs-//
-	    Route::get('BlockMCS', 'MasterController@BlockMCS')->name('admin.Master.blockmcs');	   
+	    Route::get('BlockMCS', 'MasterController@BlockMCS')->name('admin.Master.blockmcs');   
 	    Route::get('BlockbtnClickByForm', 'MasterController@BlockbtnClickByForm')->name('admin.Master.BlockbtnClickByForm');	   
 	    Route::post('BlockMCSStore{id?}', 'MasterController@BlockMCSStore')->name('admin.Master.BlockMCSStore');	   
 	    Route::get('BlockMCSEdit/{id}', 'MasterController@BlockMCSEdit')->name('admin.Master.BlockMCSEdit');
@@ -148,6 +154,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    //-village--//
 	    Route::get('village', 'MasterController@village')->name('admin.Master.village');	   
 	    Route::post('village-store{id?}', 'MasterController@villageStore')->name('admin.Master.village.store');	   
+	    Route::get('BtnClickByvillageForm', 'MasterController@BtnClickByvillageForm')->name('admin.Master.BtnClickByvillageForm');
 	    Route::get('villageTable', 'MasterController@villageTable')->name('admin.Master.villageTable');
 	    Route::get('village-edit/{id}', 'MasterController@villageEdit')->name('admin.Master.village.edit');
 	    Route::get('village-delete/{id}', 'MasterController@villageDelete')->name('admin.Master.village.delete');
@@ -182,6 +189,11 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('districtOrZpwardWiseVillage', 'MasterController@districtOrZpwardWiseVillage')->name('admin.Master.districtOrZpwardWiseVillage');
 	    Route::post('MappingVillageToZPWardStore', 'MasterController@MappingVillageToZPWardStore')->name('admin.Master.MappingVillageToZPWardStore');
 	    //mapping-zp-ward////
+	    Route::get('MappingVillageToPSWard', 'MasterController@MappingVillageToPSWard')->name('admin.Master.MappingVillageToPSWard');
+	    Route::get('blockwisePsWard', 'MasterController@blockwisePsWard')->name('admin.Master.blockwisePsWard');
+	    Route::get('BlockOrPSwardWiseVillage', 'MasterController@BlockOrPSwardWiseVillage')->name('admin.Master.BlockOrPSwardWiseVillage');
+	    Route::post('MappingVillageToPSWardStore', 'MasterController@MappingVillageToPSWardStore')->name('admin.Master.MappingVillageToPSWardStore');
+	    //mapping-ps-ward////
 	    Route::get('WardBandi', 'MasterController@WardBandi')->name('admin.Master.WardBandi');	   
 	    Route::get('WardBandiFilter', 'MasterController@WardBandiFilter')->name('admin.Master.WardBandiFilter');	   
 	    Route::get('WardBandiFilterAssemblyPart', 'MasterController@WardBandiFilterAssemblyPart')->name('admin.Master.WardBandiFilterAssemblyPart');	   
