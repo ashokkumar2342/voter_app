@@ -22,7 +22,7 @@
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" class="form-control" id="district_select_box" data-table="part_no_datatable" onchange="callAjax(this,'{{ route('admin.voter.districtWiseAssembly') }}','assembly_select_box');callAjax(this,'{{ route('admin.Master.AssemblyPartTable') }}'+'?assembly_id='+$('#assembly_select_box').val(),'part_no_table')">
+                                        <select name="district" class="form-control" id="district_select_box" onchange="callAjax(this,'{{ route('admin.voter.districtWiseAssembly') }}','assembly_select_box');callAjax(this,'{{ route('admin.Master.AssemblyPartTable') }}'+'?assembly_id='+$('#assembly_select_box').val(),'part_no_table')">
                                             <option selected disabled>Select District</option>
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
