@@ -14,11 +14,9 @@
         <div class="card card-info"> 
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card card-primary"> 
+                    <div class="col-lg-12"> 
                             <form action="{{ route('admin.Master.BlockMCSStore') }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box" button-click="btn_click_by_form">
-                                {{ csrf_field() }}
-                                <div class="card-body">
+                                {{ csrf_field() }} 
                                     <div class="row"> 
                                     <div class="col-lg-6 form-group">
                                         <label for="exampleInputEmail1">States</label>
@@ -46,8 +44,7 @@
                                 <div class="card-footer text-center">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
-                            </form>
-                        </div> 
+                            </form> 
                     </div>
                     <div class="col-lg-12">
                         <div class="card card-primary table-responsive" id="block_table"> 
@@ -70,7 +67,7 @@
                              </table>
                         </div> 
                     </div> 
-                </div>
+                 
             </div> 
         </div> 
     </section>

@@ -21,7 +21,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="card card-primary" style="border: solid 2px black"> 
+                        <div class="card card-primary"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#district_sample">District Sample Export</a>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary" style="border: solid 2px black"> 
+                        <div class="card card-primary"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#assembly_sample">Assembly Sample Export</a>
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary" style="border: solid 2px black"> 
+                        <div class="card card-primary"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#block_sample">Block Sample Export</a>
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card card-primary" style="border: solid 2px black"> 
+                        <div class="card card-primary"> 
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#village_sample">Village Sample Export</a>
@@ -231,30 +231,34 @@
                 $(document).ready(function() {
                     $('#district_sample_table').DataTable( {
                         "pageLength": 2,
+                        "bFilter": false,
                         dom: 'Bfrtip',
                         buttons: [
-                        'csv', 'excel','print'
+                        'excel',
                         ]
                     } );
                     $('#assembly_sample_table').DataTable( {
                         "pageLength": 2,
+                        "bFilter": false,
                         dom: 'Bfrtip',
                         buttons: [
-                        'csv', 'excel','print'
+                        'excel',
                         ]
                     } );
                     $('#block_sample_table').DataTable( {
                         "pageLength": 2,
+                        "bFilter": false,
                         dom: 'Bfrtip',
                         buttons: [
-                        'csv', 'excel','print'
+                        'excel',
                         ]
                     } );
                     $('#village_sample_table').DataTable( {
                         "pageLength": 2,
+                        "bFilter": false,
                         dom: 'Bfrtip',
                         buttons: [
-                        'csv', 'excel','print'
+                        'excel',
                         ]
                     } );
                     $('#district_button').click();

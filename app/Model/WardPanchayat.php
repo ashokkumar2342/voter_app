@@ -12,9 +12,17 @@ class WardPanchayat extends Model
       public $timestamps=false;
 
        
+      public function States()
+      {
+      	 return $this->hasOne('App\Model\State','id','states_id');
+      }
       public function Districts()
       {
-             return $this->hasOne('App\Model\District','id','district_id');
+      	 return $this->hasOne('App\Model\District','id','districts_id');
+      }
+      public function Blocks()
+      {
+             return $this->hasOne('App\Model\BlocksMc','id','blocks_id');
       }
        
 }

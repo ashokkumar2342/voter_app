@@ -14,11 +14,9 @@
         <div class="card card-info"> 
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.village.store') }}" method="post" class="add_form" select-triger="block_select_box" no-reset="true">
-                                {{ csrf_field() }}
-                                <div class="card-body">
+                    <div class="col-lg-12"> 
+                            <form action="{{ route('admin.Master.village.store') }}" method="post" class="add_form" select-triger="block_select_box" no-reset="true" button-click="btn_click_by_form">
+                                {{ csrf_field() }} 
                                     <div class="row"> 
                                     <div class="col-lg-4 form-group">
                                         <label for="exampleInputEmail1">States</label>
@@ -45,33 +43,15 @@
                                              
                                         </select>
                                     </div> 
-                                    <div class="col-lg-3 form-group">
-                                        <label for="exampleInputEmail1">Village Code</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="code" class="form-control" placeholder="Enter Code" maxlength="5">
+                                    <button type="button" hidden id="btn_click_by_form" onclick="callAjax(this,'{{ route('admin.Master.BtnClickByvillageForm') }}','village_form_div')"></button>
+                                    <div class="col-lg-12" id="village_form_div">
+                                        
                                     </div>
-                                    <div class="col-lg-3 form-group">
-                                        <label for="exampleInputPassword1">Village Name (English)</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="name_english" class="form-control" placeholder="Enter Name (English)" maxlength="50">
-                                    </div>
-                                    <div class="col-lg-3 form-group">
-                                        <label for="exampleInputPassword1">Village Name (Local Language)</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="name_local_language" class="form-control" placeholder="Enter Name (Local Language)" maxlength="50">
-                                    </div>
-                                    <div class="col-lg-3 form-group">
-                                        <label for="exampleInputPassword1">How Many Ward To Create</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <input type="text" name="ward" class="form-control"maxlength="50">
-                                    </div>
-                                    
                                 </div> 
                                 <div class="card-footer text-center">
                                     <button type="submit" class="btn btn-primary form-control">Submit</button>
                                 </div>
-                            </form>
-                        </div> 
+                            </form> 
                     </div>
                     <div class="col-lg-12" id="village_table">
                         <div class="card card-primary table-responsive"> 
@@ -92,9 +72,7 @@
                                 <tbody>
 
                                 </tbody>
-                            </table>
-                        </div> 
-                        
+                            </table> 
                     </div> 
                 </div>
             </div> 
@@ -103,7 +81,7 @@
     @endsection
     @push('scripts')
     <script type="text/javascript"> 
-        
+        $('#btn_click_by_form').click();
     </script> 
   @endpush  
 
