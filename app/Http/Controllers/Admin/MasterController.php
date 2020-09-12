@@ -13,6 +13,7 @@ use App\Model\District;
 use App\Model\Gender;
 use App\Model\State;
 use App\Model\TmpImportAssembly;
+use App\Model\TmpImportMapVillageWard;
 use App\Model\TmpImportVillage;
 use App\Model\Village;
 use App\Model\WardPanchayat;
@@ -745,6 +746,45 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response); 
      } 
+  //----------Mapping-Village-To-Ward----------------------------------------------------//
+     public function MappingVillageToWard()
+     {
+       return view('admin.master.mappingvillageToward.index',compact('villages'));   
+     }
+     public function MappingVillageTosample($value='')
+     {
+       $user=Auth::guard('admin')->user();
+       $villageSamples=DB::select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')")); 
+       return view('admin.master.mappingvillageToward.table',compact('villageSamples'));  
+     }
+      
+       public function MappingVillageTowardStore(Request $request)
+   {
+     if($request->hasFile('import_file')){  
+        $path = $request->file('import_file')->getRealPath();
+        $results = Excel::load($path, function($reader) {})->get();
+        $user = Auth::guard('admin')->user();
+        $TmpImportMapVillageWard=TmpImportMapVillageWard::where('userid',$user->id)->pluck('userid')->toArray();
+        $Old_TmpImportMapVillageWard=TmpImportMapVillageWard::whereIn('userid',$TmpImportMapVillageWard)->delete();
+       foreach ($results as $key => $value) {
+          if(empty($value->village_id)){       
+           $SaveResult=DB::select(DB::raw("call up_imp_map_village_wards_excel ('$user->id','$value->state_id','$value->district_id','$value->block_id','$value->village_id','$value->total_wards','$value->zp_ward_no','$value->ps_ward_no')"));      
+           } 
+        }
+        $villageSamples=TmpImportMapVillageWard::all();
+        $response = array();
+        $response['status'] = 1;
+        $response['data'] =view('admin.master.mappingvillageToward.result_table',compact('villageSamples'))->render();
+        return response()->json($response);  
+      }
+
+     return back()->with('error','Please Check your file, Something is wrong there.'); 
+   }
+      
+     public function MappingVillageToForm()
+     {
+       return view('admin.master.mappingvillageToward.form',compact('villageSamples')); 
+     }
   //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()
     {

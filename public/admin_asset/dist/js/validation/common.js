@@ -106,9 +106,10 @@ function callJqueryDefault(divId){
 				{
 				$("#"+formObj.getAttribute('data-table-without-pagination')).DataTable({
 					'paging':   false,
+					 "bFilter": false,
 					dom: 'Bfrtip',
 						buttons: [
-							'copy', 'csv', 'excel', 'pdf', 'print'
+						 'excel',
 						]
 				});
 				}
@@ -210,6 +211,15 @@ function callJqueryDefault(divId){
 			formObj.reset();
 			 
 		}
+		if(formObj.getAttribute('reset-input-text')){
+				
+				 var myStr = formObj.getAttribute('reset-input-text');
+        	    var strArray = myStr.split(",");
+        
+	        	for(var i = 0; i < strArray.length; i++){
+	        		$("#"+strArray[i]).val('');
+	       		 }
+			}
 		if(formObj.getAttribute('call-jquery-default')!=""){
 					callJqueryDefault(formObj.getAttribute('call-jquery-default'));
 					

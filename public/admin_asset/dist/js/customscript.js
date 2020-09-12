@@ -25,15 +25,23 @@ function callAjax(obj,url,divId,callback){
 					stateSave: true;
 									
 				$("#"+obj.getAttribute('data-table')).DataTable({
-					'iDisplayLength': 10,
-				});
-				
+					'iDisplayLength': 10, 
+				});				
 				  // Add event listener for opening and closing details
-				  $("#"+obj.getAttribute('data-table')).on('click', '#checkAll', function () {
-					   
-					    $('input:checkbox').not(this).prop('checked', this.checked);
-
-				  });
+				   
+				
+			}
+			if(obj.getAttribute('data-table-excel'))
+				{
+					stateSave: true;
+									
+				$("#"+obj.getAttribute('data-table-excel')).DataTable({
+					'iDisplayLength': 10,
+					dom: 'Bfrtip',
+                        buttons: [
+                        'excel',
+                        ]
+				}); 
 				
 			}
 			
@@ -128,14 +136,15 @@ function callAjax(obj,url,divId,callback){
 				}); 
 							
 			}
-			else if(obj.getAttribute('data-table-without-pagination'))
+			else if(obj.getAttribute('data-table-excel'))
 			{
-			$("#"+obj.getAttribute('data-table-without-pagination')).DataTable({
-				'paging':   false,
-				dom: 'Bfrtip',
-					buttons: [
-						'copy', 'csv', 'excel', 'pdf', 'print'
-					]
+			$("#"+obj.getAttribute('data-table-excel')).DataTable({
+				"pageLength": 2,
+                        "bFilter": false,
+                        dom: 'Bfrtip',
+                        buttons: [
+                        'excel',
+                        ]
 			});
 			}
 			else if(obj.getAttribute('data-table-with-pagination'))

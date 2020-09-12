@@ -193,7 +193,12 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('blockwisePsWard', 'MasterController@blockwisePsWard')->name('admin.Master.blockwisePsWard');
 	    Route::get('BlockOrPSwardWiseVillage', 'MasterController@BlockOrPSwardWiseVillage')->name('admin.Master.BlockOrPSwardWiseVillage');
 	    Route::post('MappingVillageToPSWardStore', 'MasterController@MappingVillageToPSWardStore')->name('admin.Master.MappingVillageToPSWardStore');
-	    //mapping-ps-ward////
+	    //mapping-village-ward//// 
+	    Route::get('MappingVillageToWard', 'MasterController@MappingVillageToWard')->name('admin.Master.MappingVillageToWard');
+	    Route::get('MappingVillageTosample', 'MasterController@MappingVillageTosample')->name('admin.Master.MappingVillageTosample');
+	    Route::get('MappingVillageToForm', 'MasterController@MappingVillageToForm')->name('admin.Master.MappingVillageToForm');
+	    Route::post('MappingVillageTowardStore', 'MasterController@MappingVillageTowardStore')->name('admin.Master.MappingVillageTowardStore');
+	     //mapping-village-ward////
 	    Route::get('WardBandi', 'MasterController@WardBandi')->name('admin.Master.WardBandi');	   
 	    Route::get('WardBandiFilter', 'MasterController@WardBandiFilter')->name('admin.Master.WardBandiFilter');	   
 	    Route::get('WardBandiFilterAssemblyPart', 'MasterController@WardBandiFilterAssemblyPart')->name('admin.Master.WardBandiFilterAssemblyPart');	   
