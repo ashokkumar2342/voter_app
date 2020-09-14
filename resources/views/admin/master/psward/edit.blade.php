@@ -7,20 +7,20 @@
       </button>
     </div>
     <div class="modal-body">
-      <form action="{{ route('admin.Master.ZilaParishadUpdate',$ZilaParishad->id) }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box" button-click="btn_close">
+      <form action="{{ route('admin.Master.PanchayatSamitiUpdate',$PanchayatSamiti->id) }}" method="post" class="add_form" select-triger="block_select_box" button-click="btn_close">
         {{ csrf_field() }}
         <div class="card-body">
           <div class="form-group">
-            <label>Z.P.Ward No.</label>
-            <input type="text" class="form-control" name="zp_ward_no" value="{{ $ZilaParishad->ward_no }}"> 
+            <label>P.S.Ward No.</label>
+            <input type="text" class="form-control" name="ps_ward_no" value="{{ $PanchayatSamiti->ward_no }}"> 
           </div>
           <div class="form-group">
-            <label>Z.P.Name (English)</label>
-            <input type="text" class="form-control" name="zp_ward_name_english" value="{{ $ZilaParishad->name_e }}"> 
+            <label>P.S.Name (English)</label>
+            <input type="text" class="form-control" name="ps_ward_name_english" value="{{ $PanchayatSamiti->name_e }}"> 
           </div>
           <div class="form-group">
-            <label>Z.P.Name (Local Language)</label>
-            <input type="text" class="form-control" name="zp_ward_name_local_language" value="{{ $ZilaParishad->name_l }}"> 
+            <label>P.S.Name (Local Language)</label>
+            <input type="text" class="form-control" name="ps_ward_name_local_language" value="{{ $PanchayatSamiti->name_l }}"> 
           </div>
         </div> 
         <div class="modal-footer justify-content-between">

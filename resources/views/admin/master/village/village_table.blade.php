@@ -28,8 +28,8 @@
                                          <td>{{ $WardVillage }}</td>
                                          <td class="text-nowrap">
                                             <button type="button" class="btn btn-primary btn-xs" onclick="callPopupLarge(this,'{{ route('admin.Master.village.ward.add',$Village->id) }}')">Add Ward</button>
-                                             <a onclick="callPopupLarge(this,'{{ route('admin.Master.village.edit',$Village->id) }}')" title="" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
-                                             <a href="{{ route('admin.Master.village.delete',$Village->id) }}" title="" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                                             <a onclick="callPopupLarge(this,'{{ route('admin.Master.village.edit',$Village->id) }}')" title="Edit" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
+                                             <a href="#" success-popup="true" select-triger="block_select_box" onclick="callAjax(this,'{{ route('admin.Master.village.delete',$Village->id) }}')" title="Delete" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
                                          </td>
                                      </tr> 
                                     @endforeach

@@ -9,29 +9,9 @@
     <div class="modal-body">
       <form action="{{ route('admin.Master.BlockMCSStore',$BlocksMcs->id) }}" method="post" class="add_form" select-triger="district_select_box" button-click="btn_close">
         {{ csrf_field() }}
-        <div class="card-body">
-          <div class="row"> 
-            <div class="col-lg-6 form-group">
-              <label for="exampleInputEmail1">States</label>
-              <span class="fa fa-asterisk"></span>
-              <select name="states" class="form-control">
-                <option selected disabled>Select States</option>
-                @foreach ($States as $State)
-                <option value="{{ $State->id }}"{{ $BlocksMcs->states_id==$State->id?'selected' : '' }}>{{ $State->code }}--{{ $State->name_e }}</option>  
-                @endforeach
-              </select>
-            </div>
-            <div class="col-lg-6 form-group">
-              <label for="exampleInputEmail1">District</label>
-              <span class="fa fa-asterisk"></span>
-              <select name="district" class="form-control">
-                <option selected disabled>Select District</option>
-                @foreach ($Districts as $District)
-                <option value="{{ $District->id }}"{{ $BlocksMcs->districts_id==$District->id?'selected' : '' }}>{{ $District->code }}--{{ $District->name_e }}</option>  
-                @endforeach
-              </select>
-            </div>
-          </div>
+        <div class="card-body"> 
+            <input type="hidden" name="states" value="{{ $BlocksMcs->states_id }}">
+            <input type="hidden" name="district" value="{{ $BlocksMcs->districts_id }}"> 
           <div class="form-group">
             <label for="exampleInputEmail1">Block MCS Code</label>
             <span class="fa fa-asterisk"></span>

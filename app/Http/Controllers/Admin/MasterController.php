@@ -222,7 +222,41 @@ class MasterController extends Controller
     }
     public function ZilaParishadEdit($id)
     {
-      return view('admin.master.zpward.edit',compact('ZilaParishads'));
+      $ZilaParishad= ZilaParishad::find($id);
+      return view('admin.master.zpward.edit',compact('ZilaParishad'));
+    }
+    public function ZilaParishadUpdate(Request $request,$id)
+   {    
+       $rules=[ 
+        // 'zp_ward_no' => 'required|unique:ward_zp,ward_no,'.$id, 
+            'zp_ward_no' => 'required',  
+            'zp_ward_name_english' => 'required',  
+            'zp_ward_name_local_language' => 'required',  
+      ]; 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+       $ZilaParishad= ZilaParishad::find($id);
+       $ZilaParishad->ward_no=$request->zp_ward_no;
+       $ZilaParishad->name_e=$request->zp_ward_name_english;
+       $ZilaParishad->name_l=$request->zp_ward_name_local_language;
+       $ZilaParishad->save();
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
+    public function ZilaParishadDelete($id)
+    {
+       $ZilaParishad= ZilaParishad::find($id); 
+       $ZilaParishad->Delete();
+       $response=['status'=>1,'msg'=>'Delete Successfully'];
+       return response()->json($response);
     }
     //------------block-mcs----------------------------//
 
@@ -259,6 +293,44 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }
+    }
+    public function PanchayatSamitiEdit($id)
+    {
+      $PanchayatSamiti= WardPanchayat::find($id); 
+      return view('admin.master.psward.edit',compact('PanchayatSamiti'));
+    }
+    public function PanchayatSamitiUpdate(Request $request,$id)
+   {    
+       $rules=[ 
+        // 'zp_ward_no' => 'required|unique:ward_zp,ward_no,'.$id, 
+            'ps_ward_no' => 'required',  
+            'ps_ward_name_english' => 'required',  
+            'ps_ward_name_local_language' => 'required',  
+      ]; 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+       $ZilaParishad= WardPanchayat::find($id);
+       $ZilaParishad->ward_no=$request->ps_ward_no;
+       $ZilaParishad->name_e=$request->ps_ward_name_english;
+       $ZilaParishad->name_l=$request->ps_ward_name_local_language;
+       $ZilaParishad->save();
+       $response=['status'=>1,'msg'=>'Update Successfully'];
+       return response()->json($response);
+      }
+    }
+    public function PanchayatSamitiDelete($id)
+    {
+       $WardPanchayat= WardPanchayat::find($id); 
+       $WardPanchayat->Delete();
+       $response=['status'=>1,'msg'=>'Delete Successfully'];
+       return response()->json($response);
     }
     //------------block-mcs----------------------------//
 
@@ -410,16 +482,48 @@ class MasterController extends Controller
     }
     public function villageEdit($id)
     {
-       try {
-        
-          $Districts= District::orderBy('name_e','ASC')->get();   
-          $States= State::orderBy('name_e','ASC')->get();   
-          $BlocksMcs= BlocksMc::find($id); 
+       try { 
+          
           $village=Village::find($id); 
           return view('admin.master.village.edit',compact('Districts','States','BlocksMcs','village'));
         } catch (Exception $e) {
             
         }
+    }
+    public function villageUpdate(Request $request,$id=null)
+   {  
+       $rules=[
+             
+            'code' => 'required|unique:villages,code,'.$id, 
+            'name_english' => 'required', 
+            'name_local_language' => 'required', 
+            // 'syllabus' => 'required', 
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        $village=Village::find($id); 
+        $village->code=$request->code; 
+        $village->name_e=$request->name_english; 
+        $village->name_l=$request->name_local_language; 
+        $village->save(); 
+       $response=['status'=>1,'msg'=>'Update Successfully'];
+       return response()->json($response);
+      }
+    }
+    public function villageDelete($id)
+    {
+       $Village= Village::find($id); 
+       $Village->Delete();
+       $response=['status'=>1,'msg'=>'Delete Successfully'];
+       return response()->json($response);
     }
     public function villageWardAdd($village_id)
     {
@@ -747,8 +851,73 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response); 
      } 
+   //---------MappingBoothWard----------MappingBoothWard-----------------MappingBoothWard
+    public function MappingBoothWard($value='')
+    {
+        $States= State::orderBy('name_e','ASC')->get();  
+        return view('admin.master.mappingBoothWard.index',compact('States'));
+    }
+    public function MappingVillageWiseBooth(Request $request)
+     {
+       $booths=PollingBooth::where('village_id',$request->village_id)->orderBy('states_id','ASC')->orderBy('districts_id','ASC')->orderBy('blocks_id','ASC')->orderBy('village_id','ASC')->orderBy('booth_no','ASC')->get(); 
+       return view('admin.master.booth.booth_select_box',compact('booths'));
+     }
+     public function MappingVillageOrBoothWiseWard(Request $request)
+     {  
+        $wards=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` not in (Select `wardId` from `booth_ward_voter_mapping`)Union select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
+        $selecdetwardId=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` not in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
+        if (empty($selecdetwardId)) {
+         $wardId[]=0;
+       }elseif(!empty($selecdetwardId)) {
+         foreach ($selecdetwardId as $key => $value) {
+           $wardId[]=$value->id;
+        }
+       }  
+        return view('admin.master.mappingBoothWard.ward_select_box',compact('wards','wardId'));
+     }
+     public function MappingBoothWardStore(Request $request)
+      {  
+        if (!empty($request->ward)) {
+         $ward=implode(',',$request->ward);  
+        }
+        elseif (empty($request->ward)) {
+           $ward=0;  
+         } 
+       
+       DB::select(DB::raw("call up_map_booth_ward ('$request->booth','$ward')"));
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response); 
+      }
+   //------MappingWardBooth-----------------MappingWardBooth--------MappingWardBooth
    
-     
+   public function MappingWardBooth()
+   {
+        $States= State::orderBy('name_e','ASC')->get();  
+        return view('admin.master.mappingWardBooth.index',compact('States'));     
+   }
+   public function MappingWardBoothTable(Request $request)
+   {
+      $booths=DB::select(DB::raw("select `bwm`.`id`, `pb`.`booth_no`, `pb`.`name_l`, `bwm`.`fromsrno`, `bwm`.`tosrno` from `booth_ward_voter_mapping` `bwm` Inner Join `polling_booths` `pb` on `pb`.`id` = `bwm`.`boothid` Where `bwm`.`wardId` =$request->id Order By `bwm`.`fromsrno`;"));
+      return view('admin.master.mappingWardBooth.table',compact('booths'));   
+   }
+   public function MappingWardBoothSelectBooth(Request $request)
+   {
+      $booths=DB::select(DB::raw("select `id`, `booth_no` from `polling_booths` Where `village_id` =$request->village_id And `id` not in (Select `boothid` from `booth_ward_voter_mapping`) Order By `booth_no`;"));
+      return view('admin.master.booth.booth_select_box',compact('booths'));
+   }
+   public function MappingWardBoothStore(Request $request)
+   { 
+       $message=DB::select(DB::raw("call up_map_ward_booth_voters ('0','$request->ward','$request->from_sr_no','$request->to_sr_no','$request->booth')"));
+       if ($message[0]->Save_Result!='Save Successfully') {
+         $response=['status'=>0,'msg'=>$message[0]->Save_Result];
+         return response()->json($response); 
+        }
+        elseif ($message[0]->Save_Result=='Save Successfully') {
+         $response=['status'=>1,'msg'=>$message[0]->Save_Result];
+         return response()->json($response); 
+        } 
+       
+   }    
   //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()
     {

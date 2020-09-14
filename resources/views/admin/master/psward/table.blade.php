@@ -22,8 +22,8 @@
      		<td>{{ $PanchayatSamiti->name_e }}</td>
      		<td>{{ $PanchayatSamiti->name_l }}</td>
             <td>
-                <a href="#" class="btn btn-xs btn-info" onclick="callPopupLarge(this,'{{ route('admin.Master.ZilaParishadEdit',$PanchayatSamiti->id) }}')"><i class="fa fa-edit"></i></a>
-                <a href="" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                <a href="#" class="btn btn-xs btn-info" onclick="callPopupLarge(this,'{{ route('admin.Master.PanchayatSamitiEdit',$PanchayatSamiti->id) }}')"><i class="fa fa-edit"></i></a>
+                <a href="#" class="btn btn-xs btn-danger" success-popup="true" select-triger="block_select_box" onclick="callAjax(this,'{{ route('admin.Master.PanchayatSamitiDelete',$PanchayatSamiti->id) }}')"><i class="fa fa-trash"></i></a>
             </td>
      	</tr>	 
      	@endforeach 
