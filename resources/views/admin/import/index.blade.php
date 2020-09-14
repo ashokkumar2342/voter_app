@@ -260,7 +260,7 @@
                                         <td>{{ $villageward->block_name }}</td>
                                         <td>{{ $villageward->village_id }}</td>
                                         <td>{{ $villageward->village_name }}</td>
-                                        <td>{{ $villageward->Total_Wards }}</td>
+                                        <td>{{ @$villageward->Total_Wards }}</td>
                                         <td></td>
                                         <td></td>
                                       </tr> 

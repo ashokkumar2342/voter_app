@@ -908,7 +908,15 @@ class MasterController extends Controller
    }
    public function MappingWardBoothStore(Request $request)
    { 
-       $message=DB::select(DB::raw("call up_map_ward_booth_voters ('0','$request->ward','$request->from_sr_no','$request->to_sr_no','$request->booth')"));
+      if (empty($request->from_sr_no)) {
+        $from_sr_no=0;
+        $to_sr_no=0; 
+      }
+      elseif (!empty($request->from_sr_no)) {
+        $from_sr_no=$request->from_sr_no;
+        $to_sr_no=$request->to_sr_no;
+      }
+       $message=DB::select(DB::raw("call up_map_ward_booth_voters ('0','$request->ward','$from_sr_no','$to_sr_no','$request->booth')"));
        if ($message[0]->Save_Result!='Save Successfully') {
          $response=['status'=>0,'msg'=>$message[0]->Save_Result];
          return response()->json($response); 
