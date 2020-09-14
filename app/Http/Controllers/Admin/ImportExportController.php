@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Model\TmpImportAssembly;
 use App\Model\TmpImportBlock;
 use App\Model\TmpImportDistrict;
+use App\Model\TmpImportMapVillageWard;
 use App\Model\TmpImportVillage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,8 @@ class ImportExportController extends Controller
    	$assemblys= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
     $blocks= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
    	$villages= DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
-      return view('admin.import.index',compact('Districts','assemblys','blocks','villages'));
+    $villagewards=DB::select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')")); 
+      return view('admin.import.index',compact('Districts','assemblys','blocks','villages','villagewards'));
    }
    public function DistrictImportForm($value='')
    { 
@@ -124,6 +126,30 @@ class ImportExportController extends Controller
         $response = array();
         $response['status'] = 1;
         $response['data'] =view('admin.import.village_import_data',compact('VillImportedDatas'))->render();
+        return response()->json($response);  
+      }
+
+     return back()->with('error','Please Check your file, Something is wrong there.'); 
+   }
+
+
+   public function VillageWardImportStore(Request $request)
+   {
+     if($request->hasFile('import_file')){  
+        $path = $request->file('import_file')->getRealPath();
+        $results = Excel::load($path, function($reader) {})->get();
+        $user = Auth::guard('admin')->user();
+        $TmpImportMapVillageWard=TmpImportMapVillageWard::where('userid',$user->id)->pluck('userid')->toArray();
+        $Old_TmpImportMapVillageWard=TmpImportMapVillageWard::whereIn('userid',$TmpImportMapVillageWard)->delete();
+       foreach ($results as $key => $value) {
+          if(empty($value->village_id)){       
+           $SaveResult=DB::select(DB::raw("call up_imp_map_village_wards_excel ('$user->id','$value->state_id','$value->district_id','$value->block_id','$value->village_id','$value->total_wards','$value->zp_ward_no','$value->ps_ward_no')"));      
+           } 
+        }
+        $villageSamples=TmpImportMapVillageWard::all();
+        $response = array();
+        $response['status'] = 1;
+        $response['data'] =view('admin.master.mappingvillageToward.result_table',compact('villageSamples'))->render();
         return response()->json($response);  
       }
 

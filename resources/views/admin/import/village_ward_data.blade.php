@@ -1,6 +1,6 @@
  
 <div class="col-lg-12 table-responsive"> 
-<table class="table" id="village_ward_sample_datarecordtable">
+<table class="table" id="village_ward_sample_table">
 	<thead>
 		<tr>
 			<th>state_id</th>

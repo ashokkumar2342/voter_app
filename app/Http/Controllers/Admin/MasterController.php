@@ -11,6 +11,7 @@ use App\Model\BlockMc;
 use App\Model\BlocksMc;
 use App\Model\District;
 use App\Model\Gender;
+use App\Model\PollingBooth;
 use App\Model\State;
 use App\Model\TmpImportAssembly;
 use App\Model\TmpImportMapVillageWard;
@@ -746,45 +747,8 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response); 
      } 
-  //----------Mapping-Village-To-Ward----------------------------------------------------//
-     public function MappingVillageToWard()
-     {
-       return view('admin.master.mappingvillageToward.index',compact('villages'));   
-     }
-     public function MappingVillageTosample($value='')
-     {
-       $user=Auth::guard('admin')->user();
-       $villageSamples=DB::select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')")); 
-       return view('admin.master.mappingvillageToward.table',compact('villageSamples'));  
-     }
-      
-       public function MappingVillageTowardStore(Request $request)
-   {
-     if($request->hasFile('import_file')){  
-        $path = $request->file('import_file')->getRealPath();
-        $results = Excel::load($path, function($reader) {})->get();
-        $user = Auth::guard('admin')->user();
-        $TmpImportMapVillageWard=TmpImportMapVillageWard::where('userid',$user->id)->pluck('userid')->toArray();
-        $Old_TmpImportMapVillageWard=TmpImportMapVillageWard::whereIn('userid',$TmpImportMapVillageWard)->delete();
-       foreach ($results as $key => $value) {
-          if(empty($value->village_id)){       
-           $SaveResult=DB::select(DB::raw("call up_imp_map_village_wards_excel ('$user->id','$value->state_id','$value->district_id','$value->block_id','$value->village_id','$value->total_wards','$value->zp_ward_no','$value->ps_ward_no')"));      
-           } 
-        }
-        $villageSamples=TmpImportMapVillageWard::all();
-        $response = array();
-        $response['status'] = 1;
-        $response['data'] =view('admin.master.mappingvillageToward.result_table',compact('villageSamples'))->render();
-        return response()->json($response);  
-      }
-
-     return back()->with('error','Please Check your file, Something is wrong there.'); 
-   }
-      
-     public function MappingVillageToForm()
-     {
-       return view('admin.master.mappingvillageToward.form',compact('villageSamples')); 
-     }
+   
+     
   //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()
     {
@@ -992,5 +956,69 @@ class MasterController extends Controller
       }
      
 
+    }
+    public function booth($value='')
+    {
+      try {
+          $Districts= District::orderBy('name_e','ASC')->get();   
+          $States= State::orderBy('name_e','ASC')->get();   
+          $BlocksMcs= BlocksMc::orderBy('name_e','ASC')->get();   
+          $Villages= Village::orderBy('name_e','ASC')->get(); 
+          return view('admin.master.booth.index',compact('Districts','States','BlocksMcs','Villages'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function boothStore(Request $request,$id=null)
+   { 
+       $rules=[
+            'states' => 'required', 
+            'district' => 'required', 
+            'block' => 'required', 
+            'village' => 'required', 
+            'booth_no' => 'required', 
+            'booth_name_english' => 'required', 
+            'booth_name_local' => 'required', 
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        $booths=PollingBooth::firstOrNew(['id'=>$id]);
+        $booths->states_id=$request->states;
+        $booths->districts_id=$request->district;
+        $booths->blocks_id=$request->block;
+        $booths->village_id=$request->village;
+        $booths->booth_no=$request->booth_no;
+        $booths->name_e=$request->booth_name_english;
+        $booths->name_l=$request->booth_name_local;
+        $booths->save(); 
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
+    public function boothTable(Request $request)
+    {
+       $booths=PollingBooth::where('village_id',$request->id)->orderBy('states_id','ASC')->orderBy('districts_id','ASC')->orderBy('blocks_id','ASC')->orderBy('village_id','ASC')->orderBy('booth_no','ASC')->get();
+       return view('admin.master.booth.table',compact('booths'));     
+    }
+    public function boothEdit($id)
+    {
+       $booth=PollingBooth::find($id);
+       return view('admin.master.booth.edit',compact('booth'));     
+    }
+    public function boothDelete($id)
+    {
+       $booth=PollingBooth::find($id);
+       $booth->delete();
+       $response=['status'=>1,'msg'=>'Delete Successfully'];
+       return response()->json($response);
+           
     }     
 }

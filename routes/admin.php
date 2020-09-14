@@ -193,11 +193,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('blockwisePsWard', 'MasterController@blockwisePsWard')->name('admin.Master.blockwisePsWard');
 	    Route::get('BlockOrPSwardWiseVillage', 'MasterController@BlockOrPSwardWiseVillage')->name('admin.Master.BlockOrPSwardWiseVillage');
 	    Route::post('MappingVillageToPSWardStore', 'MasterController@MappingVillageToPSWardStore')->name('admin.Master.MappingVillageToPSWardStore');
-	    //mapping-village-ward//// 
-	    Route::get('MappingVillageToWard', 'MasterController@MappingVillageToWard')->name('admin.Master.MappingVillageToWard');
-	    Route::get('MappingVillageTosample', 'MasterController@MappingVillageTosample')->name('admin.Master.MappingVillageTosample');
-	    Route::get('MappingVillageToForm', 'MasterController@MappingVillageToForm')->name('admin.Master.MappingVillageToForm');
-	    Route::post('MappingVillageTowardStore', 'MasterController@MappingVillageTowardStore')->name('admin.Master.MappingVillageTowardStore');
+	  
 	     //mapping-village-ward////
 	    Route::get('WardBandi', 'MasterController@WardBandi')->name('admin.Master.WardBandi');	   
 	    Route::get('WardBandiFilter', 'MasterController@WardBandiFilter')->name('admin.Master.WardBandiFilter');	   
@@ -219,10 +215,19 @@ Route::group(['middleware' => 'admin'], function() {
 
 
 
-	    //-----------------onchange-----------------------------//
+	    //-----------------gender-----------------------------//
 	    Route::get('gender', 'MasterController@gender')->name('admin.Master.gender');   
 	    Route::get('gender-edit/{id}', 'MasterController@genderEdit')->name('admin.Master.gender.edit');   
-	    Route::post('gender-update/{id}', 'MasterController@genderUpdate')->name('admin.Master.gender.update');   
+	    Route::post('gender-update/{id}', 'MasterController@genderUpdate')->name('admin.Master.gender.update'); 
+
+
+	    //-----------------gender-----------------------------//
+	    Route::get('booth', 'MasterController@booth')->name('admin.Master.booth');   
+	    Route::post('boothStore/{id?}', 'MasterController@boothStore')->name('admin.Master.boothStore');   
+	    Route::get('boothTable', 'MasterController@boothTable')->name('admin.Master.boothTable');   
+	    Route::get('boothEdit/{id}', 'MasterController@boothEdit')->name('admin.Master.boothEdit');   
+	    Route::get('boothDelete/{id}', 'MasterController@boothDelete')->name('admin.Master.boothDelete');   
+	 
 	       
 	    
 	     
@@ -276,7 +281,7 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('VillageImportForm', 'ImportExportController@VillageImportForm')->name('admin.import.VillageImportForm');
            Route::post('VillageImportStore', 'ImportExportController@VillageImportStore')->name('admin.import.VillageImportStore');
                      
-	 	 
+	 	  Route::post('VillageWardImportStore', 'ImportExportController@VillageWardImportStore')->name('admin.import.VillageWardImportStore');
     });       
 
  });

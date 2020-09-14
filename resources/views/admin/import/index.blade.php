@@ -219,6 +219,80 @@
                                 </div> 
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card card-primary"> 
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#village_ward_sample">Village Ward Sample Export</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#village_ward_menu">Village Ward Import</a>
+                                </li> 
+                            </ul> 
+                            <div class="tab-content">
+                                <div id="village_ward_sample" class="container tab-pane active"><br>
+                                    <div class="col-lg-12 table-responsive"> 
+                                    <table class="table" id="village_ward_sample_table">
+                                    <thead>
+                                      <tr>
+                                        <th>state_id</th>
+                                        <th>state_name</th>
+                                        <th>district_id</th>
+                                        <th>district_name</th>
+                                        <th>block_id</th>
+                                        <th>block_name</th>
+                                        <th>village_id</th>
+                                        <th>village_name</th>
+                                        <th>total_wards</th>
+                                        <th>zp_ward_no</th>
+                                        <th>ps_ward_noo</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      @foreach ($villagewards as $villageward)
+                                      <tr>
+                                        <td>{{ $villageward->state_id }}</td>
+                                        <td>{{ $villageward->state_name }}</td>
+                                        <td>{{ $villageward->district_id }}</td>
+                                        <td>{{ $villageward->district_name }}</td>
+                                        <td>{{ $villageward->block_id }}</td>
+                                        <td>{{ $villageward->block_name }}</td>
+                                        <td>{{ $villageward->village_id }}</td>
+                                        <td>{{ $villageward->village_name }}</td>
+                                        <td>{{ $villageward->Total_Wards }}</td>
+                                        <td></td>
+                                        <td></td>
+                                      </tr> 
+                                      @endforeach
+                                    </tbody>
+                                    </table>
+                                    </div> 
+                                </div>
+                              <div id="village_ward_menu" class="container tab-pane fade"><br>
+                                    
+                               <form action="{{ route('admin.import.VillageWardImportStore') }}" method="get" enctype="multipart/form-data" success-content-id="village_ward_imported_table" no-reset="true" data-table-without-pagination="village_ward_sample_datarecordtable" class="add_form">
+                               <div class="row">
+                               <div class="col-lg-8 form-group">
+                               <label for="exampleInputFile">Import File</label>
+                               <div class="input-group">
+                               <div class="custom-file">
+                               <input type="file" class="custom-file-input" id="exampleInputFile" name="import_file">
+                               <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                               </div> 
+                               </div>
+                               </div> 
+                               <div class="col-lg-4 form-group">
+                                <input type="submit" class="btn btn-success" style="margin-top: 30px">
+                               </div> 
+                               </div>
+                               <div class="col-lg-12 table-responsive" id="village_ward_imported_table">
+                                  
+                                </div> 
+                               </form>
+                              </div> 
+                            </div>
+                        </div>
                     </div> 
                 </div>
             </div>
@@ -254,6 +328,14 @@
                         ]
                     } );
                     $('#village_sample_table').DataTable( {
+                        "pageLength": 2,
+                        "bFilter": false,
+                        dom: 'Bfrtip',
+                        buttons: [
+                        'excel',
+                        ]
+                    } );
+                    $('#village_ward_sample_table').DataTable( {
                         "pageLength": 2,
                         "bFilter": false,
                         dom: 'Bfrtip',

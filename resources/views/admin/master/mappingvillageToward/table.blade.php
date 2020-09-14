@@ -11,9 +11,9 @@
 			<th>block_name</th>
 			<th>village_id</th>
 			<th>village_name</th>
-			<th>Total_Wards</th>
-			<th>ZP_Ward_No</th>
-			<th>PS_Ward_No</th>
+			<th>total_wards</th>
+			<th>zp_ward_no</th>
+			<th>ps_ward_noo</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -29,7 +29,7 @@
 			<td>{{ $villageSample->village_name }}</td>
 			<td>{{ $villageSample->Total_Wards }}</td>
 			<td></td>
-			<td>{{ $villageSample->PS_Ward_No }}</td>
+			<td></td>
 		</tr> 
 		@endforeach
 	</tbody>
