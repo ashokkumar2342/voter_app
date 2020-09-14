@@ -865,7 +865,7 @@ class MasterController extends Controller
      public function MappingVillageOrBoothWiseWard(Request $request)
      {  
         $wards=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` not in (Select `wardId` from `booth_ward_voter_mapping`)Union select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
-        
+
         $selecdetwardId=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
         if (empty($selecdetwardId)) {
          $wardId[]=0;
@@ -903,7 +903,7 @@ class MasterController extends Controller
    }
    public function MappingWardBoothSelectBooth(Request $request)
    {
-      $booths=DB::select(DB::raw("select `id`, `booth_no` from `polling_booths` Where `village_id` =$request->village_id And `id` not in (Select `boothid` from `booth_ward_voter_mapping`) Order By `booth_no`;"));
+      $booths=DB::select(DB::raw("select `id`, `booth_no` from `polling_booths` Where `village_id` =$request->village_id And `id` not in (Select `boothid` from `booth_ward_voter_mapping`  Where `wardId` =$request->id) Order By `booth_no`;"));
       return view('admin.master.booth.booth_select_box',compact('booths'));
    }
    public function MappingWardBoothStore(Request $request)
