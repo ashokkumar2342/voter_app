@@ -865,7 +865,8 @@ class MasterController extends Controller
      public function MappingVillageOrBoothWiseWard(Request $request)
      {  
         $wards=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` not in (Select `wardId` from `booth_ward_voter_mapping`)Union select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
-        $selecdetwardId=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` not in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
+        
+        $selecdetwardId=DB::select(DB::raw("select `id`, `ward_no` from `ward_villages` where `village_id` =$request->village_id and `id` in (Select `wardId` from `booth_ward_voter_mapping` where `boothid` =$request->id) Order By `ward_no`;"));
         if (empty($selecdetwardId)) {
          $wardId[]=0;
        }elseif(!empty($selecdetwardId)) {
