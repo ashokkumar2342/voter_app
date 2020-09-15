@@ -18,13 +18,17 @@ class ImportExportController extends Controller
 {
    public function index()
    {
-   	$user=Auth::guard('admin')->user(); 
-   	$Districts= DB::select(DB::raw("call up_fetch_import_district_sample ('$user->id')"));
-   	$assemblys= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
+    $user=Auth::guard('admin')->user();
     $blocks= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
    	$villages= DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
     $villagewards=DB::select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')")); 
       return view('admin.import.index',compact('Districts','assemblys','blocks','villages','villagewards'));
+   }
+   public function DistrictExportSample($value='')
+   {
+    $user=Auth::guard('admin')->user(); 
+    $Districts= DB::select(DB::raw("call up_fetch_import_district_sample ('$user->id')"));
+    return view('admin.import.district_sample',compact('Districts'));  
    }
    public function DistrictImportForm($value='')
    { 
@@ -46,13 +50,19 @@ class ImportExportController extends Controller
         $disImportedDatas=TmpImportDistrict::all();
         $response = array();
         $response['status'] = 1;
+        // $response['msg'] = 'Import Successfully';
         $response['data'] =view('admin.import.district_import_data',compact('disImportedDatas'))->render();
         return response()->json($response);  
       }
 
      return back()->with('error','Please Check your file, Something is wrong there.'); 
    }
-
+   public function AssemblyExportSample()
+   {
+    $user=Auth::guard('admin')->user();  
+    $assemblys= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
+    return view('admin.import.assembly_sample',compact('assemblys'));  
+   }
    public function AssemblyImportForm($value='')
    {
    	 return view('admin.import.assembly_import_form');
@@ -79,6 +89,12 @@ class ImportExportController extends Controller
 
      return back()->with('error','Please Check your file, Something is wrong there.'); 
    }
+   public function BlockExportSample()
+   {
+    $user=Auth::guard('admin')->user();  
+    $blocks= DB::select(DB::raw("call up_fetch_import_assembly_sample ('$user->id')"));
+    return view('admin.import.block_sample',compact('blocks'));  
+   }
    public function BlockImportForm($value='')
    {
      return view('admin.import.block_import_form');
@@ -104,6 +120,12 @@ class ImportExportController extends Controller
       }
 
      return back()->with('error','Please Check your file, Something is wrong there.'); 
+   }
+   public function VillageExportSample()
+   {
+    $user=Auth::guard('admin')->user();  
+    $villages= DB::select(DB::raw("call up_fetch_import_village_sample ('$user->id')"));
+    return view('admin.import.village_sample',compact('villages'));  
    }
    public function VillageImportForm($value='')
    {
@@ -132,7 +154,16 @@ class ImportExportController extends Controller
      return back()->with('error','Please Check your file, Something is wrong there.'); 
    }
 
-
+   public function VillageWardExportSample()
+   {
+    $user=Auth::guard('admin')->user();  
+    $villagewards=DB::select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
+    return view('admin.import.village_ward_sample',compact('villagewards'));  
+   }
+   public function VillageWardImportForm($value='')
+   {
+     return view('admin.import.village_ward_form');
+   }
    public function VillageWardImportStore(Request $request)
    {
      if($request->hasFile('import_file')){  
@@ -149,7 +180,7 @@ class ImportExportController extends Controller
         $villageSamples=TmpImportMapVillageWard::all();
         $response = array();
         $response['status'] = 1;
-        $response['data'] =view('admin.master.mappingvillageToward.result_table',compact('villageSamples'))->render();
+        $response['data'] =view('admin.import.village_ward_data',compact('villageSamples'))->render();
         return response()->json($response);  
       }
 

@@ -283,18 +283,26 @@ Route::group(['middleware' => 'admin'], function() {
     });
     Route::group(['prefix' => 'import'], function() {
            Route::get('', 'ImportExportController@index')->name('admin.import.index');
+
+
+           Route::get('DistrictExportSample', 'ImportExportController@DistrictExportSample')->name('admin.import.DistrictExportSample');
            Route::get('DistrictImportForm', 'ImportExportController@DistrictImportForm')->name('admin.import.DistrictImportForm');
            Route::post('DistrictImportStore', 'ImportExportController@DistrictImportStore')->name('admin.import.DistrictImportStore');
 
+           Route::get('AssemblyExportSample', 'ImportExportController@AssemblyExportSample')->name('admin.import.AssemblyExportSample');
            Route::get('AssemblyImportForm', 'ImportExportController@AssemblyImportForm')->name('admin.import.AssemblyImportForm');
            Route::post('AssemblyImportStore', 'ImportExportController@AssemblyImportStore')->name('admin.import.AssemblyImportStore');
 
+           Route::get('BlockExportSample', 'ImportExportController@BlockExportSample')->name('admin.import.BlockExportSample');
            Route::get('BlockImportForm', 'ImportExportController@BlockImportForm')->name('admin.import.BlockImportForm');
            Route::post('BlockImportStore', 'ImportExportController@BlockImportStore')->name('admin.import.BlockImportStore');
 
+           Route::get('VillageExportSample', 'ImportExportController@VillageExportSample')->name('admin.import.VillageExportSample');
            Route::get('VillageImportForm', 'ImportExportController@VillageImportForm')->name('admin.import.VillageImportForm');
            Route::post('VillageImportStore', 'ImportExportController@VillageImportStore')->name('admin.import.VillageImportStore');
                      
+	 	  Route::get('VillageWardExportSample', 'ImportExportController@VillageWardExportSample')->name('admin.import.VillageWardExportSample');
+	 	  Route::get('VillageWardImportForm', 'ImportExportController@VillageWardImportForm')->name('admin.import.VillageWardImportForm');
 	 	  Route::post('VillageWardImportStore', 'ImportExportController@VillageWardImportStore')->name('admin.import.VillageWardImportStore');
     });       
 
