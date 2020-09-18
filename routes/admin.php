@@ -271,8 +271,12 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('imageShow', 'VoterDetailsController@imageShow')->name('admin.voter.imageShow');
     });
     Route::group(['prefix' => 'Report'], function() {
-           Route::get('/', 'ReportController@index')->name('admin.report.index');
-           Route::post('reportGenerate', 'ReportController@reportGenerate')->name('admin.report.reportGenerate');
+           Route::get('PrintVoterList', 'ReportController@PrintVoterList')->name('admin.report.PrintVoterList');
+           Route::post('PrintVoterListGenerate', 'ReportController@PrintVoterListGenerate')->name('admin.report.PrintVoterListGenerate');
+
+           Route::get('Report', 'ReportController@Report')->name('admin.report.Report');
+           Route::get('ReportGenerate', 'ReportController@ReportGenerate')->name('admin.report.ReportGenerate');
+           Route::get('ReportGeneratePDF', 'ReportController@ReportGeneratePDF')->name('admin.report.ReportGeneratePDF');
 	 	 
     });
     Route::group(['prefix' => 'VoterListMaster'], function() {

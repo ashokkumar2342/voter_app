@@ -1,24 +1,20 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\ReportType;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function PrintVoterList()
     {
         
         return view('admin.report.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function reportGenerate(Request $request)
+    } 
+    public function PrintVoterListGenerate(Request $request)
     {
       $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       $pdf->setPrintHeader(FALSE); 
@@ -51,59 +47,38 @@ class ReportController extends Controller
       $pdf->Output();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    ///--------------------------------report--------report----------------------------
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Activity $activity)
+    public function Report($value='')
     {
-        //
+      $reportTypes=ReportType::OrderBy('id','ASC')->get();
+      return view('admin.report.report.index',compact('reportTypes'));  
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Activity $activity)
+    public function ReportGenerate(Request $request)
     {
-        //
+      $user=Auth::guard('admin')->user();  
+      $villagewards=DB::
+      select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
+      return view('admin.report.report.result_data',compact('villagewards'));  
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Activity $activity)
+    public function ReportGeneratePDF(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Activity $activity)
-    {
-        //
-    }
+      $user=Auth::guard('admin')->user(); 
+      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+      $pdf->setPrintHeader(FALSE); 
+      $pdf->SetCreator(PDF_CREATOR); 
+      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+      $pdf->setFontSubsetting(true); 
+      $pdf->SetFont('freesans', '', 11, '', true); 
+      $pdf->AddPage(); 
+      $villagewards=DB::
+      select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
+      $html = view('admin.report.report.result_data',compact('villagewards'));  
+      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+      ob_end_clean(); 
+      $pdf->Output();
+      
+    } 
 }

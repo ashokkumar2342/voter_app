@@ -13,7 +13,7 @@
         </div> 
         <div class="card card-info"> 
             <div class="card-body">
-                <form action="{{ route('admin.report.reportGenerate') }}" method="post" target="blank">
+                <form action="{{ route('admin.report.PrintVoterListGenerate') }}" method="post" target="blank">
                 {{ csrf_field() }} 
                 <div class="row">
                     <div class="col-lg-3 form-group"> 

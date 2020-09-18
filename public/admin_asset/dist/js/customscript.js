@@ -37,9 +37,24 @@ function callAjax(obj,url,divId,callback){
 									
 				$("#"+obj.getAttribute('data-table-excel')).DataTable({
 					'iDisplayLength': 10,
+					"bFilter": false,
 					dom: 'Bfrtip',
                         buttons: [
                         'excel',
+                        ]
+				}); 
+				
+			}
+			if(obj.getAttribute('data-table-excel-2'))
+				{
+					stateSave: true;
+									
+				$("#"+obj.getAttribute('data-table-excel-2')).DataTable({
+					'iDisplayLength': 10,
+					"bFilter": false,
+					dom: 'Bfrtip',
+                        buttons: [
+                        'excel','print',
                         ]
 				}); 
 				
