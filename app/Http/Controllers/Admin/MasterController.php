@@ -9,6 +9,7 @@ use App\Model\Assembly;
 use App\Model\AssemblyPart;
 use App\Model\BlockMc;
 use App\Model\BlocksMc;
+use App\Model\BoothWardVoterMapping;
 use App\Model\District;
 use App\Model\Gender;
 use App\Model\PollingBooth;
@@ -907,7 +908,7 @@ class MasterController extends Controller
       return view('admin.master.booth.booth_select_box',compact('booths'));
    }
    public function MappingWardBoothStore(Request $request)
-   { 
+   {  
       if (empty($request->from_sr_no)) {
         $from_sr_no=0;
         $to_sr_no=0; 
@@ -916,7 +917,13 @@ class MasterController extends Controller
         $from_sr_no=$request->from_sr_no;
         $to_sr_no=$request->to_sr_no;
       }
-       $message=DB::select(DB::raw("call up_map_ward_booth_voters ('0','$request->ward','$from_sr_no','$to_sr_no','$request->booth')"));
+      if (empty($request->id)) {
+         $id=0;
+      }
+      else if (!empty($request->id)) {
+         $id=$request->id;
+      }
+       $message=DB::select(DB::raw("call up_map_ward_booth_voters ('$id','$request->ward','$from_sr_no','$to_sr_no','$request->booth')"));
        if ($message[0]->Save_Result!='Save Successfully') {
          $response=['status'=>0,'msg'=>$message[0]->Save_Result];
          return response()->json($response); 
@@ -926,6 +933,11 @@ class MasterController extends Controller
          return response()->json($response); 
         } 
        
+   }
+   public function MappingWardBoothEdit($id)
+   {
+    $BoothWardVoterMapping=BoothWardVoterMapping::find($id);
+    return view('admin.master.mappingWardBooth.edit',compact('BoothWardVoterMapping'));      
    }    
   //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()

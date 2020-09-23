@@ -67,15 +67,15 @@ class ReportController extends Controller
       $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       $pdf->setPrintHeader(FALSE); 
       $pdf->SetCreator(PDF_CREATOR); 
-      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+      // $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+      // $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
       $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
       $pdf->setFontSubsetting(true); 
       $pdf->SetFont('freesans', '', 11, '', true); 
       $pdf->AddPage(); 
       $villagewards=DB::
       select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
-      $html = view('admin.report.report.result_data',compact('villagewards'));  
+      $html = view('admin.report.report.voter_parchi',compact('villagewards'));  
       $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
       ob_end_clean(); 
       $pdf->Output();
