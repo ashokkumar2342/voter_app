@@ -6,6 +6,7 @@
             <th>Code</th>
             <th>Name (English)</th>
             <th>Name (Local Language)</th>
+            <th>Block MSC Type</th>
             <th>Total P.S.Ward</th>
             <th>Action</th>
              
@@ -22,6 +23,7 @@
             <td>{{ $BlockMc->code }}</td>
             <td>{{ $BlockMc->name_e }}</td>
             <td>{{ $BlockMc->name_l }}</td>
+            <td>{{ $BlockMc->BlockMcTypes->block_mc_type_e or ''}}</td>
             <td>{{ $psward }}</td>
             <td class="text-nowrap">
                 <a onclick="callPopupLarge(this,'{{ route('admin.Master.BlockMCSpsWard',$BlockMc->id) }}')" title="" class="btn btn-primary btn-xs" style="color: #fff">Add S.P.Ward</a>

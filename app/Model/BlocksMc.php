@@ -17,4 +17,8 @@ class BlocksMc extends Model
       {
       	 return $this->hasOne('App\Model\District','id','districts_id');
       }
+      public function BlockMcTypes()
+      {
+             return $this->hasOne('App\Model\BlockMCType','id','block_mc_type_id');
+      }
 }

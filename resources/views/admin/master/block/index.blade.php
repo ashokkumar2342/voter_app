@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12"> 
-                            <form action="{{ route('admin.Master.BlockMCSStore') }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box" button-click="btn_click_by_form">
+                            <form action="{{ route('admin.Master.BlockMCSStore') }}" method="post" class="add_form" no-reset="true" select-triger="district_select_box" reset-input-text="code,name_english,name_local_language,block_mc_type,ps_ward">
                                 {{ csrf_field() }} 
                                     <div class="row"> 
                                     <div class="col-lg-6 form-group">
@@ -35,9 +35,35 @@
                                             <option selected disabled>Select District</option>
                                         </select>
                                     </div>
-                                    <button type="button" hidden id="btn_click_by_form" onclick="callAjax(this,'{{ route('admin.Master.BlockbtnClickByForm') }}','btn_click_by_form_div')"></button> 
-                                    <div class="col-lg-12" id="btn_click_by_form_div">
-                                        
+                                    <div class="col-lg-3 form-group">
+                                        <label for="exampleInputEmail1">Block Code</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <input type="text" name="code" id="code" class="form-control" placeholder="Enter Code" maxlength="5">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <label for="exampleInputPassword1">Block Name(English)</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <input type="text" name="name_english" id="name_english" class="form-control" placeholder="Enter Name (English)" maxlength="50">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <label for="exampleInputPassword1">Block Name(Local Lang)</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <input type="text" name="name_local_language" id="name_local_language" class="form-control" placeholder="Enter Name (Local Language)" maxlength="50">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
+                                        <label for="exampleInputPassword1">Block MSC Type</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <select name="block_mc_type_id" id="block_mc_type" class="form-control">
+                                            <option selected disabled>Select Block MSC Type</option>
+                                            @foreach ($BlockMCTypes as $BlockMCType)
+                                            <option value="{{ $BlockMCType->id }}">{{ $BlockMCType->block_mc_type_e }}</option>  
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-12 form-group">
+                                        <label for="exampleInputPassword1">How Many P.S.Ward To Create</label>
+                                         
+                                        <input type="text" name="ps_ward" id="ps_ward" class="form-control" maxlength="50">
                                     </div>
                                     
                                 </div> 
@@ -56,6 +82,7 @@
                                          <th>Code</th>
                                          <th>Name (English)</th>
                                          <th>Name (Local Language)</th>
+                                         <th>Block MSC Type</th>
                                          <th>Total P.S.Ward</th>
                                          <th>Action</th>
                                           

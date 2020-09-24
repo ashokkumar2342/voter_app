@@ -30,11 +30,11 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-3 form-group">
-                                        <label for="exampleInputEmail1">Block MCS</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <select name="block_mcs" class="form-control select2" id="block_select_box" onchange="callAjax(this,'{{ route('admin.Master.BlockWiseVillage') }}','village_select_box')">
-                                            <option selected disabled>Select Block MCS</option>
-                                        </select>
+                                    <label for="exampleInputEmail1">Block MCS</label>
+                                    <span class="fa fa-asterisk"></span>
+                                    <select name="block" class="form-control select2" id="block_select_box" onchange="callAjax(this,'{{ route('admin.Master.BlockWiseVillage') }}'+'?id='+this.value+'&district_id='+$('#district_select_box').val(),'village_select_box')">
+                                        <option selected disabled>Select Block MCS</option> 
+                                    </select>
                                     </div>
                                     <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Village</label>

@@ -144,9 +144,12 @@ Route::group(['middleware' => 'admin'], function() {
         Route::get('PanchayatSamitiEdit/{id}', 'MasterController@PanchayatSamitiEdit')->name('admin.Master.PanchayatSamitiEdit');
         Route::post('PanchayatSamitiUpdate/{id}', 'MasterController@PanchayatSamitiUpdate')->name('admin.Master.PanchayatSamitiUpdate');
         Route::get('PanchayatSamitiDelete/{id}', 'MasterController@PanchayatSamitiDelete')->name('admin.Master.PanchayatSamitiDelete');
+	    //-block-mcs-type//
+	    Route::get('BlockMCSType', 'MasterController@BlockMCSType')->name('admin.Master.BlockMCSType');
+	    Route::get('BlockMCSTypeEdit/{id}', 'MasterController@BlockMCSTypeEdit')->name('admin.Master.BlockMCSTypeEdit');  
+	    Route::post('BlockMCSTypeUpdate/{id}', 'MasterController@BlockMCSTypeUpdate')->name('admin.Master.BlockMCSTypeUpdate');  
 	    //-block-mcs-//
-	    Route::get('BlockMCS', 'MasterController@BlockMCS')->name('admin.Master.blockmcs');   
-	    Route::get('BlockbtnClickByForm', 'MasterController@BlockbtnClickByForm')->name('admin.Master.BlockbtnClickByForm');	   
+	    Route::get('BlockMCS', 'MasterController@BlockMCS')->name('admin.Master.blockmcs');  
 	    Route::post('BlockMCSStore{id?}', 'MasterController@BlockMCSStore')->name('admin.Master.BlockMCSStore');	   
 	    Route::get('BlockMCSEdit/{id}', 'MasterController@BlockMCSEdit')->name('admin.Master.BlockMCSEdit');
 	    Route::get('BlockMCSTable', 'MasterController@BlockMCSTable')->name('admin.Master.BlockMCSTable');

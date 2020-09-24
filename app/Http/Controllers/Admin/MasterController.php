@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PanchayatSamiti;
 use App\Http\Controllers\Controller;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
+use App\Model\BlockMCType;
 use App\Model\BlockMc;
 use App\Model\BlocksMc;
 use App\Model\BoothWardVoterMapping;
@@ -333,15 +334,55 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Delete Successfully'];
        return response()->json($response);
     }
+    //------------block-mcs-type---------------------------//
+    public function BlockMCSType()
+    {
+      $BlockMCTypes=BlockMCType::orderBy('id','ASC')->get();
+      return view('admin.master.blockmctype.index',compact('BlockMCTypes'));
+    }
+    public function BlockMCSTypeEdit($id)
+    {
+      $BlockMCType=BlockMCType::find($id);
+      return view('admin.master.blockmctype.edit',compact('BlockMCType'));
+    }
+    public function BlockMCSTypeUpdate(Request $request,$id)
+   { 
+      
+       $rules=[
+            'block_mc_type_e' => 'required', 
+            'block_mc_type_l' => 'required', 
+            
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else { 
+       $BlockMCType=BlockMCType::firstOrNew(['id'=>$id]);          
+       $BlockMCType->block_mc_type_e=$request->block_mc_type_e;          
+       $BlockMCType->block_mc_type_l=$request->block_mc_type_l;  
+       $BlockMCType->save();          
+       $response=['status'=>1,'msg'=>'Update Successfully'];
+       return response()->json($response);
+      }
+     
+
+    }
     //------------block-mcs----------------------------//
 
     public function BlockMCS(Request $request)
    {
       try {
+          $BlockMCTypes=BlockMCType::orderBy('id','ASC')->get();
           $Districts= District::orderBy('name_e','ASC')->get();   
           $States= State::orderBy('name_e','ASC')->get();   
           $BlocksMcs= BlocksMc::orderBy('name_e','ASC')->get();   
-          return view('admin.master.block.index',compact('Districts','States','BlocksMcs'));
+          return view('admin.master.block.index',compact('Districts','States','BlocksMcs','BlockMCTypes'));
         } catch (Exception $e) {
             
         }
@@ -373,6 +414,7 @@ class MasterController extends Controller
        $BlocksMc= BlocksMc::firstOrNew(['id'=>$id]);
        $BlocksMc->states_id=$request->states;
        $BlocksMc->districts_id=$request->district;
+       $BlocksMc->block_mc_type_id=$request->block_mc_type_id;
        $BlocksMc->code=$request->code;
        $BlocksMc->name_e=$request->name_english;
        $BlocksMc->name_l=$request->name_local_language; 
