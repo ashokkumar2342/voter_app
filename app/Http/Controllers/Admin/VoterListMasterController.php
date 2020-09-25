@@ -11,11 +11,11 @@ class VoterListMasterController extends Controller
 {
 	public function index()
 	{
-        $VoterListMasters=VoterListMaster::orderBy('id','ASC')->get(); 
+		$VoterListMasters=VoterListMaster::orderBy('id','ASC')->get(); 
 		return view('admin.voterlistmaster.index',compact('VoterListMasters'));
 	}
-	public function store(Request $request)
-	{   
+	public function store(Request $request,$id=null)
+	{    
 		$rules=[
 
 // 'syllabus' => 'required', 
@@ -30,7 +30,7 @@ class VoterListMasterController extends Controller
 return response()->json($response);// response as json
 }
 else {
-	$voterlistmaster=new VoterListMaster();
+	$voterlistmaster=VoterListMaster::firstOrNew(['id'=>$id]);
 	$voterlistmaster->voter_list_name=$request->voter_list_name;
 	$voterlistmaster->voter_list_type=$request->voter_list_type;
 	$voterlistmaster->year_publication=$request->publication_year;
@@ -41,11 +41,11 @@ else {
 	$voterlistmaster->remarks2=$request->remarks2;
 	$voterlistmaster->remarks3=$request->remarks3;
 	if (empty($request->is_supplement)) {
-	 $voterlistmaster->is_supplement=0;  
-	 }
-	 elseif (!empty($request->is_supplement)) {
-	 $voterlistmaster->is_supplement=$request->is_supplement;  
-	 } 
+		$voterlistmaster->is_supplement=0;  
+	}
+	elseif (!empty($request->is_supplement)) {
+		$voterlistmaster->is_supplement=$request->is_supplement;  
+	} 
 	$voterlistmaster->save();
 	$response=['status'=>1,'msg'=>'Submit Successfully'];
 	return response()->json($response);
@@ -53,16 +53,22 @@ else {
 }
 public function default($id)
 {
- $VoterListMaster =VoterListMaster::all(); 
-          foreach ($VoterListMaster as  $value) {
-             $VoterListMaster =VoterListMaster::find($value->id);
-             $VoterListMaster->status=0;
-             $VoterListMaster->save(); 
-          }
-          $VoterListMaster =VoterListMaster::find($id); 
-          $VoterListMaster->status=1;
-          $VoterListMaster->save();
-          return  redirect()->back()->with(['message'=>'Default Value Set Successfully','class'=>'success']);	 
+	$VoterListMaster =VoterListMaster::all(); 
+	foreach ($VoterListMaster as  $value) {
+		$VoterListMaster =VoterListMaster::find($value->id);
+		$VoterListMaster->status=0;
+		$VoterListMaster->save(); 
+	}
+	$VoterListMaster =VoterListMaster::find($id); 
+	$VoterListMaster->status=1;
+	$VoterListMaster->save();
+	return  redirect()->back()->with(['message'=>'Default Value Set Successfully','class'=>'success']);	 
+}
+public function edit($id)
+{
+	$VoterListMaster=VoterListMaster::find($id); 
+	return view('admin.voterlistmaster.edit',compact('VoterListMaster'));
 }
 
 }
+

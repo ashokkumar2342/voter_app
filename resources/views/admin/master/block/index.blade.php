@@ -60,7 +60,17 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-lg-12 form-group">
+                                    <div class="col-lg-4 form-group">
+                                        <label for="exampleInputPassword1">stamp_l1</label>
+                                         
+                                        <input type="text" name="stamp_l1" id="stamp_l1" class="form-control" maxlength="100">
+                                    </div>
+                                    <div class="col-lg-4 form-group">
+                                        <label for="exampleInputPassword1">stamp_l2</label>
+                                         
+                                        <input type="text" name="stamp_l2" id="stamp_l2" class="form-control" maxlength="100">
+                                    </div>
+                                    <div class="col-lg-4 form-group">
                                         <label for="exampleInputPassword1">How Many P.S.Ward To Create</label>
                                          
                                         <input type="text" name="ps_ward" id="ps_ward" class="form-control" maxlength="50">

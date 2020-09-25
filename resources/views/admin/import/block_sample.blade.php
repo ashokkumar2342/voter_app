@@ -8,6 +8,7 @@
                <th>block_code</th>
                <th>block_name_eng</th>
                <th>block_name_hindi</th>
+               <th>block_mc_type_id</th>
                <th>total_wards</th>
            </tr>
         </thead>
@@ -16,6 +17,7 @@
            <tr>
                <td>{{ $block->name_e }}</td>
                <td>{{ $block->id }}</td>
+               <td></td>
                <td></td>
                <td></td>
                <td></td>

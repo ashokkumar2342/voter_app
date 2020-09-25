@@ -91,12 +91,13 @@
                    <td>{{ $VoterListMaster->year_base }}</td>
                    <td>{{ $VoterListMaster->date_base }}</td>
                    <td>{{ $VoterListMaster->remarks1 }}</td>
-                   <td>
+                   <td class="text-nowrap">
                     @if ($VoterListMaster->status==1)
                      <a href="{{ route('admin.VoterListMaster.default',$VoterListMaster->id) }}" title="" class="btn btn-success btn-xs">Default</a>
                      @else
                      <a href="{{ route('admin.VoterListMaster.default',$VoterListMaster->id) }}" title="" class="btn btn-default btn-xs">Default</a> 
                     @endif
+                    <a href="#" title="Edit" class="btn btn-xs btn-info" onclick="callPopupLarge(this,'{{ route('admin.VoterListMaster.edit',$VoterListMaster->id) }}')"><i class="fa fa-edit"></i></a>
                    </td>
                  </tr>
                  @endforeach

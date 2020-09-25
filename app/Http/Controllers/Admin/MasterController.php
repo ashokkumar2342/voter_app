@@ -19,6 +19,7 @@ use App\Model\TmpImportAssembly;
 use App\Model\TmpImportMapVillageWard;
 use App\Model\TmpImportVillage;
 use App\Model\Village;
+use App\Model\VoterListMaster;
 use App\Model\WardPanchayat;
 use App\Model\WardVillage;
 use App\Model\ZilaParishad;
@@ -751,19 +752,17 @@ class MasterController extends Controller
     public function MappingVillageAssemblyPart()
     {
        try {
-          $Districts= District::orderBy('name_e','ASC')->get();   
-          $States= State::orderBy('name_e','ASC')->get();   
-          $BlocksMcs= BlocksMc::orderBy('name_e','ASC')->get();   
-          $Villages= Village::orderBy('name_e','ASC')->get();  
-          return view('admin.master.mappingvillageassemblypart.index',compact('Districts','States','Villages','BlocksMcs'));
+           
+          $States= State::orderBy('name_e','ASC')->get();  
+          return view('admin.master.mappingvillageassemblypart.index',compact('States'));
         } catch (Exception $e) {
             
         }
     }
     public function MappingVillageAssemblyPartFilter(Request $request)
     {
-       try {
-          $assemblys= Assembly::orderBy('name_e','ASC')->get();  
+       try {  
+          $assemblys= Assembly::where('district_id',$request->district_id)->orderBy('name_e','ASC')->get();  
           $Parts= AssemblyPart::orderBy('part_no','ASC')->get();  
           $assemblyParts= AssemblyPart::where('village_id',$request->id)->get();   
              
@@ -985,6 +984,10 @@ class MasterController extends Controller
     public function WardBandi()
     {
        try {
+          $VoterListMaster=VoterListMaster::where('status',1)->first();
+         if (empty($VoterListMaster)) {
+          return 'Voter List Not Selected Contact Your Admin';  
+         }
           $Districts= District::orderBy('name_e','ASC')->get();   
           $States= State::orderBy('name_e','ASC')->get();   
           $BlocksMcs= BlocksMc::orderBy('name_e','ASC')->get();   

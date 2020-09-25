@@ -12,6 +12,7 @@
 	       <th>block_code</th>
 	       <th>block_name_eng</th>
 	       <th>block_name_hindi</th>
+	       <th>block_mc_type_id</th>
 	       <th>total_wards</th>
 	       <th>save_status</th>
 	   </tr>
@@ -24,6 +25,7 @@
 	       <td>{{ $BloImportedDatas->bcode }}</td>
 	       <td>{{ $BloImportedDatas->bname_e }}</td>
 	       <td>{{ $BloImportedDatas->bname_l }}</td>
+	       <td>{{ $BloImportedDatas->block_mc_type_id }}</td>
 	       <td>{{ $BloImportedDatas->total_wards }}</td>
 	       <td>{{ $BloImportedDatas->save_status }}</td>
 	        

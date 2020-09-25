@@ -109,13 +109,13 @@ class ImportExportController extends Controller
         $Old_TmpImportBlock=TmpImportBlock::whereIn('userid',$TmpImportBlock)->delete();
        foreach ($results as $key => $value) {    
              if (!empty($value->district_id)) {
-             $SaveResult=DB::select(DB::raw("call up_create_block_excel ('$user->id','0','$value->district_id','$value->block_code','$value->block_name_eng','$value->block_name_hindi','$value->total_wards')"));      
+             $SaveResult=DB::select(DB::raw("call up_create_block_excel ('$user->id','0','$value->district_id','$value->block_code','$value->block_name_eng','$value->block_name_hindi','$value->total_wards','$value->block_mc_type_id')"));      
             } 
         }
         $BloImportedDatas=TmpImportBlock::all();
         $response = array();
         $response['status'] = 1;
-        $response['data'] =view('admin.import.assembly_import_data',compact('BloImportedDatas'))->render();
+        $response['data'] =view('admin.import.block_import_data',compact('BloImportedDatas'))->render();
         return response()->json($response);  
       }
 

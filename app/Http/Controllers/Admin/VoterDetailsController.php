@@ -15,8 +15,9 @@ use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\WardVillage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Imagick;
 class VoterDetailsController extends Controller
 {
@@ -165,54 +166,70 @@ class VoterDetailsController extends Controller
 
     //--------Prepare-----Voter--------List-------PrepareVoterList----------
 
-    public function PrepareVoterList()
+    public function PrepareVoterListPanchayat()
     {
       $Districts= District::orderBy('name_e','ASC')->get();
       return view('admin.master.PrepareVoterList.index',compact('Districts'));     
     }
     public function VillageWiseWardMultiple(Request $request)
-    {
-      $WardVillages= WardVillage::where('village_id',$request->id)->get(['id','ward_no']);
+    { 
+      $WardVillages = DB::select(DB::raw("call up_fetch_ward_village_access ('$request->id','0')")); 
+     
       return view('admin.master.PrepareVoterList.select_ward_value',compact('WardVillages'));     
     }
     public function PrepareVoterListGenerate(Request $request)
-    {
-      $voterReports=Voter::take(30)->get();
-      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
-      $pdf->SetCreator(PDF_CREATOR);
-      $pdf->SetPrintHeader(false);  
-      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-      $pdf->setFontSubsetting(true); 
-      $pdf->SetFont('freesans', '', 11, '', true); 
-      $pdf->AddPage(); 
-      $html = view('admin.master.PrepareVoterList.first_page',compact('voterReports'));
-      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+    { 
+      if ($request->proses_by==1) { 
+         return $voterReports = DB::select(DB::raw("call up_process_village_voterlist ('$request->village')")); 
+          $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+          $pdf->SetCreator(PDF_CREATOR); 
+          $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+          $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+          $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+          $pdf->setFontSubsetting(true); 
+          $pdf->SetFont('freesans','', 11);  
+          $pdf->SetPrintHeader(false); 
+          $pdf->AddPage(4); 
+          $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
+          $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true); 
+          $pdf->Output();
+      }
+      else if($request->proses_by==2) {
+      $voterReports = DB::select(DB::raw("call up_unlock_village_voterlist ('$request->village')"));
+      }      
+    } 
 
-      $pdf->AddPage(); 
-      $html = '';
-      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-      $header='<h1>संतोश Dilip kumar Ashok Kumar</h1>';
-      $pdf->setHeaderFont(Array('freesans', '', 11, '', true));
-      $pdf->SetPrintHeader(true);
-      $pdf->SetHeaderData('', PDF_HEADER_LOGO_WIDTH,$header); 
-      $pdf->SetHeaderMargin(4); 
-      $pdf->SetMargins(3,12,3,2); 
-      $pdf->AddPage(); 
-      $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
-      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-      
-      $pdf->Output(); 
+    public function PrepareVoterListMunicipal()
+    {
+      $Districts= District::orderBy('name_e','ASC')->get();
+      return view('admin.master.PrepareVoterList.municipal.index',compact('Districts'));     
     }
-   public function imageShow()
-   {
-    $voterImage=VoterImage::find(1); 
-    $image = str_replace('data:image/png;base64,', '', base64_encode($voterImage->image));
-           $image = str_replace(' ', '+', $image);
-           $imageName = str_random(10).'.'.'png';
-        return  \File::put(public_path(). '/images/' . $imageName, base64_decode($image));
-    return storage_path().'/'.$imageName;
-    
-   }
+    public function PrepareVoterListMunicipalGenerate(Request $request)
+    {  
+      if ($request->proses_by==1) {
+           
+          foreach ($request->ward as $key => $value) { 
+          $voterReports = DB::select(DB::raw("call up_process_voterlist ('$value')"));
+          }
+
+          $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+          $pdf->SetCreator(PDF_CREATOR); 
+          $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+          $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+          $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+          $pdf->setFontSubsetting(true); 
+          $pdf->SetFont('freesans','', 11);  
+          $pdf->SetPrintHeader(false); 
+          $pdf->AddPage(4); 
+          $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
+          $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+          $documentUrl = Storage_path() . '/app/voter/';   
+          @mkdir($documentUrl, 0755, true);  
+          $pdf->Output($documentUrl.'list.pdf', 'F');
+          return redirect()->back()->with(['message'=>'Prepare Successfully','class'=>'success']);
+      }
+      else if($request->proses_by==2) { return 'dd';
+      $voterReports = DB::select(DB::raw("call up_unlock_voterlist ('$wards')"));
+      }      
+    } 
 }

@@ -48,7 +48,7 @@
                                     <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Village</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="village" class="form-control" id="village_select_box" onchange="callAjax(this,'{{ route('admin.Master.MappingVillageAssemblyPartFilter') }}','value_div_id')">
+                                        <select name="village" class="form-control" id="village_select_box" onchange="callAjax(this,'{{ route('admin.Master.MappingVillageAssemblyPartFilter') }}'+'?district_id='+$('#district_select_box').val(),'value_div_id')">
                                             <option selected disabled>Select Village</option>
                                             
                                         </select>

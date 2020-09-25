@@ -269,10 +269,13 @@ Route::group(['middleware' => 'admin'], function() {
 
     //-------prepare-voter-list--------------prepare-voter-list-----///
            
-           Route::get('PrepareVoterList', 'VoterDetailsController@PrepareVoterList')->name('admin.voter.PrepareVoterList');
+           Route::get('PrepareVoterListPanchayat', 'VoterDetailsController@PrepareVoterListPanchayat')->name('admin.voter.PrepareVoterListPanchayat');
            Route::get('VillageWiseWardMultiple', 'VoterDetailsController@VillageWiseWardMultiple')->name('admin.voter.VillageWiseWardMultiple');
            Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate');
-           Route::get('imageShow', 'VoterDetailsController@imageShow')->name('admin.voter.imageShow');
+            
+
+           Route::get('PrepareVoterListMunicipal', 'VoterDetailsController@PrepareVoterListMunicipal')->name('admin.voter.PrepareVoterListMunicipal');
+           Route::post('PrepareVoterListMunicipalGenerate', 'VoterDetailsController@PrepareVoterListMunicipalGenerate')->name('admin.voter.PrepareVoterListMunicipalGenerate');
     });
     Route::group(['prefix' => 'Report'], function() {
            Route::get('PrintVoterList', 'ReportController@PrintVoterList')->name('admin.report.PrintVoterList');
@@ -285,8 +288,9 @@ Route::group(['middleware' => 'admin'], function() {
     });
     Route::group(['prefix' => 'VoterListMaster'], function() {
            Route::get('/', 'VoterListMasterController@index')->name('admin.VoterListMaster.index');
-           Route::post('store', 'VoterListMasterController@store')->name('admin.VoterListMaster.store');
-           Route::get('default/{id}', 'VoterListMasterController@default')->name('admin.VoterListMaster.default');           
+           Route::post('store/{id?}', 'VoterListMasterController@store')->name('admin.VoterListMaster.store');
+           Route::get('default/{id}', 'VoterListMasterController@default')->name('admin.VoterListMaster.default'); 
+           Route::get('edit/{id}', 'VoterListMasterController@edit')->name('admin.VoterListMaster.edit');           
 	 	 
     });
     Route::group(['prefix' => 'import'], function() {
