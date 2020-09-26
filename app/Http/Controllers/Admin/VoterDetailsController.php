@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Imagick;
+use PDF;
 class VoterDetailsController extends Controller
 {
     /**
@@ -205,13 +206,16 @@ class VoterDetailsController extends Controller
       return view('admin.master.PrepareVoterList.municipal.index',compact('Districts'));     
     }
     public function PrepareVoterListMunicipalGenerate(Request $request)
-    {  
-      if ($request->proses_by==1) {
-           
-          foreach ($request->ward as $key => $value) { 
-          $voterReports = DB::select(DB::raw("call up_process_voterlist ('$value')"));
-          }
-
+    {  $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+       $pdf=PDF::setOptions([
+            'logOutputFile' => storage_path('logs/log.htm'),
+            'tempDir' => storage_path('logs/')
+        ])
+        ->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
+        return $pdf->stream('user_list.pdf'); 
+      if ($request->proses_by==1) { 
+        $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+          // $voterReports = DB::select(DB::raw("call up_process_voterlist ('$request->ward')")); 
           $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
           $pdf->SetCreator(PDF_CREATOR); 
           $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
@@ -223,9 +227,10 @@ class VoterDetailsController extends Controller
           $pdf->AddPage(4); 
           $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
           $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-          $documentUrl = Storage_path() . '/app/voter/';   
-          @mkdir($documentUrl, 0755, true);  
-          $pdf->Output($documentUrl.'list.pdf', 'F');
+          // $documentUrl = Storage_path() . '/app/voter/';   
+          // @mkdir($documentUrl, 0755, true);  
+          // $pdf->Output($documentUrl.'list.pdf', 'F');
+          $pdf->Output();
           return redirect()->back()->with(['message'=>'Prepare Successfully','class'=>'success']);
       }
       else if($request->proses_by==2) { return 'dd';

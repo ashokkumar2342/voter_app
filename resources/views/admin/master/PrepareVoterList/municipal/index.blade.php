@@ -43,12 +43,12 @@
                                             <option selected disabled>Select Village</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-3 form-group" id="value_div_id"> 
-                                        <label for="exampleInputEmail1">Ward No.</label>
-                                        <span class="fa fa-asterisk"></span>
-                                        <select name="ward" class="form-control multiselect">
-                                           
-                                        </select>
+                                    <div class="col-lg-3 form-group"> 
+                                    <label for="exampleInputEmail1">Ward No.</label>
+                                    <span class="fa fa-asterisk"></span>
+                                    <select name="ward" class="form-control multiselect" id="value_div_id">
+                                      <option selected disabled>Select Ward</option> 
+                                    </select>
                                     </div>
                                     <div class="col-lg-12 form-group text-center">
                                         <div class="icheck-primary d-inline">
