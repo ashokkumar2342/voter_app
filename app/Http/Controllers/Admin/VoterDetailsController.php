@@ -206,13 +206,22 @@ class VoterDetailsController extends Controller
       return view('admin.master.PrepareVoterList.municipal.index',compact('Districts'));     
     }
     public function PrepareVoterListMunicipalGenerate(Request $request)
-    {  $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+    {  
+
+      $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+       // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
        $pdf=PDF::setOptions([
+
             'logOutputFile' => storage_path('logs/log.htm'),
-            'tempDir' => storage_path('logs/')
-        ])
-        ->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
+            'tempDir' => storage_path('logs/'),
+            'defaultMediaType'=>'all',
+            'isFontSubsettingEnabled'=>true,
+
+        ])->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
         return $pdf->stream('user_list.pdf'); 
+
+
+
       if ($request->proses_by==1) { 
         $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
           // $voterReports = DB::select(DB::raw("call up_process_voterlist ('$request->ward')")); 

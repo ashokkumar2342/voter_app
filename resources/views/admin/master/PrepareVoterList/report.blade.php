@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <head>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
 	<style> 
+		body{
+		  font-family: 'Mangal';
+		  font-style: 'bold';
+		  font-weight: 'bold';
+		  src: url('https://github.com/nsisodiya/rajiv-bharat/raw/master/fonts/MANGAL.ttf') format('truetype');
+		}
+		@font-face {
+		  font-family: 'Mangal';
+		  font-style: 'bold';
+		  font-weight: 'bold';
+		  src: url('https://github.com/nsisodiya/rajiv-bharat/raw/master/fonts/MANGAL.ttf') format('truetype');
+		}
 	</style>
 </head>
 <body>
-	<div style="text-align:center;"><h1>Annexure-A मुय पृठ </h1></div> 
+	<div style="text-align:center;"><h1>Annexure-A मुय पृठ </h1> 
+	</div> 
 	<table style="border: 1px solid black;
 	padding: 8px;">
 	<tbody>
