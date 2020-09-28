@@ -13,7 +13,6 @@ use App\Model\UserActivity;
 use App\Model\Village;
 use App\Model\Voter;
 use App\Model\VoterImage;
-use App\Model\VoterListMaster;
 use App\Model\WardVillage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -208,13 +207,9 @@ class VoterDetailsController extends Controller
     }
     public function PrepareVoterListMunicipalGenerate(Request $request)
     {  
-      $voterListMaster=VoterListMaster::where('status',1)->first();
-     if ($request->proses_by==1) { 
-       $PrepareVoterListMunicipal= DB::select(DB::raw("call up_process_voterlist ('$request->ward')"));  
-       $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
-       $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = 206;"));
-       $voterReports = Voter::take(30)->get();
-       // return view('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
+
+      $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+       // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
        $pdf=PDF::setOptions([
 
             'logOutputFile' => storage_path('logs/log.htm'),
@@ -222,10 +217,32 @@ class VoterDetailsController extends Controller
             'defaultMediaType'=>'all',
             'isFontSubsettingEnabled'=>true,
 
-        ])->loadView('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
+        ])->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
         return $pdf->stream('user_list.pdf'); 
-       
-      }else if($request->proses_by==2) { return 'dd';
+
+
+
+      if ($request->proses_by==1) { 
+        $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+          // $voterReports = DB::select(DB::raw("call up_process_voterlist ('$request->ward')")); 
+          $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+          $pdf->SetCreator(PDF_CREATOR); 
+          $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+          $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+          $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+          $pdf->setFontSubsetting(true); 
+          $pdf->SetFont('freesans','', 11);  
+          $pdf->SetPrintHeader(false); 
+          $pdf->AddPage(4); 
+          $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
+          $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+          // $documentUrl = Storage_path() . '/app/voter/';   
+          // @mkdir($documentUrl, 0755, true);  
+          // $pdf->Output($documentUrl.'list.pdf', 'F');
+          $pdf->Output();
+          return redirect()->back()->with(['message'=>'Prepare Successfully','class'=>'success']);
+      }
+      else if($request->proses_by==2) { return 'dd';
       $voterReports = DB::select(DB::raw("call up_unlock_voterlist ('$wards')"));
       }      
     } 

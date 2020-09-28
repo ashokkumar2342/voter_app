@@ -54,16 +54,15 @@ class DataTransfer extends Command
       
        $HistoryUpdatefirst->status=1; 
        $HistoryUpdatefirst->save();
-       $condition=substr($table,0,-9);
-       
-       // if ($condition=='A') {
+      return $condition=substr($table,0,-9);
+       if ($condition=='A') {
        $datas = DB::connection('sqlsrv')->table($table)->where('STATUSTYPE','<>','D')->select('SLNOINPART','HOUSE_NO_V1','HOUSE_NO_EN','FM_NAME_V1','RLN_TYPE','RLN_FM_NM_V1','MOBILE','RLN_fm_NMen','IDCARD_NO','SEX','AGE','FM_NAMEEN','JPGIMAGE')->get(); 
           
-        // }
-        // elseif ($condition=='S') {
-        // $datas = DB::connection('sqlsrv')->table($table)->get(); 
-        //   \Log::info($datas);
-        // } 
+        }
+        elseif ($condition=='S') {
+        $datas = DB::connection('sqlsrv')->table($table)->get(); 
+          \Log::info($datas);
+        } 
        $countTotal=0;
        $assemblyCode=substr($table, -7, 3); 
        $assemblyPartCode=substr($table,4);
