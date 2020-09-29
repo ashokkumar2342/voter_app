@@ -50,7 +50,7 @@
   content: counter(pageTotal); 
 } 
 </style> 
-@include('admin.include.boostrap')
+{{-- @include('admin.include.boostrap') --}}
 </head> 
 <body >
 <div style="text-align:center;font-family:sans-serif;"><h2><b>Annexure-A</b></h2></div>
@@ -163,7 +163,7 @@
 <div style="page-break-before: always;"> </div>
 <div class="header">
 	पंचायत : अहर &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $mainpagedetail->voter_list_type }} नवाचान नामावल , {{ $mainpagedetail->year }} &nbsp;&nbsp;&nbsp;&nbsp;वाड संया :1
-    <hr style="width: 750px;margin-left: -20px">
+    <hr style="width: 700px;margin-left: -20px">
  </div>
  @php
   $time =0;
@@ -185,7 +185,7 @@
 							<td style="border: 1px solid black;">&nbsp;1234/1234</td>
 						</tr>
 						<tr>
-							<td style="" colspan="2">नाम&nbsp; &nbsp; &nbsp; {{ $voterReport->name_l }}</td>
+							<td style="" colspan="2">नाम&nbsp; &nbsp; &nbsp; {{ $voterReport->name_e }}</td>
 							<td style="" rowspan="4">
 								{{-- <img src="http://eageskool.com/front_asset/images/hdg-01.jpg" alt=""> --}}
 							</td>

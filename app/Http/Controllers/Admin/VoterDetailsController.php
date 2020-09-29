@@ -213,7 +213,7 @@ class VoterDetailsController extends Controller
        $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
        $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = 206;"));
        $voterReports=Voter::take(10)->get();
-       // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
+       // return view('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
        $pdf=PDF::setOptions([
 
             'logOutputFile' => storage_path('logs/log.htm'),
