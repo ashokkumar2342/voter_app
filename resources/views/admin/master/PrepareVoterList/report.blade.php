@@ -21,14 +21,14 @@
 	</style>
 </head>
 <body>
-	<div style="text-align:center;"><h1>Annexure-A मुय पृठ </h1> 
+	<div style="text-align:center;"><h1>Annexure-A </h1> 
 	</div> 
 	<table style="border: 1px solid black;
 	padding: 8px;">
 	<tbody>
 		<tr >
 			<td colspan="5" style="border: 1px solid black;
-			padding: 8px;">2015 म काशत नगर पालका मतदाता सूच सबिधत वधानसभा े का नाम :- बहादरुगढ़ </td>
+			padding: 8px;">2015 म काशत नगर पालका मतदाता सूच सबिधत वधानसभा े का नाम :- बहादरुगढ़ मुय पृठ </td>
 		</tr>
 		<tr>
 			<td colspan="5" style="border: 1px solid black;
