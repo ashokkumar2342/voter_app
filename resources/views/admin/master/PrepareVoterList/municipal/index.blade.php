@@ -51,10 +51,7 @@
                                     </select>
                                     </div>
                                     <div class="col-lg-12 form-group text-center">
-                                        <div class="icheck-primary d-inline">
-                                          <input type="checkbox" id="radioPrimary1" name="report" value="1">
-                                          <label for="radioPrimary1">With Photo</label>  
-                                        </div> 
+                                         
                                     </div>
                                     <input type="hidden" name="proses_by" id="proses_by" value="0">
                                     <div class="col-lg-3 form-group">
