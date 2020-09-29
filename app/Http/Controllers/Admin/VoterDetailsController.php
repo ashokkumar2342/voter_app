@@ -217,7 +217,7 @@ class VoterDetailsController extends Controller
             'defaultMediaType'=>'all',
             'isFontSubsettingEnabled'=>true,
 
-        ])->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
+        ])->loadView('admin.master.PrepareVoterList.test',compact('voterReports'));
         return $pdf->stream('user_list.pdf'); 
 
 
