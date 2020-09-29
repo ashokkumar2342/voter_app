@@ -57,12 +57,18 @@
                                         </div> 
                                     </div>
                                     <input type="hidden" name="proses_by" id="proses_by" value="0">
-                                    <div class="col-lg-6 form-group">
+                                    <div class="col-lg-3 form-group">
                                        <input type="submit" class="btn btn-success form-control" value="Process And Lock" onclick="$('#proses_by').val(1)">
                                    </div>
-                                   <div class="col-lg-6 form-group">
+                                   <div class="col-lg-3 form-group">
                                        <input type="submit" class="btn btn-danger form-control" value="Unlock" onclick="$('#proses_by').val(2)">
-                                   </div> 
+                                   </div>
+                                   <div class="col-lg-3 form-group">
+                                    <a href="#" class="form-control btn btn-success"> Download With Photo</a>
+                                   </div>
+                                   <div class="col-lg-3 form-group">
+                                    <a href="#" class="form-control btn btn-success"> Download Without Photo</a>
+                                   </div>  
                                    
                                     </div>
                                 </div> 

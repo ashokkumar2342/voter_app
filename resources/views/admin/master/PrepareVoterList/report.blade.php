@@ -3,7 +3,6 @@
 <head>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
 <style> 
-
 	body{
 	  font-family: 'Mangal';
 	  font-style: 'bold';
@@ -18,7 +17,7 @@
 	}
 	 
 .header {
-    top: -50px;
+    top: -30px;
     width: 100%;
     text-align: center;
     position: fixed;
@@ -29,13 +28,7 @@
     text-align: center;
     position: fixed;
 }
-/*.pagenum:before {
-    content: counter(page);
-}
-.totalpage:before {
-    #pageCounter {
-  counter-reset: pageTotal;
-}*/
+ 
 #pageCounter span {
   counter-increment: pageTotal; 
 }
@@ -163,21 +156,29 @@
 <div style="page-break-before: always;"> </div>
 <div class="header">
 	पंचायत : अहर &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $mainpagedetail->voter_list_type }} नवाचान नामावल , {{ $mainpagedetail->year }} &nbsp;&nbsp;&nbsp;&nbsp;वाड संया :1
-    <hr style="width: 700px;margin-left: -20px">
+    <hr style="width: 750px;margin-left: -20px">
  </div>
+ <div class="footer" style="font-family:sans-serif;"> 
+    <div id="pageCounter"> 
+      <span></span>
+    </div>
+    <div id="pageNumbers">
+      <div class="page-number"></div> 
+    </div>
+</div>
  @php
   $time =0;
 @endphp
 @foreach ($voterReports as $voterReport) 
 @if ($time==0)
-<table>
+<table style="width: 750px;margin-left: -20px">
 	<tbody>
 		<tr>
 @endif 
 
 			<td> 
 				<table style="border: 1px solid black;
-					font-size: 12px;padding:1px;">
+					font-size: 9px;padding:1px;width: 242px">
 					<tbody>
 						<tr>
 							<td style="border: 1px solid black;">1234</td>
@@ -185,13 +186,13 @@
 							<td style="border: 1px solid black;">&nbsp;1234/1234</td>
 						</tr>
 						<tr>
-							<td style="" colspan="2">नाम&nbsp; &nbsp; &nbsp; {{ $voterReport->name_e }}</td>
+							<td style="width: 130px" colspan="2">Name&nbsp; &nbsp; {{ $voterReport->name_l }}</td>
 							<td style="" rowspan="4">
-								{{-- <img src="http://eageskool.com/front_asset/images/hdg-01.jpg" alt=""> --}}
+								<img src="">
 							</td>
 						</tr>
 						<tr>
-							<td style="" colspan="2">पिता&nbsp; &nbsp; &nbsp; प्रमोद</td>
+							<td style="width: 130px" colspan="2">Father&nbsp; &nbsp; {{ $voterReport->father_name_l }}</td>
 						</tr>
 						<tr>
 							<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp; 12</td>
@@ -217,15 +218,6 @@
 @endif	 
 		 
 @endforeach
-@endforeach
-<div class="footer" style="font-family:sans-serif;">
-   {{--  कुल 10 पृष्ठ का पृठ <span class="pagenum"></span> --}}
-    <div id="pageCounter"> 
-      <span></span>
-    </div>
-    <div id="pageNumbers">
-      <div class="page-number"></div> 
-    </div>
-</div>
+@endforeach 
 </body> 
 </html>

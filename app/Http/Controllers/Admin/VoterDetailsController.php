@@ -212,7 +212,9 @@ class VoterDetailsController extends Controller
        $PrepareVoterListMunicipal= DB::select(DB::raw("call up_process_voterlist ('$request->ward')"));  
        $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
        $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = 206;"));
-       $voterReports=Voter::take(10)->get();
+       $voterReports=Voter::take(90)->get();
+       $voterImage=VoterImage::first();
+
        // return view('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
        $pdf=PDF::setOptions([
 
@@ -221,7 +223,7 @@ class VoterDetailsController extends Controller
             'defaultMediaType'=>'all',
             'isFontSubsettingEnabled'=>true,
 
-        ])->loadView('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
+        ])->loadView('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports','voterImage'));
         return $pdf->stream('user_list.pdf'); 
 
 
