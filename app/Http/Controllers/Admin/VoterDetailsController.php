@@ -14,7 +14,6 @@ use App\Model\Village;
 use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\WardVillage;
-use App\Model\VoterListMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -207,29 +206,10 @@ class VoterDetailsController extends Controller
       return view('admin.master.PrepareVoterList.municipal.index',compact('Districts'));     
     }
     public function PrepareVoterListMunicipalGenerate(Request $request)
-    { 
-      $rules=[
-            
-            'district' => 'required', 
-            'block' => 'required', 
-            'village' => 'required', 
-            'ward' => 'required', 
-      ];
+    {  
 
-      $validator = Validator::make($request->all(),$rules);
-      if ($validator->fails()) {
-          $errors = $validator->errors()->all();
-          $response=array();
-          $response["status"]=0;
-          $response["msg"]=$errors[0];
-          return response()->json($response);// response as json
-      }
-       $voterListMaster=VoterListMaster::where('status',1)->first(); 
-       $PrepareVoterListMunicipal= DB::select(DB::raw("call up_process_voterlist ('$request->ward')"));  
-       $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
-       $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = 206;"));
-       $voterReports=Voter::take(90)->get(); 
-       // return view('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
+      $voterReports=Voter::take(9)->get();
+       // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
        $pdf=PDF::setOptions([
 
             'logOutputFile' => storage_path('logs/log.htm'),
@@ -237,17 +217,33 @@ class VoterDetailsController extends Controller
             'defaultMediaType'=>'all',
             'isFontSubsettingEnabled'=>true,
 
-        ])->loadView('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports','voterImage'));
+        ])->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
         return $pdf->stream('user_list.pdf'); 
 
 
 
-      if ($request->proses_by==1) {  
-          $voterReports = DB::select(DB::raw("call up_process_voterlist ('$request->ward')")); 
-          
+      if ($request->proses_by==1) { 
+        $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+          // $voterReports = DB::select(DB::raw("call up_process_voterlist ('$request->ward')")); 
+          $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
+          $pdf->SetCreator(PDF_CREATOR); 
+          $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+          $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+          $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+          $pdf->setFontSubsetting(true); 
+          $pdf->SetFont('freesans','', 11);  
+          $pdf->SetPrintHeader(false); 
+          $pdf->AddPage(4); 
+          $html = view('admin.master.PrepareVoterList.report',compact('voterReports'));
+          $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+          // $documentUrl = Storage_path() . '/app/voter/';   
+          // @mkdir($documentUrl, 0755, true);  
+          // $pdf->Output($documentUrl.'list.pdf', 'F');
+          $pdf->Output();
+          return redirect()->back()->with(['message'=>'Prepare Successfully','class'=>'success']);
       }
       else if($request->proses_by==2) { return 'dd';
-          $voterReports = DB::select(DB::raw("call up_unlock_voterlist ('$wards')"));
+      $voterReports = DB::select(DB::raw("call up_unlock_voterlist ('$wards')"));
       }      
     } 
 }
