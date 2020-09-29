@@ -186,13 +186,13 @@
 							<td style="border: 1px solid black;">&nbsp;1234/1234</td>
 						</tr>
 						<tr>
-							<td style="width: 130px" colspan="2">Name&nbsp; &nbsp; {{ $voterReport->name_l }}</td>
+							<td style="width: 130px" colspan="2">Name&nbsp; &nbsp; {{ $voterReport->name_e }}</td>
 							<td style="" rowspan="4">
 								<img src="">
 							</td>
 						</tr>
 						<tr>
-							<td style="width: 130px" colspan="2">Father&nbsp; &nbsp; {{ $voterReport->father_name_l }}</td>
+							<td style="width: 130px" colspan="2">Father&nbsp; &nbsp; {{ $voterReport->father_name_e }}</td>
 						</tr>
 						<tr>
 							<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp; 12</td>
