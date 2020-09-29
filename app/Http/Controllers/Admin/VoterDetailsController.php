@@ -14,6 +14,7 @@ use App\Model\Village;
 use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\WardVillage;
+use Dompdf\Options;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -209,7 +210,9 @@ class VoterDetailsController extends Controller
     {  
 
       $voterReports=Voter::take(9)->get();
-       return view('admin.master.PrepareVoterList.report',compact('voterReports'));
+       // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
+        $options = new Options();
+         $options->set('defaultFont', 'MANGAL');
        $pdf=PDF::setOptions([
 
             'logOutputFile' => storage_path('logs/log.htm'),
