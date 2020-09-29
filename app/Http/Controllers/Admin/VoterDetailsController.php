@@ -209,7 +209,7 @@ class VoterDetailsController extends Controller
     {  
 
       $voterReports=Voter::take(9)->get();
-       // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
+       return view('admin.master.PrepareVoterList.report',compact('voterReports'));
        $pdf=PDF::setOptions([
 
             'logOutputFile' => storage_path('logs/log.htm'),
