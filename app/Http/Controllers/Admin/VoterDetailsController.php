@@ -14,6 +14,7 @@ use App\Model\Village;
 use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\WardVillage;
+use App\Model\VoterListMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -207,8 +208,11 @@ class VoterDetailsController extends Controller
     }
     public function PrepareVoterListMunicipalGenerate(Request $request)
     {  
-
-      $voterReports=Voter::take(10)->get();
+       $voterListMaster=VoterListMaster::where('status',1)->first(); 
+       $PrepareVoterListMunicipal= DB::select(DB::raw("call up_process_voterlist ('$request->ward')"));  
+       $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
+       $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = 206;"));
+       $voterReports=Voter::take(10)->get();
        // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
        $pdf=PDF::setOptions([
 
@@ -217,7 +221,7 @@ class VoterDetailsController extends Controller
             'defaultMediaType'=>'all',
             'isFontSubsettingEnabled'=>true,
 
-        ])->loadView('admin.master.PrepareVoterList.test',compact('voterReports'));
+        ])->loadView('admin.master.PrepareVoterList.report',compact('mainpagedetails','voterssrnodetails','voterReports'));
         return $pdf->stream('user_list.pdf'); 
 
 
