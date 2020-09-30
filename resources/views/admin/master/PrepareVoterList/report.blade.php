@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<html>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <head>
+ 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
 <style>
 	
@@ -120,53 +123,57 @@
 	<br>
 	नये परसमत नवाचन े के वतारानुसार सभी अनुपूरक सहत एककृत व वष  <b>{{ $mainpagedetail->year }}</b> क पुनरत मूल नवाचक नामावल 
 </td>
+
 </tr>
-<tr style="border: 1px solid black; height: 24px;">
-<td style="border: 1px solid black; width: 114px; height: 24px;" colspan="5">
-मतदाताओं क संया 
-</td>
+<tr>
+	<td colspan="5" style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
 </tr>
-<tr style="border: 1px solid black; height: 24px;">
-<td style="border: 1px solid black; width: 114px; height: 24px;text-align:center">आरंभक म संया </td>
-<td style="border: 1px solid black; width: 157px; height: 24px;text-align:center">अंतम म संया </td>
-<td style="border: 1px solid black; width: 71px; height: 24px;text-align:center">पुष</td>
-<td style="border: 1px solid black; width: 115px; height: 24px;text-align:center">महला </td>
-<td style="border: 1px solid black; width: 115px; height: 24px;text-align:center">कुल </td> 
-<tr style="border: 1px solid black; height: 24px;">
-<td style="border: 1px solid black; width: 114px; height: 24px;text-align:center">1</td>
-<td style="border: 1px solid black; width: 157px; height: 24px;text-align:center">20</td>
-<td style="border: 1px solid black; width: 71px; height: 24px;text-align:center"><b>{{ $mainpagedetail->male }}</b></td>
-<td style="border: 1px solid black; width: 115px; height: 24px;text-align:center"><b>{{ $mainpagedetail->female }}</b></td>
-<td style="border: 1px solid black; width: 115px; height: 24px;text-align:center"><b>{{ $mainpagedetail->total }}</b></td>
+<tr>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
 </tr>
+<tr>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+	<td style="border: 1px solid black;
+	padding: 8px;">dddddddd</td>
+</tr> 
 </tbody>
-</table>   
+</table>
 <div style="page-break-before: always;"> </div>
-<div class="header">
-	पंचायत : अहर &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $mainpagedetail->voter_list_type }} नवाचान नामावल , {{ $mainpagedetail->year }} &nbsp;&nbsp;&nbsp;&nbsp;वाड संया :1
-    <hr style="width: 750px;margin-left: -20px">
- </div>
- <div class="footer" style="font-family:sans-serif;"> 
-    <div id="pageCounter"> 
-      <span></span>
-    </div>
-    <div id="pageNumbers">
-      <div class="page-number"></div> 
-    </div>
+<div>
+	<header>header on each page</header> 
 </div>
+
+  
  @php
   $time =0;
 @endphp
 @foreach ($voterReports as $voterReport) 
 @if ($time==0)
-<table style="width: 750px;margin-left: -20px">
+<table>
 	<tbody>
 		<tr>
 @endif 
 
 			<td> 
 				<table style="border: 1px solid black;
-					font-size: 9px;padding:1px;width: 242px">
+					font-size: 12px;padding:1px;">
 					<tbody>
 						<tr>
 							<td style="border: 1px solid black;">1234</td>
@@ -174,13 +181,13 @@
 							<td style="border: 1px solid black;">&nbsp;1234/1234</td>
 						</tr>
 						<tr>
-							<td style="width: 130px" colspan="2">Name&nbsp; &nbsp; {{ $voterReport->name_e }}</td>
-							<td style="" rowspan="4">
-								<img src="">
+							<td style="" colspan="2">नाम&nbsp; &nbsp; &nbsp; {{ $voterReport->name_l }}</td>
+							<td style="" rowspan="3">
+								<img src="http://eageskool.com/front_asset/images/hdg-01.jpg" alt="">
 							</td>
 						</tr>
 						<tr>
-							<td style="width: 130px" colspan="2">Father&nbsp; &nbsp; {{ $voterReport->father_name_e }}</td>
+							<td style="" colspan="2">पिता&nbsp; &nbsp; &nbsp; प्रमोद</td>
 						</tr>
 						<tr>
 							<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp; 12</td>
@@ -191,10 +198,12 @@
 					</tbody>
 				</table> 
 			</td> 
-@if ($time==3)
-</table>
+@if ($time==2)
+	
+	   </tr>
 	</tbody>
-		</tr>
+</table>
+
 @endif
 @php
   $time ++;
@@ -206,6 +215,5 @@
 @endif	 
 		 
 @endforeach
-@endforeach 
-</body> 
+</body>
 </html>
