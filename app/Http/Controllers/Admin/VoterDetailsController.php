@@ -13,8 +13,7 @@ use App\Model\UserActivity;
 use App\Model\Village;
 use App\Model\Voter;
 use App\Model\VoterImage;
-use App\Model\WardVillage;
-use Dompdf\Options;
+use App\Model\WardVillage; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -211,22 +210,21 @@ class VoterDetailsController extends Controller
 
       $voterReports=Voter::take(9)->get();
        // return view('admin.master.PrepareVoterList.report',compact('voterReports'));
-        $options = new Options();
-         $options->set('defaultFont', 'MANGAL');
-       $pdf=PDF::setOptions([
+         
+       // $pdf=PDF::setOptions([
 
-            'logOutputFile' => storage_path('logs/log.htm'),
-            'tempDir' => storage_path('logs/'),
-            'defaultMediaType'=>'all',
-            'isFontSubsettingEnabled'=>true,
+       //      'logOutputFile' => storage_path('logs/log.htm'),
+       //      'tempDir' => storage_path('logs/'),
+       //      'defaultMediaType'=>'all',
+       //      'isFontSubsettingEnabled'=>true,
 
-        ])->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
-        return $pdf->stream('user_list.pdf'); 
+       //  ])->loadView('admin.master.PrepareVoterList.report',compact('voterReports'));
+       //  return $pdf->stream('user_list.pdf'); 
 
 
 
       if ($request->proses_by==1) { 
-        $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+        // $voterReports=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
           // $voterReports = DB::select(DB::raw("call up_process_voterlist ('$request->ward')")); 
           $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
           $pdf->SetCreator(PDF_CREATOR); 
