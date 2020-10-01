@@ -9,10 +9,10 @@
 <table style="border: 1px solid black;">
 <tbody>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 40px" colspan="5">{{ $mainpagedetail->year }}  म काशत ाम पंचायत/पंचायत समत /{{ $mainpagedetail->election_type }} मतदाता सूच सबिधत वधानसभा े का नाम :</td>
+<td style="border: 1px solid black;height: 40px" colspan="5">&nbsp;{{ $mainpagedetail->year }}काशत ाम पंचायत/पंचायत समत /{{ $mainpagedetail->election_type }} मतदाता सूच सबिधत वधानसभा े का नाम :</td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 200px;margin-top: 5px" colspan="2">िजले का नाम : {{ $mainpagedetail->district }}</td>
+<td style="border: 1px solid black;height: 200px;margin-top: 5px" colspan="2">&nbsp;<br><b><h3>िजले का नाम : {{ $mainpagedetail->district }}</h3></b></td>
 <td style="border: 1px solid black;height: 200px" colspan="3">
 	<div>
 		भाग संया  : 16
@@ -29,7 +29,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@php
+			{{-- @php
           $time =0;
         @endphp
 	       @foreach ($voterssrnodetails as $voterssrnodetail)
@@ -49,7 +49,7 @@
 	            $time=0;
 	          @endphp
 	         @endif
-	        @endforeach 
+	        @endforeach  --}}
 		</tbody>
 	</table>
 </td>

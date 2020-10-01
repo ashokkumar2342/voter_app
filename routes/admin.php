@@ -276,6 +276,7 @@ Route::group(['middleware' => 'admin'], function() {
 
            Route::get('PrepareVoterListMunicipal', 'VoterDetailsController@PrepareVoterListMunicipal')->name('admin.voter.PrepareVoterListMunicipal');
            Route::post('PrepareVoterListMunicipalGenerate', 'VoterDetailsController@PrepareVoterListMunicipalGenerate')->name('admin.voter.PrepareVoterListMunicipalGenerate');
+           Route::get('PrepareVoterListMunicipalDownload/{condition_type}', 'VoterDetailsController@PrepareVoterListMunicipalDownload')->name('admin.voter.PrepareVoterListMunicipalDownload');
     });
     Route::group(['prefix' => 'Report'], function() {
            Route::get('PrintVoterList', 'ReportController@PrintVoterList')->name('admin.report.PrintVoterList');

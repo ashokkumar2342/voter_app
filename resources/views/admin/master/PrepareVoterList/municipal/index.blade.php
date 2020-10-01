@@ -61,11 +61,12 @@
                                        <input type="submit" class="btn btn-danger form-control" value="Unlock" onclick="$('#proses_by').val(2)">
                                    </div>
                                    <div class="col-lg-3 form-group">
-                                    <a href="#" class="form-control btn btn-success"> Download With Photo</a>
+                                    <a href="#" class="form-control btn btn-success" target="_blank" id="download_with_poto" onclick="downloadWithPhoto()"> Download With Photo</a>
                                    </div>
                                    <div class="col-lg-3 form-group">
-                                    <a href="#" class="form-control btn btn-success"> Download Without Photo</a>
-                                   </div>  
+                                    <a href="#" class="form-control btn btn-success" target="_blank" id="download_without_poto" onclick="downloadWithoutPhoto()"> Download Without Photo</a>
+                                   </div>
+                                     
                                    
                                     </div>
                                 </div> 
@@ -77,5 +78,15 @@
   </div>
 </section>
 @endsection
+@push('scripts')
+<script>
+    function downloadWithPhoto(){ 
+        $('#download_with_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',1) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
+    }
+    function downloadWithoutPhoto(){  
+        $('#download_without_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',2) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
+    }
+</script> 
+@endpush
  
 
