@@ -122,28 +122,28 @@ $time=0;
 		<tr>
 			@endif  
 			<td> 
-				<table style="border: 2px solid black;
+				<table style="border:1px solid black;
 				font-size:11px;padding:2px;">
 				<tbody>
 					<tr>
-						<td style="border: 1px solid black;">1234</td>
-						<td style="">xzfd123456</td>
-						<td style="border: 1px solid black;">&nbsp;1234/1234</td>
+						<td style="border: 1px solid black;width: 40px">{{ $voterReport->print_sr_no }}</td>
+						<td style="width: 100px;text-align:center">{{ $voterReport->voter_card_no }}</td>
+						<td style="border: 1px solid black;">&nbsp;{{ $voterReport->part_srno }}</td>
 					</tr>
 					<tr>
-						<td style="width: 130px" colspan="2">Name&nbsp; &nbsp; {{ $voterReport->name_l }}</td>
+						<td style="width: 130px" colspan="2">नाम&nbsp; &nbsp; {{ $voterReport->name_l }}</td>
 						<td style="" rowspan="4">
 							<img src="">
 						</td>
 					</tr>
 					<tr>
-						<td style="width: 130px" colspan="2">Father&nbsp; &nbsp; {{ $voterReport->father_name_l }}</td>
+						<td style="width: 130px" colspan="2">{{ $voterReport->vrelation }}&nbsp; &nbsp; {{ $voterReport->father_name_l }}</td>
 					</tr>
 					<tr>
-						<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp; 12</td>
+						<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp;{{ $voterReport->house_no_l }}</td>
 					</tr>
 					<tr>
-						<td style="" colspan="2">आयु&nbsp; &nbsp; &nbsp; 20&nbsp; &nbsp; &nbsp; ͧलिंग&nbsp; &nbsp; &nbsp; पुरुष</td>
+						<td style="" colspan="2">आयु&nbsp; &nbsp; &nbsp;{{ $voterReport->age }} &nbsp; &nbsp;लिंग&nbsp; &nbsp; &nbsp; {{ $voterReport->genders_l }}</td>
 					</tr>
 				</tbody>
 			</table> 
