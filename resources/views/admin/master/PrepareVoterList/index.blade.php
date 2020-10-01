@@ -39,15 +39,12 @@
                                     <div class="col-lg-4 form-group">
                                         <label for="exampleInputEmail1">Village</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="village" class="form-control select2" id="village_select_box" multiselect-form="true">
+                                        <select name="village" class="form-control select2" id="village_select_box" multiselect-form="true" onchange="callAjax(this,'{{ route('admin.voter.VillageWiseWardMultiple') }}','value_div_id')">
                                             <option selected disabled>Select Village</option>
                                         </select>
                                     </div> 
                                     <div class="col-lg-12 form-group text-center">
-                                        <div class="icheck-primary d-inline">
-                                          <input type="checkbox" id="radioPrimary1" name="report" value="1">
-                                          <label for="radioPrimary1">With Photo</label>  
-                                        </div> 
+                                         
                                     </div>
                                     <input type="hidden" name="proses_by" id="proses_by" value="0">
                                     <div class="col-lg-3 form-group">
@@ -57,11 +54,13 @@
                                        <input type="submit" class="btn btn-danger form-control" value="Unlock" onclick="$('#proses_by').val(2)">
                                    </div>
                                    <div class="col-lg-3 form-group">
-                                    <a href="#" class="form-control btn btn-success"><i class="fa fa-download"></i>Download With Photo</a>
+                                    <a href="#" class="form-control btn btn-success" target="_blank" id="download_with_poto" onclick="downloadWithPhoto()"> Download With Photo</a>
                                    </div>
                                    <div class="col-lg-3 form-group">
-                                    <a href="#" class="form-control btn btn-success"><i class="fa fa-download"></i>Download Without Photo</a>
-                                   </div> 
+                                    <a href="#" class="form-control btn btn-success" target="_blank" id="download_without_poto" onclick="downloadWithoutPhoto()"> Download Without Photo</a>
+                                   </div>
+                                     
+                                   
                                     </div>
                                 </div> 
                         </form>
@@ -72,5 +71,15 @@
   </div>
 </section>
 @endsection
+@push('scripts')
+<script>
+    function downloadWithPhoto(){ 
+        $('#download_with_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',1) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
+    }
+    function downloadWithoutPhoto(){  
+        $('#download_without_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',2) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
+    }
+</script> 
+@endpush
  
 

@@ -36,7 +36,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{{-- @php
+			@php
           $time =0;
         @endphp
 	       @foreach ($voterssrnodetails as $voterssrnodetail)
@@ -56,7 +56,7 @@
 	            $time=0;
 	          @endphp
 	         @endif
-	        @endforeach  --}}
+	        @endforeach 
 		</tbody>
 	</table>
 </td>
