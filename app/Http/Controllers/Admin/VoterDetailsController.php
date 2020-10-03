@@ -303,10 +303,10 @@ class VoterDetailsController extends Controller
                  ]
              ],
              'default_font' => 'freesans',
-             'pagenumPrefix' => 'Page number',
-            'pagenumSuffix' => ' - ',
-            'nbpgPrefix' => ' out of ',
-            'nbpgSuffix' => ' pages'
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
          ]);
           
 
