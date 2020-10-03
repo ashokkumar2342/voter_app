@@ -29,7 +29,7 @@
 		    <tr>
 		        <td width="25%" style="text-align: left;font-size: 11px"><h2>पंचायत : {{ $mainpagedetails[0]->district }}</h2></td> 
 		        <td width="50%" align="right" style="text-align: right;font-size: 12px"><h2>{{ $mainpagedetails[0]->voter_list_type }} निर्वाचन नामावली {{ $mainpagedetails[0]->year }}</h2></td>
-		        <td width="25%" align="right" style="text-align: right;font-size: 12px"><h2>वार्ड संख्या : {{ $mainpagedetails[0]->ward_id }}</h2></td> 
+		        <td width="25%" align="right" style="text-align: right;font-size: 12px"><h2>वार्ड संख्या : {{ $mainpagedetails[0]->ward }}</h2></td> 
 		    </tr>
 		</table> 
 	</htmlpageheader>
@@ -37,8 +37,8 @@
 	<htmlpagefooter name="otherpagesfooter" style="display:none">
 		<table width="100%" style="margin-top:5px;">
 		    <tr>
-		        <td width="50%" style="text-align: left;font-size: 11px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->publication_date }} के अनुसार संशोधित </td> 
-		        <td width="50%" align="right" style="text-align: right;font-size: 12px">{nbpg}  {PAGENO}</td>
+		        <td width="50%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->publication_date }} के अनुसार संशोधित </td> 
+		        <td width="50%" align="right" style="text-align: right;font-size: 12px;word-spacing: 4px">{nbpg}  {PAGENO}</td>
 		        
 		    </tr>
 		</table>
@@ -101,7 +101,7 @@
 <tr>
 <td style="padding-left: 20px;width: 300px">1.(क) ग्राम पंचायत का नाम व वार्ड संख्या</td>
 <td style="width:200px;height: 40px"><b>{{ $mainpagedetail->village }}</b></td>
-<td><b>{{ $mainpagedetail->ward_id }}</b></td>
+<td><b>{{ $mainpagedetail->ward }}</b></td>
 </tr>
 <tr>
 <td style="padding-left: 40px;width: 300px">खण्ड का नाम</td>
@@ -123,45 +123,46 @@
 </td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 40px" colspan="5">2- पुनरण का ववरण </td>
+<td style="border: 1px solid black;height: 40px;word-spacing: 4px" colspan="5">&nbsp;&nbsp;2- पुनरीक्षण  का विवरण   </td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 120px" colspan="2">
+<td style="border: 1px solid black;height: 120px;word-spacing: 4px" colspan="2">
 	
-&nbsp;&nbsp;&nbsp;पुनरण का वष : <b>{{ $mainpagedetail->list_type }}</b>
+&nbsp;&nbsp;&nbsp;पुनरीक्षण का वर्ष : <b>{{ $mainpagedetail->year }}</b>
 <br>
 <br>
-&nbsp;&nbsp;&nbsp;पुनरण क तथ : <b>{{ $mainpagedetail->publication_date }}</b>
+&nbsp;&nbsp;&nbsp;पुनरीक्षण की तिथि  : <b>{{ $mainpagedetail->publication_date }}</b>
 <br>
 <br>
-&nbsp;&nbsp;&nbsp;पुनरण का वप : <b>{{ $mainpagedetail->list_type }}  {{ $mainpagedetail->year }}</b> 
+&nbsp;&nbsp;&nbsp;पुनरीक्षण का स्वरूप  : <b>{{ $mainpagedetail->list_type }}  {{ $mainpagedetail->year }}</b> 
 <br> 
 <br> 
-&nbsp;&nbsp;काशन क तथ : <b>{{ $mainpagedetail->publication_date }}</b>  
+&nbsp;&nbsp;प्रकाशन की तिथि : <b>{{ $mainpagedetail->publication_date }}</b>  
 </td>
-<td style="border: 1px solid black;height: 120px" colspan="3">
+<td style="border: 1px solid black;height: 120px;word-spacing: 4px" colspan="3">
 	
-	नामावल पहचान : 
+	नामावली  पहचान  : 
 	<br>
-	नये परसमत नवाचन े के वतारानुसार सभी अनुपूरक सहत एककृत व वष  <b>{{ $mainpagedetail->year }}</b> क पुनरत मूल नवाचक नामावल 
+	<br>
+	नये परिसमिति निर्वाचन क्षेत्रो के विस्तारानुसार सभी अनुपूरकों सहित एकीकृत व  वर्ष <b>{{ $mainpagedetail->year }}</b> की पुनरीक्षित मूल निर्वाचक नामावली 
 </td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 40px" colspan="5">मतदाताओं क संया </td>
+<td style="border: 1px solid black;height: 40px;word-spacing: 4px" colspan="5">&nbsp;&nbsp;मतदाताओं क संया </td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 40px">आरंभक म संया</td>
-<td style="border: 1px solid black;height: 40px">अंतम म संया</td>
-<td style="border: 1px solid black;height: 40px">पुष</td>
-<td style="border: 1px solid black;height: 40px">महला</td>
-<td style="border: 1px solid black;height: 40px">कुल</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">आरंभिक क्रम संख्या </td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">अंतिम  क्रम संख्या </td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">पुरुष</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">महिला</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">कुल</td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 40px">&nbsp;</td>
-<td style="border: 1px solid black;height: 40px">&nbsp;</td>
-<td style="border: 1px solid black;height: 40px">{{ $mainpagedetail->male }}</td>
-<td style="border: 1px solid black;height: 40px">{{ $mainpagedetail->female }}</td>
-<td style="border: 1px solid black;height: 40px">{{ $mainpagedetail->total }}</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->from_sr_no }}</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->total }}</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->male }}</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->female }}</td>
+<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->total }}</td>
 </tr>
 </tbody>
 </table>
