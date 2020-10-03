@@ -285,7 +285,7 @@ class VoterDetailsController extends Controller
        $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
        $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $request->ward;"));
       $voterReports = DB::select(DB::raw("select `hpsn`.`print_sr_no`,`v`.`voter_card_no`, case `source` when 'V' then concat('*', `ap`.`part_no`, '/', `v`.`sr_no`) Else 'New' End as `part_srno`, `v`.`name_l`, case `v`.`relation` When 'F' then 'पिता' When 'H' Then 'पति' End as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l`, `vi`.`image` from `history_print_sr_no` `hpsn` inner join `voters` `v` on `v`.`id` = `hpsn`.`voter_id` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `hpsn`.`gender_id` LEFT JOIN `voter_image` `vi` on `vi`.`voter_id` = `v`.`id` 
-         where `hpsn`.`supliment_no` = 1 And `hpsn`.`ward_id` =$request->ward And `hpsn`.`status` in (0,1,3) Order By `hpsn`.`print_sr_no`; "));
+         where `hpsn`.`supliment_no` = 1 And `hpsn`.`ward_id` =$request->ward And `hpsn`.`status` in (0,1,3) Order By `hpsn`.`print_sr_no`; ")); 
         
         $path=Storage_path('fonts/');
         $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
@@ -303,13 +303,14 @@ class VoterDetailsController extends Controller
                  ]
              ],
              'default_font' => 'freesans',
-             'pagenumPrefix' => 'Page number ',
+             'pagenumPrefix' => 'Page number',
             'pagenumSuffix' => ' - ',
             'nbpgPrefix' => ' out of ',
             'nbpgSuffix' => ' pages'
          ]);
-         $foot ='<span style="float:left">ashok</span>';
-         $mpdf->setFooter($foot.' {PAGENO}{nbpg}');
+          
+
+          
          $html = view('admin.master.PrepareVoterList.municipal.report_without_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
          $mpdf->WriteHTML($html); 
          $mpdf->Output(); 

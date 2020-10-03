@@ -2,8 +2,42 @@
 <html>
 <head>
 	<title></title>
+	<style>
+		@page {  
+		    header: html_otherpageheader;
+		    footer: html_otherpagesfooter;
+		}
+
+		@page :first {    
+		    header: html_firstpageheader;
+		     
+		}
+	</style>
 </head>
 <body>
+	<htmlpageheader name="firstpageheader" style="display:none">
+	    <div style="text-align:center"> first page header</div>
+	</htmlpageheader>
+
+	<htmlpagefooter name="firstpagefooter" style="display:none">
+	    <div style="text-align:center">{PAGENO}/{nbpg} </div>
+	     
+	</htmlpagefooter>
+
+	<htmlpageheader name="otherpageheader" style="display:none">
+	    <div style="text-align:center"> all page Header</div>
+	</htmlpageheader>
+
+	<htmlpagefooter name="otherpagesfooter" style="display:none">
+		<table width="100%" style="margin-top:10px">
+		    <tr>
+		        <td width="50%" style="text-align: left;">My document</td> 
+		        <td width="50%" align="right">{PAGENO}/{nbpg}</td>
+		        
+		    </tr>
+		</table>
+	    
+	</htmlpagefooter>
 <div style="text-align:center;"><h2><b>Annexure-A</b></h2></div>
 @foreach ($mainpagedetails as $mainpagedetail)
 <table style="border: 1px solid black;">
@@ -114,8 +148,13 @@
 <div style="page-break-before: always;"></div>
 @php
 $time=0;
+$totalCount=count($voterReports);
+$i=0;
 @endphp
-@foreach ($voterReports as $voterReport) 
+@foreach ($voterReports as $voterReport)
+@php
+ 	$i=$i+1;
+ @endphp 
 @if ($time==0)
 <table style="">
 	<tbody>
@@ -148,7 +187,7 @@ $time=0;
 				</tbody>
 			</table> 
 		</td> 
-		@if($time==2)
+		@if($time==2 || $totalCount==$i)
 			</tr>
 		</tbody>
 
