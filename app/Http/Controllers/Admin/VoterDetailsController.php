@@ -285,29 +285,36 @@ class VoterDetailsController extends Controller
        $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$request->ward;")); 
        $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $request->ward;"));
       $voterReports = DB::select(DB::raw("select `hpsn`.`print_sr_no`,`v`.`voter_card_no`, case `source` when 'V' then concat('*', `ap`.`part_no`, '/', `v`.`sr_no`) Else 'New' End as `part_srno`, `v`.`name_l`, case `v`.`relation` When 'F' then 'पिता' When 'H' Then 'पति' End as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l`, `vi`.`image` from `history_print_sr_no` `hpsn` inner join `voters` `v` on `v`.`id` = `hpsn`.`voter_id` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `hpsn`.`gender_id` LEFT JOIN `voter_image` `vi` on `vi`.`voter_id` = `v`.`id` 
-         where `hpsn`.`supliment_no` = 1 And `hpsn`.`ward_id` =$request->ward And `hpsn`.`status` in (0,1,3) Order By `hpsn`.`print_sr_no`; ")); 
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
-        $pdf->SetCreator(PDF_CREATOR); 
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-        $pdf->setFontSubsetting(true); 
-        $pdf->SetFont('freesans','', 11);
-        $pdf->SetHeaderData('',1,'पंचायत :'.$mainpagedetails[0]->district.','.$mainpagedetails[0]->voter_list_type.','. 'नवाचान नामावल'.' : '. $mainpagedetails[0]->year,'');
-        $pdf->setHeaderFont(Array('freesans', '',12));
-        $pdf->SetMargins(PDF_MARGIN_LEFT,12, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);  
-        $pdf->SetPrintHeader(true);
-        $pdf->SetAutoPageBreak(TRUE,30); 
-        $pdf->AddPage(4); 
-        $html = view('admin.master.PrepareVoterList.municipal.report_without_photo',compact('mainpagedetails','voterssrnodetails','voterReports'));
-        $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-        $documentUrl = Storage_path() . '/app/voter/Prepare/'.$request->district.'/'.$request->block.'/'.$request->village;   
-        @mkdir($documentUrl, 0755, true);  
-        $pdf->Output($documentUrl.'/'.$request->ward.'_without_photo'.'.pdf', 'F');
-        return  $this->SavePhoth($request->district,$request->block,$request->village,$request->ward,$mainpagedetails,$voterssrnodetails,$voterReports);
-        $response=['status'=>1,'msg'=>'Process And Lock Successfully'];
-            return response()->json($response); 
+         where `hpsn`.`supliment_no` = 1 And `hpsn`.`ward_id` =$request->ward And `hpsn`.`status` in (0,1,3) Order By `hpsn`.`print_sr_no`; "));
+        
+        $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+         $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => 'Page number ',
+            'pagenumSuffix' => ' - ',
+            'nbpgPrefix' => ' out of ',
+            'nbpgSuffix' => ' pages'
+         ]);
+         $foot ='<span style="float:left">ashok</span>';
+         $mpdf->setFooter($foot.' {PAGENO}{nbpg}');
+         $html = view('admin.master.PrepareVoterList.municipal.report_without_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
+         $mpdf->WriteHTML($html); 
+         $mpdf->Output(); 
+         
+         
       }
       else if($request->proses_by==2) {
       $voterReports = DB::select(DB::raw("call up_unlock_voterlist ('$request->ward')"));

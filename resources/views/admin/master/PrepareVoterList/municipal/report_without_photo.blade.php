@@ -12,7 +12,7 @@
 <td style="border: 1px solid black;height: 40px" colspan="5">&nbsp;{{ $mainpagedetail->year }} काशत ाम पंचायत/पंचायत समत /{{ $mainpagedetail->election_type }} मतदाता सूच सबिधत वधानसभा े का नाम : <b>{{ $mainpagedetail->district }}</b></td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 200px;margin-top: 5px" colspan="2">&nbsp;<br><b><h3>िजले का नाम : {{ $mainpagedetail->district }}</h3></b></td>
+<td style="border: 1px solid black;height: 200px;margin-top: 5px" colspan="2">&nbsp;<br><b><h3>जिला का नाम : {{ $mainpagedetail->district }}</h3></b></td>
 <td style="border: 1px solid black;height: 200px" colspan="3">
 	<div>
 		भाग संया  : 16
@@ -123,7 +123,7 @@ $time=0;
 			@endif  
 			<td> 
 				<table style="border:1px solid black;
-				font-size:11px;padding:2px;">
+				font-size:11px;padding:0px;width: 220">
 				<tbody>
 					<tr>
 						<td style="border: 1px solid black;width: 40px">{{ $voterReport->print_sr_no }}</td>
