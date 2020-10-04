@@ -8,9 +8,10 @@ use App\Model\AssemblyPart;
 use App\Model\History;
 use App\Model\Voter;
 use App\Model\VoterImage;
+use App\Model\VoterListMaster;
 use DB;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+
 class DataTransfer extends Command
 {
     /**
@@ -78,7 +79,8 @@ class DataTransfer extends Command
          $response=['status'=>0,'msg'=>'assembly Part code does not exist'];
           return response()->json($response);   
         }
-      foreach ($datas as $key => $value) { 
+      foreach ($datas as $key => $value) {
+       $houseno = DB::select(DB::raw("select uf_converthno('$value->HOUSE_NO_EN')")); 
        $voterImport=new Voter();
        $voterImport->assembly_id=$assembly->id;
        $voterImport->assembly_part_id=$assemblyPart->id;
@@ -87,8 +89,7 @@ class DataTransfer extends Command
        $voterImport->print_sr_no=0;
        $voterImport->source='v';
        $voterImport->suppliment_no=$voterlistmaster->id;
-       $voterImport->sr_no=$value->SLNOINPART;
-       $houseno = DB::select(DB::raw("select uf_converthno('$value->HOUSE_NO_EN')"));
+       $voterImport->sr_no=$value->SLNOINPART; 
        $voterImport->house_no=$houseno;
        $voterImport->house_no_l=$value->HOUSE_NO_V1; 
        $voterImport->house_no_e=$value->HOUSE_NO_EN; 

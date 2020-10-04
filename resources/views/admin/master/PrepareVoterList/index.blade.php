@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">    
-                        <form action="{{ route('admin.voter.PrepareVoterListGenerate') }}" method="post" target="blank">
+                        <form action="{{ route('admin.voter.PrepareVoterListGenerate') }}" method="post" no-reset="true" class="add_form">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">  
@@ -74,10 +74,10 @@
 @push('scripts')
 <script>
     function downloadWithPhoto(){ 
-        $('#download_with_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',1) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
+        $('#download_with_poto').attr('href','{{ route('admin.voter.PrepareVoterListPanchayatDownload',1) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
     }
     function downloadWithoutPhoto(){  
-        $('#download_without_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',2) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
+        $('#download_without_poto').attr('href','{{ route('admin.voter.PrepareVoterListPanchayatDownload',2) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
     }
 </script> 
 @endpush

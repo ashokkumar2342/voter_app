@@ -1034,9 +1034,7 @@ class MasterController extends Controller
             'block' => 'required', 
             'village' => 'required', 
             'assembly_part' => 'required', 
-            'from_sr_no' => 'required', 
-            'to_sr_no' => 'required', 
-            
+             
       ];
 
       $validator = Validator::make($request->all(),$rules);
@@ -1052,9 +1050,25 @@ class MasterController extends Controller
          $forcefully=1; 
         }else{
          $forcefully=0; 
-        } 
-        DB::select(DB::raw("call up_ward_bandi_voters ('$request->assembly_part','$request->ward','$request->from_sr_no','$request->to_sr_no','$forcefully')")); 
-       $response=['status'=>1,'msg'=>'Submit Successfully'];
+        }
+        if ($request->from_sr_no==null) {
+           $from_sr_no=0;
+         }
+         else if ($request->from_sr_no!=null) {
+           $from_sr_no=$request->from_sr_no;
+         }
+         if ($request->to_sr_no==null) {
+           $to_sr_no=0;
+         }
+         else if ($request->to_sr_no!=null) {
+           $to_sr_no=$request->to_sr_no;
+         } 
+        $message=DB::select(DB::raw("call up_ward_bandi_voters ('$request->assembly_part','$request->ward','$from_sr_no','$to_sr_no','$forcefully')"));
+        if ($message[0]->save_status=='Saved Successfully') {
+          $response=['status'=>1,'msg'=>$message[0]->save_status];  
+         }else{ 
+          $response=['status'=>0,'msg'=>$message[0]->save_status];
+         } 
        return response()->json($response);
       }
      

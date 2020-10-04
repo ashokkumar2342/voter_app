@@ -44,7 +44,7 @@ class ImportExportController extends Controller
         $Old_tmp_import_districts=TmpImportDistrict::whereIn('userid',$tmp_import_districts)->delete();
        foreach ($results as $key => $value) {         
              if (!empty($value->state_id)) {
-             $SaveResult=DB::select(DB::raw("call up_create_district_excel ('$user->id','$value->state_id','$value->district_code','$value->district_name_eng','$value->district_name_hindi','$value->total_wards')"));      
+             $SaveResult=DB::select(DB::raw("call up_create_district_excel ('$user->id','$value->state_id','$value->district_code','$value->district_name_eng','$value->district_name_hindi','$value->total_zp_wards')"));      
             } 
         }
         $disImportedDatas=TmpImportDistrict::all();

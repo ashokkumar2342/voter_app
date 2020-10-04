@@ -207,10 +207,10 @@ class VoterDetailsController extends Controller
     }
     public function PrepareVoterListGenerate(Request $request)
     {  
-       $rules=[            
+      $rules=[            
             'district' => 'required', 
             'block' => 'required', 
-            'village' => 'required',             
+            'village' => 'required',            
       ];
       $validator = Validator::make($request->all(),$rules);
       if ($validator->fails()) {
@@ -220,40 +220,92 @@ class VoterDetailsController extends Controller
           $response["msg"]=$errors[0];
           return response()->json($response);// response as json
       }  
-    if ($request->proses_by==1) { 
-        $village_id=$request->village;
-        $WardVillages=WardVillage::where('village_id',$village_id)->get();
-        $processvillagevoterlistSave= DB::select(DB::raw("call up_process_village_voterlist ('$village_id')")); 
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
-        $pdf->SetCreator(PDF_CREATOR); 
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-        $pdf->setFontSubsetting(true); 
-        $pdf->SetFont('freesans','', 11);
-        $pdf->SetHeaderData('',1,'पंचायत :नवाचान नामावल','');
-        $pdf->setHeaderFont(Array('freesans', '',12));
-        $pdf->SetMargins(PDF_MARGIN_LEFT,12, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);  
-        $pdf->SetPrintHeader(true);
-        $pdf->SetAutoPageBreak(TRUE,30); 
-        $pdf->AddPage(4); 
-        $html = view('admin.master.PrepareVoterList.report',compact('WardVillages'));
-        $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-        // $documentUrl = Storage_path() . '/app/voter/Prepare/'.$request->district.'/'.$request->block.'/'.$request->village;   
-        // @mkdir($documentUrl, 0755, true);  
-        // $pdf->Output($documentUrl.'_without_photo.pdf', 'F');
-        $pdf->Output();
-        // return  $this->SavePhoth($request->district,$request->block,$request->village,$request->ward,$mainpagedetails,$voterssrnodetails,$voterReports);
-        $response=['status'=>1,'msg'=>'Process And Lock Successfully'];
-            return response()->json($response); 
+    if ($request->proses_by==1) {  
+       $voterListMaster=VoterListMaster::where('status',1)->first(); 
+       $WardVillages=WardVillage::where('village_id',$request->village)->first(); 
+       $PrepareVoterListSave= DB::select(DB::raw("call up_process_village_voterlist ('$request->village')"));  
+       $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$WardVillages->id;")); 
+       $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $WardVillages->id;"));
+      $voterReports = DB::select(DB::raw("select `hpsn`.`print_sr_no`,`v`.`voter_card_no`, case `source` when 'V' then concat('*', `ap`.`part_no`, '/', `v`.`sr_no`) Else 'New' End as `part_srno`, `v`.`name_l`, case `v`.`relation` When 'F' then 'पिता' When 'H' Then 'पति' End as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l`, `vi`.`image` from `history_print_sr_no` `hpsn` inner join `voters` `v` on `v`.`id` = `hpsn`.`voter_id` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `hpsn`.`gender_id` LEFT JOIN `voter_image` `vi` on `vi`.`voter_id` = `v`.`id` 
+         where `hpsn`.`supliment_no` = 1 And `hpsn`.`ward_id` =$WardVillages->id And `hpsn`.`status` in (0,1,3) Order By `hpsn`.`print_sr_no`; "));        
+        $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+         $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
+         ]); 
+         $html = view('admin.master.PrepareVoterList.report_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
+         $mpdf->WriteHTML($html); 
+         $documentUrl = Storage_path() . '/app/voter/Prepare/village/'.$request->district.'/'.$request->block;   
+        @mkdir($documentUrl, 0755, true);  
+        $mpdf->Output($documentUrl.'/'.$request->village.'_photo'.'.pdf', 'F');
+        return  $this->SavePhoth($request->district,$request->block,$request->village,$mainpagedetails,$voterssrnodetails,$voterReports); 
       }
       else if($request->proses_by==2) {
       $unlock_village_voterlist = DB::select(DB::raw("call up_unlock_village_voterlist ('$request->village')"));
        $response=['status'=>1,'msg'=>'Unlock Successfully'];
             return response()->json($response);
       }
-    } 
+    }
+    public function SavePhoth($district,$block,$village,$mainpagedetails,$voterssrnodetails,$voterReports)
+    {
+       $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+         $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
+         ]); 
+         $html = view('admin.master.PrepareVoterList.report_without_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
+         $mpdf->WriteHTML($html); 
+         $documentUrl = Storage_path() . '/app/voter/Prepare/village/'.$district.'/'.$block;   
+        @mkdir($documentUrl, 0755, true);  
+        $mpdf->Output($documentUrl.'/'.$village.'_without_photo'.'.pdf', 'F'); 
+        $response=['status'=>1,'msg'=>'Process And Lock Successfully'];
+            return response()->json($response); 
+    }
+    public function PrepareVoterListPanchayatDownload(Request $request,$id)
+     {  
+        if ($id==1) {
+        $documentUrl = Storage_path() . '/app/voter/Prepare/village/'.$request->district_id.'/'.$request->block_id.'/'.$request->village_id.'_photo.pdf'; 
+        return response()->file($documentUrl);
+        }
+        elseif ($id==2) {
+         $documentUrl = Storage_path() . '/app/voter/Prepare/village/'.$request->district_id.'/'.$request->block_id.'/'.$request->village_id.'_without_photo.pdf';
+        return response()->file($documentUrl);
+        }
+         
+              
+     } 
 
     public function PrepareVoterListMunicipal()
     {
@@ -263,14 +315,12 @@ class VoterDetailsController extends Controller
 
     public function PrepareVoterListMunicipalGenerate(Request $request)
     {  
-      $rules=[
-            
+      $rules=[            
             'district' => 'required', 
             'block' => 'required', 
             'village' => 'required', 
             'ward' => 'required', 
       ];
-
       $validator = Validator::make($request->all(),$rules);
       if ($validator->fails()) {
           $errors = $validator->errors()->all();
@@ -307,15 +357,13 @@ class VoterDetailsController extends Controller
             'pagenumSuffix' => '',
             'nbpgPrefix' => ' कुल ',
             'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
-         ]);
-          
-
-          
-         $html = view('admin.master.PrepareVoterList.municipal.report_without_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
+         ]); 
+         $html = view('admin.master.PrepareVoterList.municipal.report_with_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
          $mpdf->WriteHTML($html); 
-         $mpdf->Output(); 
-         
-         
+         $documentUrl = Storage_path() . '/app/voter/Prepare/ward/'.$request->district.'/'.$request->block.'/'.$request->village;   
+        @mkdir($documentUrl, 0755, true);  
+        $mpdf->Output($documentUrl.'/'.$request->ward.'_photo'.'.pdf', 'F'); 
+        return  $this->SaveMunicipal($request->district,$request->block,$request->village,$request->ward,$mainpagedetails,$voterssrnodetails,$voterReports);  
       }
       else if($request->proses_by==2) {
       $voterReports = DB::select(DB::raw("call up_unlock_voterlist ('$request->ward')"));
@@ -323,38 +371,45 @@ class VoterDetailsController extends Controller
             return response()->json($response);
       }      
     }
-    public function SavePhoth($district,$block,$village,$ward,$mainpagedetails,$voterssrnodetails,$voterReports)
+    public function SaveMunicipal($district,$block,$village,$ward,$mainpagedetails,$voterssrnodetails,$voterReports)
     {
-       $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
-        $pdf->SetCreator(PDF_CREATOR); 
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-        $pdf->setFontSubsetting(true); 
-        $pdf->SetFont('freesans','', 11);
-        $pdf->SetHeaderData('',1,'पंचायत :'.$mainpagedetails[0]->district.','.$mainpagedetails[0]->voter_list_type.''. 'नवाचान नामावल'. $mainpagedetails[0]->year,'');
-        $pdf->setHeaderFont(Array('freesans', '',12));
-        $pdf->SetMargins(PDF_MARGIN_LEFT,12, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);  
-        $pdf->SetPrintHeader(true);
-        $pdf->SetAutoPageBreak(TRUE,30); 
-        $pdf->AddPage(4); 
-        $html = view('admin.master.PrepareVoterList.municipal.report_with_photo',compact('mainpagedetails','voterssrnodetails','voterReports'));
-        $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-        $documentUrl = Storage_path() . '/app/voter/Prepare/'.$district.'/'.$block.'/'.$village;   
+       $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+         $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
+         ]); 
+         $html = view('admin.master.PrepareVoterList.municipal.report_without_photo',compact('mainpagedetails','voterssrnodetails','voterReports')); 
+         $mpdf->WriteHTML($html); 
+         $documentUrl = Storage_path() . '/app/voter/Prepare/ward/'.$district.'/'.$block.'/'.$village;   
         @mkdir($documentUrl, 0755, true);  
-        $pdf->Output($documentUrl.'/'.$ward.'_with_photo'.'.pdf', 'F'); 
+        $mpdf->Output($documentUrl.'/'.$ward.'_without_photo'.'.pdf', 'F'); 
         $response=['status'=>1,'msg'=>'Process And Lock Successfully'];
-            return response()->json($response);
+            return response()->json($response); 
     }
     public function PrepareVoterListMunicipalDownload(Request $request,$id)
      {  
         if ($id==1) {
-        $documentUrl = Storage_path() . '/app/voter/Prepare/'.$request->district_id.'/'.$request->block_id.'/'.$request->village_id.'/'.$request->ward_id.'_with_photo'.'.pdf'; 
+        $documentUrl = Storage_path() . '/app/voter/Prepare/ward/'.$request->district_id.'/'.$request->block_id.'/'.$request->village_id.'/'.$request->ward_id.'_photo'.'.pdf'; 
         return response()->file($documentUrl);
         }
         elseif ($id==2) {
-        $documentUrl = Storage_path() . '/app/voter/Prepare/'.$request->district_id.'/'.$request->block_id.'/'.$request->village_id.'/'.$request->ward_id.'_without_photo'.'.pdf'; 
+        $documentUrl = Storage_path() . '/app/voter/Prepare/ward/'.$request->district_id.'/'.$request->block_id.'/'.$request->village_id.'/'.$request->ward_id.'_without_photo'.'.pdf'; 
         return response()->file($documentUrl);
         }
          
