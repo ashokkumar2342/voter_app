@@ -8,6 +8,7 @@ use App\Model\AssemblyPart;
 use App\Model\History;
 use App\Model\Voter;
 use App\Model\VoterImage;
+use App\Model\VoterListMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
@@ -99,6 +100,7 @@ class DatabaseConnectionController extends Controller
        $assembly=Assembly::where('code',$assemblyCode)->first();  
        $assemblyPart=AssemblyPart::where('part_no',$assemblyPartCode)->where('assembly_id',$assembly->id)->first();
        $history=History::where('table_name',$val)->where('status',2)->first(); 
+       $voterlistmaster=VoterListMaster::where('status',1)->first(); 
        if (empty($assembly)) {
          $response=['status'=>0,'msg'=>$val.' Assembly code does not exist'];
           return response()->json($response);   
@@ -109,6 +111,10 @@ class DatabaseConnectionController extends Controller
         }
         elseif (!empty($history)) {
          $response=['status'=>0,'msg'=>$val.' This Table Record Already Import'];
+          return response()->json($response);   
+        }
+        elseif (empty($voterlistmaster)) {
+         $response=['status'=>0,'msg'=>'Voter List Master Not Set Contact Your Admin'];
           return response()->json($response);   
         }
       }

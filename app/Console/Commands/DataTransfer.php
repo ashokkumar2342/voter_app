@@ -3,14 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Admin;
- 
-use App\Model\Voter;
-use App\Model\VoterImage;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
 use App\Model\History;
-use Illuminate\Console\Command;
+use App\Model\Voter;
+use App\Model\VoterImage;
 use DB;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 class DataTransfer extends Command
 {
     /**
@@ -68,7 +68,8 @@ class DataTransfer extends Command
        $assemblyCode=substr($table, -7, 3); 
        $assemblyPartCode=substr($table,4);
        $assembly=Assembly::where('code',$assemblyCode)->first();  
-       $assemblyPart=AssemblyPart::where('part_no',$assemblyPartCode)->where('assembly_id',$assembly->id)->first(); 
+       $assemblyPart=AssemblyPart::where('part_no',$assemblyPartCode)->where('assembly_id',$assembly->id)->first();
+       $voterlistmaster=VoterListMaster::where('status',1)->first();  
        if (empty($assembly)) {
          $response=['status'=>0,'msg'=>'assembly code does not exist'];
           return response()->json($response);   
@@ -78,30 +79,36 @@ class DataTransfer extends Command
           return response()->json($response);   
         }
       foreach ($datas as $key => $value) { 
-       $AssemblyPart=new Voter();
-       $AssemblyPart->assembly_id=$assembly->id;
-       $AssemblyPart->assembly_part_id=$assemblyPart->id;
-       $AssemblyPart->village_id=0;
-       $AssemblyPart->ward_id=0;
-       $AssemblyPart->print_sr_no=0;
-       $AssemblyPart->source='v';
-       $AssemblyPart->suppliment_no=0;
-       $AssemblyPart->sr_no=$value->SLNOINPART;
-       $AssemblyPart->house_no=trim($value->HOUSE_NO_EN,"abcdefghijklmnopqrstuvwxyz!");
-       $AssemblyPart->house_no_l=$value->HOUSE_NO_V1; 
-       $AssemblyPart->house_no_e=$value->HOUSE_NO_EN; 
-       $AssemblyPart->name_l=str_replace('਍', '', $value->FM_NAME_V1);
-       $AssemblyPart->name_e=str_replace('਍', '', $value->FM_NAMEEN);
-       $AssemblyPart->father_name_e=str_replace('਍', '', $value->RLN_fm_NMen);
-       $AssemblyPart->father_name_l=str_replace('਍', '', $value->RLN_FM_NM_V1);
-       $AssemblyPart->relation=$value->RLN_TYPE;
-       $AssemblyPart->voter_card_no=$value->IDCARD_NO;
-       $AssemblyPart->gender_id=$value->SEX;
-       $AssemblyPart->age=$value->AGE;
-       $AssemblyPart->save();
+       $voterImport=new Voter();
+       $voterImport->assembly_id=$assembly->id;
+       $voterImport->assembly_part_id=$assemblyPart->id;
+       $voterImport->village_id=0;
+       $voterImport->ward_id=0;
+       $voterImport->print_sr_no=0;
+       $voterImport->source='v';
+       $voterImport->suppliment_no=$voterlistmaster->id;
+       $voterImport->sr_no=$value->SLNOINPART;
+       $houseno = DB::select(DB::raw("select uf_converthno('$value->HOUSE_NO_EN')"));
+       $voterImport->house_no=$houseno;
+       $voterImport->house_no_l=$value->HOUSE_NO_V1; 
+       $voterImport->house_no_e=$value->HOUSE_NO_EN; 
+       $voterImport->name_l=str_replace('਍', '', $value->FM_NAME_V1);
+       $voterImport->name_e=str_replace('਍', '', $value->FM_NAMEEN);
+       $voterImport->father_name_e=str_replace('਍', '', $value->RLN_fm_NMen);
+       $voterImport->father_name_l=str_replace('਍', '', $value->RLN_FM_NM_V1);
+       $voterImport->relation=$value->RLN_TYPE;
+       $voterImport->voter_card_no=$value->IDCARD_NO;
+       if ($value->SEX=='M') {
+        $voterImport->gender_id=1;  
+       }
+       elseif ($value->SEX=='F') {
+        $voterImport->gender_id=2;  
+       } 
+       $voterImport->age=$value->AGE;
+       $voterImport->save();
        $countTotal++; 
        $VoterImage=new VoterImage();
-       $VoterImage->voter_id=1; 
+       $VoterImage->voter_id=$voterImport->id; 
        $VoterImage->image=$value->JPGIMAGE;
        $VoterImage->save();
        $HistoryUpdate=History::where('status',1)->first();
