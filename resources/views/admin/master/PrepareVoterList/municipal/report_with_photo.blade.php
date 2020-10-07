@@ -52,72 +52,17 @@
 <td style="border: 1px solid black;height: 40px;word-spacing:4px" colspan="5">&nbsp;&nbsp;{{ $mainpagedetail->year }} {{ $mainpagedetail->list_type }} {{ $mainpagedetail->election_type }} मतदाता सूचि सम्बन्धित विधानसभा क्षेत्र का नाम : {{ $mainpagedetail->district }}</td>
 </tr>
 <tr style="border: 1px solid black;">
-<td style="border: 1px solid black;height: 200px;word-spacing:4px" colspan="2">&nbsp;<br><b><h3>&nbsp;&nbsp;जिला का नाम : {{ $mainpagedetail->district }}</h3></b></td>
-<td style="border: 1px solid black;height: 200px" colspan="3">
-	<div>
-		भाग संया  : 16
-	</div>
-	 <table style="width: 370px;">
-		<thead>
-			<tr>
-				<th style="text-align:center">क्रo से</th>
-				<th style="text-align:center">क्रo तक</th>
-				<th style="text-align:center">क्रo से</th>
-				<th style="text-align:center">क्रo तक</th>
-				<th style="text-align:center">क्रo से</th>
-				<th style="text-align:center">क्रo तक</th>
-			</tr>
-		</thead>
-		<tbody>
-			@php
-          $time =0;
-        @endphp
-	       @foreach ($voterssrnodetails as $voterssrnodetail)
-	       @if ($time==0)
-	       <tr>
-	       @endif 
-	         <td style="text-align:center"> {!! $voterssrnodetail->fromsrno !!}</td>
-	         <td style="text-align:center"> {!! $voterssrnodetail->tosrno !!} </td>
-	       @if ($time ==2)
-	         </tr>
-	       @endif
-	         @php
-	           $time ++;
-	         @endphp
-	         @if ($time==3)
-	          @php
-	            $time=0;
-	          @endphp
-	         @endif
-	        @endforeach 
-		</tbody>
-	</table>
-</td>
+<td style="border: 1px solid black;height: 40px;word-spacing:4px;padding-left: 20px" colspan="5"><h3><b>जिला का नाम : {{ $mainpagedetail->district }}</b></h3></td>
+ 
 </tr>
 <tr style="border: 1px solid black;">
 <td style="border: 1px solid black;height: 150px;word-spacing: 4px" colspan="5">
 <table style="word-spacing: 4px">
 <tbody>
 <tr>
-<td style="padding-left: 20px;width: 300px">1.(क) ग्राम पंचायत का नाम व वार्ड संख्या</td>
-<td style="width:200px;height: 40px"><b>{{ $mainpagedetail->village }}</b></td>
-<td><b>{{ $mainpagedetail->ward }}</b></td>
-</tr>
-<tr>
-<td style="padding-left: 40px;width: 300px">खण्ड का नाम</td>
-<td style="width:200px;height: 40px"><b>{{ $mainpagedetail->block }}</b></td>
-<td></td>
-</tr>
-<tr>
-<td style="padding-left: 40px;width: 300px">(ख) पंचायत समिति का नाम व वार्ड संख्या</td>
-<td style="width:200px;height: 40px"><b>{{ $mainpagedetail->block }}</b></td>
-<td><b>{{ $mainpagedetail->ps_ward }}</b></td>
-</tr>
-<tr>
-<td style="padding-left: 40px;width: 300px">(ग) जिला परिषद का नाम व वार्ड संख्या :</td>
-<td style="width:200px;height: 40px"><b>{{ $mainpagedetail->district }}</b></td>
-<td><b>{{ $mainpagedetail->zp_ward }}</b></td>
-</tr>
+<td style="padding-left: 20px;width: 300px">1. वार्ड संख्या</td>
+<td style="width:200px;height: 40px"><b>{{ $mainpagedetail->ward }}</b></td> 
+</tr> 
 </tbody>
 </table> 
 </td>
@@ -137,9 +82,9 @@
 &nbsp;&nbsp;&nbsp;पुनरीक्षण का स्वरूप  : <b>{{ $mainpagedetail->list_type }}  {{ $mainpagedetail->year }}</b> 
 <br> 
 <br> 
-&nbsp;&nbsp;प्रकाशन की तिथि : <b>{{ $mainpagedetail->publication_date }}</b>  
+&nbsp;&nbsp;&nbsp;प्रकाशन की तिथि : <b>{{ $mainpagedetail->publication_date }}</b>  
 </td>
-<td style="border: 1px solid black;height: 120px;word-spacing: 4px" colspan="3">
+<td style="border: 1px solid black;height: 120px;word-spacing: 4px;padding-left: 20px" colspan="3">
 	
 	नामावली  पहचान  : 
 	<br>
