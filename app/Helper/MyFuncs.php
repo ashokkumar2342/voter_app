@@ -3,6 +3,8 @@
 namespace App\Helper;
 
 use App\Model\AcademicYear;
+use App\Model\Assembly;
+use App\Model\AssemblyPart;
 use App\Model\ClassType;
 use App\Model\HotMenu;
 use App\Model\Minu;
@@ -244,6 +246,21 @@ class MyFuncs {
         $user = MyFuncs::getUser();
        return $StudentDefaultValue = StudentDefaultValue::where('user_id',$user->id)->first();
           
+    }
+
+    public static function getAssemblyIdByTableName($table_name)
+    {     
+       $assemblyCode=substr($table_name, -7, 3); 
+       $assembly=Assembly::where('code',$assemblyCode)->first(); 
+       return $assembly;
+    }
+    public static function getAssemblyPartIdByTableName($table_name)
+    {     
+       $assemblyCode=substr($table_name, -7, 3); 
+       $assemblyPartCode=substr($table_name,4);
+       $assembly=Assembly::where('code',$assemblyCode)->first();  
+       $assemblyPart=AssemblyPart::where('part_no',$assemblyPartCode)->where('assembly_id',$assembly->id)->first(); 
+       return $assemblyPart;
     }
    
 

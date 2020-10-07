@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Admin;
 use App\Events\SmsEvent;
+use App\Helper\MyFuncs;
 use App\Http\Controllers\Controller;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
@@ -95,21 +96,20 @@ class DatabaseConnectionController extends Controller
     public function tableRecordStore(Request $request)
     {   
       foreach ($request->table as $key => $val) {
-       $assemblyCode=substr($val, -7, 3); 
-       $assemblyPartCode=substr($val,4);
-       $assembly=Assembly::where('code',$assemblyCode)->first();  
-       $assemblyPart=AssemblyPart::where('part_no',$assemblyPartCode)->where('assembly_id',$assembly->id)->first();
-       $history=History::where('table_name',$val)->where('status',2)->first(); 
+       $assembly=new MyFuncs();
+       $assemblyId=$assembly->getAssemblyIdByTableName($val); 
+       $assemblyPartId=$assembly->getAssemblyPartIdByTableName($val);
+       $totalImport =DB::select(DB::raw("select count(*) as `TRecord` from `voters` where `assembly_id` =$assemblyId->id and `assembly_part_id` =$assemblyPartId->id"));  
        $voterlistmaster=VoterListMaster::where('status',1)->first(); 
-       if (empty($assembly)) {
+       if (empty($assemblyId)) {
          $response=['status'=>0,'msg'=>$val.' Assembly code does not exist'];
           return response()->json($response);   
         }
-        elseif (empty($assemblyPart)) {
+        elseif (empty($assemblyPartId)) {
          $response=['status'=>0,'msg'=>$val.' Assembly Part code does not exist'];
           return response()->json($response);   
         }
-        elseif (!empty($history)) {
+        elseif ($totalImport[0]->TRecord!=0) { 
          $response=['status'=>0,'msg'=>$val.' This Table Record Already Import'];
           return response()->json($response);   
         }
@@ -117,17 +117,9 @@ class DatabaseConnectionController extends Controller
          $response=['status'=>0,'msg'=>'Voter List Master Not Set Contact Your Admin'];
           return response()->json($response);   
         }
-      }
-
+      } 
         foreach ($request->table as $key => $val) { 
-        $Oldcount = DB::connection('sqlsrv')->table($val)->count();
-        $History=new History();
-       $History->old_count=$Oldcount;
-       $History->count=0;
-       $History->database_name=$request->database_name;
-       $History->table_name=$val;
-       $History->status=0;
-       $History->save(); 
+         
       \Artisan::queue('data:transfer',['database'=>$request->database_name,'table'=>$val]);
 
       }
@@ -143,13 +135,7 @@ class DatabaseConnectionController extends Controller
       return view('admin.DatabaseConnection.progres_page',compact('history'));    
      }
      public function processDelete($table)
-     {
-        // $datas = DB::connection('sqlsrv')->table($table)->pluck('SLNOINPART')->toArray();
-        // $voters=Voter::whereIn('sr_no',$datas)->get();
-        // set_time_limit(7200);
-        // foreach ($voters as $value) {
-        //  $value->delete();    
-        // }
+     { 
        DB::select(DB::raw("call up_delete_part_port_voter ('$table')"));
         return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
      }  

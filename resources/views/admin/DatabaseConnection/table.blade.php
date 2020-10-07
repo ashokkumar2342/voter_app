@@ -34,12 +34,17 @@
                              </tr>
                          </thead>
                          <tbody>
+                            @php
+                            $totalImport =Illuminate\Support\Facades\DB::select(DB::raw("SELECT `a`.code, `ap`.`part_no`, Count(*) as `tcount`
+                            FROM `voters` `v`
+                            Inner Join `assemblys` `a` on `a`.`id` = `v`.`assembly_id`
+                            inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Group By `a`.code, `ap`.`part_no`"));
+                            @endphp
                             @foreach ($datas as $key => $data)
                             @php
-                                 $counts =Illuminate\Support\Facades\DB::connection('sqlsrv')->table($data->TABLE_NAME)->count();
-                                 $history=App\Model\History::where('table_name',$data->TABLE_NAME)->first();
+                                 $counts =Illuminate\Support\Facades\DB::connection('sqlsrv')->table($data->TABLE_NAME)->count(); 
                              @endphp 
-                             <tr style="{{ $counts==@$history->count?'background-color: #28a745':'' }}">
+                             <tr style="">
                                  <td>
                                     <div class="icheck-primary d-inline">
                                     <input type="checkbox" name="table[]" value="{{ $data->TABLE_NAME }}" id="{{ $data->TABLE_NAME }}"  class="checkbox">
@@ -50,10 +55,9 @@
                                  <td>{{ $data->TABLE_NAME }}</td>
                                  <td>{{ $counts }}</td>
                                  <td id="1_{{ $data->TABLE_NAME }}">
-                                   <span id="count_{{ $data->TABLE_NAME }}">{{ $history->count or ''}}</span>  </td>
+                                   <span id="count_{{ $data->TABLE_NAME }}">{{ $totalImport[$key]->tcount or ''}}</span>  </td>
                                  <td>
-                                    @if (@$history->count ==null)
-                                     @else    
+                                    @if (isset($totalImport[$key]->tcount)) 
                                     <a href="{{ route('admin.database.conection.processDelete',$data->TABLE_NAME) }}" title="Delete Records" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
                                     @endif
                                 </td>
@@ -82,27 +86,27 @@
  <script type="text/javascript" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
  <script type="text/javascript">
     
-    setInterval(statusbarStart,5000);
+    // setInterval(statusbarStart,5000);
     
-    function statusbarStart() {
-        $.ajax({
-            url: '{{ route('admin.database.conection.process') }}',
-            type: 'GET',
+    // function statusbarStart() {
+    //     $.ajax({
+    //         {{-- url: '{{ route('admin.database.conection.process') }}', --}}
+    //         type: 'GET',
             
-        })
-        .done(function(response) {
-           $('#process').html(response)
-        })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });
+    //     })
+    //     .done(function(response) {
+    //        $('#process').html(response)
+    //     })
+    //     .fail(function() {
+    //         console.log("error");
+    //     })
+    //     .always(function() {
+    //         console.log("complete");
+    //     });
         
-      {{-- callAjax(this,'{{ route('admin.database.conection.process') }}','process')   --}}
+    //   {{-- callAjax(this,'{{ route('admin.database.conection.process') }}','process')   --}}
        
-    }
+    // }
     //  setInterval(statusbarStart,1000);
 
     //  $(document).ready(function(){ 
