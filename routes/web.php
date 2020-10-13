@@ -84,6 +84,7 @@ Route::group(['prefix' => 'Database'], function() {
            Route::get('getdata', 'Admin\DatabaseConnectionController@getData')->name('admin.database.conection.getData');
 
            Route::get('getTable', 'Admin\DatabaseConnectionController@getTable')->name('admin.database.conection.getTable');
+           Route::get('assemblyWisePartNo', 'Admin\DatabaseConnectionController@assemblyWisePartNo')->name('admin.database.conection.assemblyWisePartNo');
            Route::post('tableRecordStore', 'Admin\DatabaseConnectionController@tableRecordStore')->name('admin.database.conection.tableRecordStore');
             Route::get('imagestore', 'Admin\DatabaseConnectionController@imageStore')->name('admin.database.conection.imagestore');
             Route::get('process', 'Admin\DatabaseConnectionController@process')->name('admin.database.conection.process');

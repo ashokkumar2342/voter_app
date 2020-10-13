@@ -13,30 +13,30 @@
         </div> 
          <div class="card">
          <div class="card-body login-card-body"> 
-         <form action="{{ route('admin.database.conection.store') }}" method="post" class="add_form">
+         <form action="{{ route('admin.database.conection.store') }}" method="post" class="add_form" no-reset="true">
          {{ csrf_field() }}
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>IP(URL)</label>
-         <input type="text" name="ip" class="form-control" placeholder="Enter IP(URL)">
+         <input type="text" name="ip" class="form-control" placeholder="Enter IP(URL)" value="{{ $contents['hostname'] }}">
          </div> 
          </div> 
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>Database Name</label>
-         <input type="text" name="database" class="form-control" placeholder="Enter Database Name">
+         <input type="text" name="database" class="form-control" placeholder="Enter Database Name"  value="{{ $contents['database'] }}">
          </div> 
          </div>
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>User Name</label>
-         <input type="text" name="user_name" class="form-control" autocomplete="false">
+         <input type="text" name="user_name" class="form-control" autocomplete="false" value="{{ $contents['username'] }}">
          </div> 
          </div> 
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>Password</label>
-         <input type="password" name="password" class="form-control">
+         <input type="text" name="password" class="form-control" value="{{ $contents['password'] }}">
          </div> 
          </div>
          <div class="col-md-12" data-select2-id="29">

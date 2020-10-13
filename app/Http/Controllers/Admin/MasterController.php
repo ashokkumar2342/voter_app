@@ -1089,28 +1089,43 @@ class MasterController extends Controller
         $assemblyPart=AssemblyPart::find($request->assembly_part);
         $assembly=Assembly::find($assemblyPart->assembly_id); 
         $voterReports=DB::select(DB::raw("select `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`, `vil`.`name_l` as `vil_name`, `wv`.`ward_no` 
-           from `voters` `v`Left Join `villages` `vil` on `vil`.`id` = `v`.`village_id`Left Join `ward_villages` `wv` on `wv`.`id` = `v`.`ward_id`Where `v`.`assembly_part_id` =$request->assembly_part;")); 
+           from `voters` `v`Left Join `villages` `vil` on `vil`.`id` = `v`.`village_id`Left Join `ward_villages` `wv` on `wv`.`id` = `v`.`ward_id`Where `v`.`assembly_part_id` =$request->assembly_part order By `v`.`sr_no`;")); 
+       
        }
       elseif ($request->report==2) {
       $assemblyPart=AssemblyPart::find($request->assembly_part);
       $assembly=Assembly::find($assemblyPart->assembly_id);
-      $voterReports=DB::select(DB::raw("select `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`from `voters` `v`Where `v`.`assembly_part_id` =$request->assembly_part and `v`.`village_id` = 0 ;")); 
+      $voterReports=DB::select(DB::raw("select `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`from `voters` `v`Where `v`.`assembly_part_id` =$request->assembly_part and `v`.`village_id` = 0 order By `v`.`sr_no` ;")); 
       }
       elseif ($request->report==3) {
       $village=Village::find($request->village);  
       $wardVillage=WardVillage::find($request->ward);  
-      $voterReports= DB::select(DB::raw("select `a`.`code`, `ap`.`part_no`, `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`from `voters` `v`Left Join `assemblys` `a` on `a`.`id` = `v`.`assembly_id`Left Join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id`Where `v`.`ward_id` =$request->ward ;"));
+      $voterReports= DB::select(DB::raw("select `a`.`code`, `ap`.`part_no`, `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`from `voters` `v`Left Join `assemblys` `a` on `a`.`id` = `v`.`assembly_id`Left Join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id`Where `v`.`ward_id` =$request->ward order By `v`.`sr_no`;"));
       } 
       
-      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setPrintHeader(FALSE); 
-      $pdf->SetCreator(PDF_CREATOR); 
-      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-      $pdf->setFontSubsetting(true); 
-      $pdf->SetFont('freesans', '', 11, '', true); 
-      $pdf->AddPage();
+      $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+         $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
+         ]); 
+         
+         
       if ($request->report==1) {
       $html = view('admin.master.wardbandi.report_list',compact('voterReports','assemblyPart','assembly'));
       }
@@ -1119,10 +1134,9 @@ class MasterController extends Controller
       }
       elseif ($request->report==3) {
       $html = view('admin.master.wardbandi.report_list3',compact('voterReports','village','wardVillage'));
-      } 
-      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-      ob_end_clean(); 
-      $pdf->Output(); 
+      }
+      $mpdf->WriteHTML($html); 
+      $mpdf->Output(); 
 
 
 

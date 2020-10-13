@@ -26,8 +26,10 @@ class DatabaseConnectionController extends Controller
     
     public function DatabaseConnection()
     {
-        try {     
-            return view('admin.DatabaseConnection.form');    
+        try {
+            $content = Storage::get('file.json');
+            $contents=(array)json_decode($content); 
+            return view('admin.DatabaseConnection.form',compact('contents'));    
         } catch (Exception $e) {
            return $e; 
         }
@@ -87,44 +89,26 @@ class DatabaseConnectionController extends Controller
     }
     public function getTable()
     {
-         $contents = Storage::get('file.json');
-         $conn =(array) json_decode($contents);
-         $datas = DB::connection('sqlsrv')->select('SELECT * FROM information_schema.tables order BY [TABLE_NAME]'); 
-         return view('admin.DatabaseConnection.table',compact('datas')); 
+         // $contents = Storage::get('file.json');
+         // $conn =(array) json_decode($contents);
+         // $datas = DB::connection('sqlsrv')->select('SELECT * FROM information_schema.tables order BY [TABLE_NAME]'); 
+         $assemblys=Assembly::orderBy('code','ASC')->get(); 
+         return view('admin.DatabaseConnection.table',compact('assemblys')); 
              
+    }
+    public function assemblyWisePartNo(Request $request)
+    { 
+        $ac_code=Assembly::where('code',$request->id)->orderBy('code','ASC')->first(); 
+        $partnos=AssemblyPart::where('assembly_id',$ac_code->id)->orderBy('assembly_id','ASC')->orderBy('part_no','ASC')->get(); 
+        return view('admin.DatabaseConnection.part_no_value',compact('partnos')); 
     } 
     public function tableRecordStore(Request $request)
     {   
-      foreach ($request->table as $key => $val) {
-       $assembly=new MyFuncs();
-       $assemblyId=$assembly->getAssemblyIdByTableName($val); 
-       $assemblyPartId=$assembly->getAssemblyPartIdByTableName($val);
-       $totalImport =DB::select(DB::raw("select count(*) as `TRecord` from `voters` where `assembly_id` =$assemblyId->id and `assembly_part_id` =$assemblyPartId->id"));  
-       $voterlistmaster=VoterListMaster::where('status',1)->first(); 
-       if (empty($assemblyId)) {
-         $response=['status'=>0,'msg'=>$val.' Assembly code does not exist'];
-          return response()->json($response);   
-        }
-        elseif (empty($assemblyPartId)) {
-         $response=['status'=>0,'msg'=>$val.' Assembly Part code does not exist'];
-          return response()->json($response);   
-        }
-        elseif ($totalImport[0]->TRecord!=0) { 
-         $response=['status'=>0,'msg'=>$val.' This Table Record Already Import'];
-          return response()->json($response);   
-        }
-        elseif (empty($voterlistmaster)) {
-         $response=['status'=>0,'msg'=>'Voter List Master Not Set Contact Your Admin'];
-          return response()->json($response);   
-        }
-      } 
-        foreach ($request->table as $key => $val) { 
-         
-      \Artisan::queue('data:transfer',['database'=>$request->database_name,'table'=>$val]);
-
-      }
-       $response=['status'=>1,'msg'=>'Transfer Process Start'];
-          return response()->json($response); 
+        
+      
+      \Artisan::queue('data:transfer',['ac_code'=>$request->ac_code,'part_no'=>$request->part_no]); 
+       
+     
     } 
 
      public function process(){

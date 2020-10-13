@@ -6,11 +6,12 @@ use App\Admin;
 use App\Helper\MyFuncs;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
+use App\Model\DefaultValue;
 use App\Model\History;
 use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\VoterListMaster;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 
 class DataTransfer extends Command
@@ -20,7 +21,7 @@ class DataTransfer extends Command
      *
      * @var string
      */
-    protected $signature = 'data:transfer {database} {table}';
+    protected $signature = 'data:transfer {ac_code} {part_no}';
 
 
     /**
@@ -48,49 +49,54 @@ class DataTransfer extends Command
     public function handle()
     { 
       // set_time_limit(7200);
-      //\Log::info(date('Y-m-d H:i:s')); 
-       $database = $this->argument('database'); 
-       $table = $this->argument('table');
-       $assembly=new MyFuncs();
-       $assemblyId=$assembly->getAssemblyIdByTableName($table); 
-       $assemblyPartId=$assembly->getAssemblyPartIdByTableName($table);
-         
-       $datas = DB::connection('sqlsrv')->table($table)->where('STATUSTYPE','<>','D')->select('SLNOINPART','HOUSE_NO_V1','HOUSE_NO_EN','FM_NAME_V1','RLN_TYPE','RLN_FM_NM_V1','MOBILE','RLN_fm_NMen','IDCARD_NO','SEX','AGE','FM_NAMEEN','JPGIMAGE')->get(); 
+      //\Log::info(date('Y-m-d H:i:s'));
        $voterlistmaster=VoterListMaster::where('status',1)->first(); 
+       $ac_code = $this->argument('ac_code');
+       $part_no = $this->argument('part_no');
+       foreach ($part_no as $key => $val) { 
+       $assembly=Assembly::where('code',$ac_code)->first();
+       $assemblyPart=AssemblyPart::where('assembly_id',$assembly->id)->where('part_no',$val)->first();
+       $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$val");
+       $totalImport=Voter::where('assembly_id',$assembly->id)->where('assembly_part_id',$assemblyPart->id)->count();
+    if ($totalImport==0) {  
       foreach ($datas as $key => $value) { 
        $voterImport=new Voter();
-       $voterImport->assembly_id=$assemblyId->id;
-       $voterImport->assembly_part_id=$assemblyPartId->id;
+       $voterImport->assembly_id=$assembly->id;
+       $voterImport->assembly_part_id=$assemblyPart->id;
        $voterImport->village_id=0;
        $voterImport->ward_id=0;
        $voterImport->print_sr_no=0;
        $voterImport->source='v';
        $voterImport->suppliment_no=$voterlistmaster->id;
-       $voterImport->sr_no=$value->SLNOINPART; 
-       $voterImport->house_no_l=$value->HOUSE_NO_V1; 
-       $voterImport->house_no_e=$value->HOUSE_NO_EN; 
-       $voterImport->name_l=str_replace('਍', '', $value->FM_NAME_V1);
-       $voterImport->name_e=str_replace('਍', '', $value->FM_NAMEEN);
-       $voterImport->father_name_e=str_replace('਍', '', $value->RLN_fm_NMen);
-       $voterImport->father_name_l=str_replace('਍', '', $value->RLN_FM_NM_V1);
-       $voterImport->relation=$value->RLN_TYPE;
-       $voterImport->voter_card_no=$value->IDCARD_NO;
-       if ($value->SEX=='M') {
+       $voterImport->sr_no=$value->SlNoInPart; 
+       $voterImport->house_no_l=$value->C_House_No_V1; 
+       $voterImport->house_no_e=$value->C_House_no; 
+       $voterImport->name_l=str_replace('਍', '', $value->name_l);
+       $voterImport->name_e=str_replace('਍', '', $value->name_en);
+       $voterImport->father_name_e=str_replace('਍', '', $value->fname_en);
+       $voterImport->father_name_l=str_replace('਍', '', $value->FName_L);
+       $voterImport->relation=$value->RLN_Type;
+       $voterImport->voter_card_no=$value->EPIC_No;
+       if ($value->GENDER=='M') {
         $voterImport->gender_id=1;  
        }
-       elseif ($value->SEX=='F') {
+       elseif ($value->GENDER=='F') {
         $voterImport->gender_id=2;  
        }else{
         $voterImport->gender_id=3;  
        } 
        $voterImport->age=$value->AGE;
+       $voterImport->mobile_no=$value->MOBILE_NO;
        $voterImport->save(); 
        $VoterImage=new VoterImage();
        $VoterImage->voter_id=$voterImport->id; 
-       $VoterImage->image=$value->JPGIMAGE;
+       $VoterImage->image=$value->PHOTO;
        $VoterImage->save(); 
-      }  
+      }
+     }  
     }
+    // DB::select(DB::raw("call up_process_converthno();")); 
+  }
      
        
 }
