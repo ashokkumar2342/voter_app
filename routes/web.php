@@ -88,6 +88,6 @@ Route::group(['prefix' => 'Database'], function() {
            Route::post('tableRecordStore', 'Admin\DatabaseConnectionController@tableRecordStore')->name('admin.database.conection.tableRecordStore');
             Route::get('imagestore', 'Admin\DatabaseConnectionController@imageStore')->name('admin.database.conection.imagestore');
             Route::get('process', 'Admin\DatabaseConnectionController@process')->name('admin.database.conection.process');
-            Route::get('processDelete/{table}', 'Admin\DatabaseConnectionController@processDelete')->name('admin.database.conection.processDelete');
+            Route::get('processDelete/{ac_id}/{part_id}', 'Admin\DatabaseConnectionController@processDelete')->name('admin.database.conection.processDelete');
     });
 

@@ -118,9 +118,9 @@ class DatabaseConnectionController extends Controller
       }
       return view('admin.DatabaseConnection.progres_page',compact('history'));    
      }
-     public function processDelete($table)
-     { 
-       DB::select(DB::raw("call up_delete_part_port_voter ('$table')"));
+     public function processDelete($ac_id,$part_id)
+     {  
+       DB::select(DB::raw("call up_delete_part_port_voter ('$ac_id','$part_id')"));
         return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
      }  
      

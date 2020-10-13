@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Voter extends Model
 {
-      protected $fillable=['id'];
+      protected $fillable=['id','sr_no','assembly_id','assembly_part_id'];
       public $timestamps=false;
 
       public function states()

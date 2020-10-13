@@ -14,7 +14,7 @@
 <td>{{ $totalImport }}</td> 
 <td>
 	@if ($totalImport!=0) 
-	 <a href="#" title="" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+	 <a href="{{ route('admin.database.conection.processDelete',[$partno->assembly_id,$partno->id]) }}" title="Delete Records" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
 	@endif
 </td> 
 </tr> 
