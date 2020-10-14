@@ -75,7 +75,24 @@ class DataTransfer extends Command
        $voterImport->name_e=str_replace('਍', '', $value->name_en);
        $voterImport->father_name_e=str_replace('਍', '', $value->fname_en);
        $voterImport->father_name_l=str_replace('਍', '', $value->FName_L);
-       $voterImport->relation=$value->RLN_Type;
+       if ($value->RLN_Type=='F') {
+        $voterImport->relation=1;  
+       }
+       elseif ($value->RLN_Type=='G') {
+        $voterImport->relation=2;  
+       } 
+       elseif ($value->RLN_Type=='H') {
+        $voterImport->relation=3;  
+       } 
+       elseif ($value->RLN_Type=='M') {
+        $voterImport->relation=4;  
+       } 
+       elseif ($value->RLN_Type=='O') {
+        $voterImport->relation=5;  
+       } 
+       elseif ($value->RLN_Type=='W') {
+        $voterImport->relation=6;  
+       } 
        $voterImport->voter_card_no=$value->EPIC_No;
        if ($value->GENDER=='M') {
         $voterImport->gender_id=1;  
@@ -111,7 +128,27 @@ class DataTransfer extends Command
        $voterupdate->name_e=str_replace('਍', '', $value->name_en);
        $voterupdate->father_name_e=str_replace('਍', '', $value->fname_en);
        $voterupdate->father_name_l=str_replace('਍', '', $value->FName_L);
-       $voterupdate->relation=$value->RLN_Type;
+       if ($value->RLN_Type=='F') {
+        $voterupdate->relation=1;  
+       }
+       elseif ($value->RLN_Type=='G') {
+        $voterupdate->relation=2;  
+       } 
+       elseif ($value->RLN_Type=='H') {
+        $voterupdate->relation=3;  
+       } 
+       elseif ($value->RLN_Type=='M') {
+        $voterupdate->relation=4;  
+       } 
+       elseif ($value->RLN_Type=='O') {
+        $voterupdate->relation=5;  
+       } 
+       elseif ($value->RLN_Type=='W') {
+        $voterupdate->relation=6;  
+       } 
+       
+
+       
        $voterupdate->voter_card_no=$value->EPIC_No;
        if ($value->GENDER=='M') {
         $voterupdate->gender_id=1;  
