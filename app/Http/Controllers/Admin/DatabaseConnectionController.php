@@ -97,16 +97,15 @@ class DatabaseConnectionController extends Controller
              
     }
     public function assemblyWisePartNo(Request $request)
-    { 
-        $ac_code=Assembly::where('code',$request->id)->orderBy('code','ASC')->first(); 
-        $partnos=AssemblyPart::where('assembly_id',$ac_code->id)->orderBy('assembly_id','ASC')->orderBy('part_no','ASC')->get(); 
+    {  
+        $partnos=DB::select(DB::raw("select `ap`.`id`, `ap`.`part_no`, `ap`.`assembly_id`, count(`v`.`id`) as `rtotal` from `assembly_parts` `ap` Left Join `voters` `v` on `v`.`assembly_part_id` = `ap`.`id` Where `ap`.`assembly_id` =$request->id Group by `ap`.`id`, `ap`.`part_no`, `ap`.`assembly_id` Order By `ap`.`part_no`")); 
         return view('admin.DatabaseConnection.part_no_value',compact('partnos')); 
     } 
     public function tableRecordStore(Request $request)
     {   
         
-      
-      \Artisan::queue('data:transfer',['ac_code'=>$request->ac_code,'part_no'=>$request->part_no]); 
+      $assembly=Assembly::find($request->ac_code);
+      \Artisan::queue('data:transfer',['ac_code'=>$assembly->code,'part_no'=>$request->part_no]); 
        
      
     } 

@@ -21,7 +21,7 @@
     <select name="ac_code" class="form-control" multiselect-form="true" onchange="callAjax(this,'{{ route('admin.database.conection.assemblyWisePartNo') }}','part_no_div')">
         <option selected disabled>Select Assembly Code</option> 
         @foreach ($assemblys as $assembly)
-         <option value="{{ $assembly->code }}">{{ $assembly->code }}--{{ $assembly->name_e }}</option> 
+         <option value="{{ $assembly->id }}">{{ $assembly->code }}--{{ $assembly->name_e }}</option> 
         @endforeach 
      </select> 
  </div>
