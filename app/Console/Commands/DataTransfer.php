@@ -166,7 +166,7 @@ class DataTransfer extends Command
        $VoterImageUpdate->image=$value->PHOTO;
        $VoterImageUpdate->save(); 
       }
-      $DeleteData = DB::connection('sqlsrv')->select("select SlNoInPart from deletions where ac_no = $ac_code and part_no =$val union select SlNoInPart from for6_form8a_form8_1_to_65  where ac_no = $ac_code and part_no =$val");
+      $DeleteData = DB::connection('sqlsrv')->select("select SlNoInPart from deletions where ac_no = $ac_code and part_no =$val union select SlNoInPart from for6_form8a_form8_1_to_65  where ac_no = $ac_code and part_no =$val and form_type = 'form7'");
        foreach ($DeleteData  as $k => $sr_no) {
          $delete=Voter::where('sr_no',$sr_no->SlNoInPart)->where('assembly_id',$assembly->id)->where('assembly_part_id',$assemblyPart->id)->delete(); 
        } 
