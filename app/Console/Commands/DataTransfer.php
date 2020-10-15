@@ -171,7 +171,7 @@ class DataTransfer extends Command
          $delete=Voter::where('sr_no',$sr_no->SlNoInPart)->where('assembly_id',$assembly->id)->where('assembly_part_id',$assemblyPart->id)->delete(); 
        } 
     }
-    DB::select(DB::raw("call up_process_converthno();")); 
+    // DB::select(DB::raw("call up_process_converthno();")); 
   }
      
        
