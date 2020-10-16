@@ -105,7 +105,9 @@ class DatabaseConnectionController extends Controller
     {   
         
       $assembly=Assembly::find($request->ac_code);
-      \Artisan::queue('data:transfer',['ac_code'=>$assembly->code,'part_no'=>$request->part_no]); 
+      foreach ($request->part_no as $key => $part_no) {
+      \Artisan::queue('data:transfer',['ac_code'=>$assembly->code,'part_no'=>$part_no]); 
+      }
        
      
     } 
