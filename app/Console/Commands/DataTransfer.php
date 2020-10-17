@@ -55,9 +55,10 @@ class DataTransfer extends Command
        $part_no = $this->argument('part_no'); 
        $assembly=Assembly::where('code',$ac_code)->first();
        $assemblyPart=AssemblyPart::where('assembly_id',$assembly->id)->where('part_no',$part_no)->first();
-       $totalImport=Voter::where('assembly_id',$assembly->id)->where('assembly_part_id',$assemblyPart->id)->count();
-    if ($totalImport==0) {  
-       $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no order by SlNoInPart");
+        
+       $totalImport=DB::select(DB::raw("select ifnull(max(`sr_no`),0) as `maxid` from `voters` where `assembly_id` =$assembly->id and `assembly_part_id` =$assemblyPart->id;"));
+       $maxid=$totalImport[0]->maxid;
+       $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no and SlNoInPart > $maxid order by SlNoInPart");
       foreach ($datas as $key => $value) { 
        // $voterImport=new Voter();
        // $voterImport->assembly_id=$assembly->id;
@@ -146,7 +147,7 @@ class DataTransfer extends Command
         $VoterImage->save();
 
       } 
-      $updateDatas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_66_to_90 where ac_no = $ac_code and part_no =$part_no union all select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_1_to_65 where ac_no =$ac_code and part_no =$part_no and form_type <> 'form7' order by SlNoInPart");
+      $updateDatas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_66_to_90 where ac_no = $ac_code and part_no =$part_no and SlNoInPart > $maxid union all select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_1_to_65 where ac_no =$ac_code and part_no =$part_no and form_type <> 'form7' and SlNoInPart > $maxid order by SlNoInPart");
       foreach ($updateDatas as $key => $value) { 
        // $voterupdate=new Voter();
        // $voterupdate->assembly_id=$assembly->id;
@@ -241,7 +242,7 @@ class DataTransfer extends Command
      } 
      
    
-  }
+  
      
        
 }
