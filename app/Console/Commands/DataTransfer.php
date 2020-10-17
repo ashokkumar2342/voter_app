@@ -57,7 +57,7 @@ class DataTransfer extends Command
        $assemblyPart=AssemblyPart::where('assembly_id',$assembly->id)->where('part_no',$part_no)->first();
        $totalImport=Voter::where('assembly_id',$assembly->id)->where('assembly_part_id',$assemblyPart->id)->count();
     if ($totalImport==0) {  
-       $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no");
+       $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no order by SlNoInPart");
       foreach ($datas as $key => $value) { 
        // $voterImport=new Voter();
        // $voterImport->assembly_id=$assembly->id;
@@ -139,14 +139,14 @@ class DataTransfer extends Command
         $gender_id=3;  
        }  
        $newId=DB::select(DB::raw("call up_save_voter_detail('0','$assembly->id','$assemblyPart->id','$value->SlNoInPart','$value->EPIC_No','$value->C_House_no','$value->C_House_No_V1','','$name_e','$name_l','$f_name_e','$f_name_l','$relation','$gender_id','$value->AGE','$value->MOBILE_NO','v','$voterlistmaster->id','0');"));
-       // dd($newId[0]->newid);
-       $VoterImage=new VoterImage();
-       $VoterImage->voter_id=$newId[0]->newid; 
-       $VoterImage->image=$value->PHOTO;
-       $VoterImage->save();
+        //dd($newId[0]->newid);
+        $VoterImage=new VoterImage();
+        $VoterImage->voter_id=$newId[0]->newid; 
+        $VoterImage->image=$value->PHOTO;
+        $VoterImage->save();
 
       } 
-      $updateDatas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_66_to_90 where ac_no = $ac_code and part_no =$part_no union all select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_1_to_65 where ac_no =$ac_code and part_no =$part_no and form_type <> 'form7'");
+      $updateDatas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_66_to_90 where ac_no = $ac_code and part_no =$part_no union all select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + IsNull(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNull(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNUll(RLN_L_NM_V1,'') as FName_L, EPIC_No, '' as STATUS_TYPE, GENDER, AGE, '' as EMAIL_ID, MOBILE_NO, PHOTO from for6_form8a_form8_1_to_65 where ac_no =$ac_code and part_no =$part_no and form_type <> 'form7' order by SlNoInPart");
       foreach ($updateDatas as $key => $value) { 
        // $voterupdate=new Voter();
        // $voterupdate->assembly_id=$assembly->id;
@@ -228,10 +228,10 @@ class DataTransfer extends Command
         $gender_id=3;  
        }  
        $updateId=DB::select(DB::raw("call up_save_voter_detail('0','$assembly->id','$assemblyPart->id','$value->SlNoInPart','$value->EPIC_No','$value->C_House_no','$value->C_House_No_V1','','$name_e','$name_l','$f_name_e','$f_name_l','$relation','$gender_id','$value->AGE','$value->MOBILE_NO','v','$voterlistmaster->id','0');"));
-       $VoterImage=new VoterImage();
-       $VoterImage->voter_id=$updateId[0]->newid; 
-       $VoterImage->image=$value->PHOTO;
-       $VoterImage->save(); 
+        $VoterImage=new VoterImage();
+        $VoterImage->voter_id=$updateId[0]->newid; 
+        $VoterImage->image=$value->PHOTO;
+        $VoterImage->save(); 
       }
       $DeleteData = DB::connection('sqlsrv')->select("select SlNoInPart from deletions where ac_no = $ac_code and part_no =$part_no union select SlNoInPart from for6_form8a_form8_1_to_65  where ac_no = $ac_code and part_no =$part_no and form_type = 'form7'");
        foreach ($DeleteData  as $k => $sr_no) {
