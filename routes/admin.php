@@ -225,7 +225,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   
 	    
 
-	    Route::get('DistrictWiseBlock', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');
+	    Route::get('DistrictWiseBlock/{print_condition?}', 'MasterController@DistrictWiseBlock')->name('admin.Master.DistrictWiseBlock');
 	     
 
 	    Route::get('BlockWiseVillage', 'MasterController@BlockWiseVillage')->name('admin.Master.BlockWiseVillage');
@@ -271,13 +271,17 @@ Route::group(['middleware' => 'admin'], function() {
            
            Route::get('PrepareVoterListPanchayat', 'VoterDetailsController@PrepareVoterListPanchayat')->name('admin.voter.PrepareVoterListPanchayat');
            Route::get('VillageWiseWardMultiple', 'VoterDetailsController@VillageWiseWardMultiple')->name('admin.voter.VillageWiseWardMultiple');
-           Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate');
-           Route::get('PrepareVoterListPanchayatDownload/{condition_type}', 'VoterDetailsController@PrepareVoterListPanchayatDownload')->name('admin.voter.PrepareVoterListPanchayatDownload');
+           Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate'); 
             
 
            Route::get('PrepareVoterListMunicipal', 'VoterDetailsController@PrepareVoterListMunicipal')->name('admin.voter.PrepareVoterListMunicipal');
            Route::post('PrepareVoterListMunicipalGenerate', 'VoterDetailsController@PrepareVoterListMunicipalGenerate')->name('admin.voter.PrepareVoterListMunicipalGenerate');
-           Route::get('PrepareVoterListMunicipalDownload/{condition_type}', 'VoterDetailsController@PrepareVoterListMunicipalDownload')->name('admin.voter.PrepareVoterListMunicipalDownload');
+            
+
+
+           Route::get('VoterListDownload', 'VoterDetailsController@VoterListDownload')->name('admin.voter.VoterListDownload');
+           Route::get('VoterListDownloadPDF/{path}/{condition}', 'VoterDetailsController@VoterListDownloadPDF')->name('admin.voter.VoterListDownloadPDF');
+            
     });
     Route::group(['prefix' => 'Report'], function() {
            Route::get('PrintVoterList', 'ReportController@PrintVoterList')->name('admin.report.PrintVoterList');
@@ -319,5 +323,17 @@ Route::group(['middleware' => 'admin'], function() {
 	 	  Route::get('VillageWardImportForm', 'ImportExportController@VillageWardImportForm')->name('admin.import.VillageWardImportForm');
 	 	  Route::post('VillageWardImportStore', 'ImportExportController@VillageWardImportStore')->name('admin.import.VillageWardImportStore');
     });       
+    Route::group(['prefix' => 'Database'], function() {
+               Route::get('Connection', 'DatabaseConnectionController@DatabaseConnection')->name('admin.database.connection');
+               Route::post('ConnectionStore', 'DatabaseConnectionController@ConnectionStore')->name('admin.database.conection.store');
+               Route::get('getdata', 'DatabaseConnectionController@getData')->name('admin.database.conection.getData');
+
+               Route::get('getTable', 'DatabaseConnectionController@getTable')->name('admin.database.conection.getTable');
+               Route::get('assemblyWisePartNo', 'DatabaseConnectionController@assemblyWisePartNo')->name('admin.database.conection.assemblyWisePartNo');
+               Route::post('tableRecordStore', 'DatabaseConnectionController@tableRecordStore')->name('admin.database.conection.tableRecordStore');
+                Route::get('imagestore', 'DatabaseConnectionController@imageStore')->name('admin.database.conection.imagestore');
+                Route::get('process', 'DatabaseConnectionController@process')->name('admin.database.conection.process');
+                Route::get('processDelete/{ac_id}/{part_id}', 'DatabaseConnectionController@processDelete')->name('admin.database.conection.processDelete');
+        });
 
  });

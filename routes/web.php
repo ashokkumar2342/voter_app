@@ -16,7 +16,7 @@ Route::get('/func', function () {
 });
  
 Route::get('/', function () {
-    return view('front.home');
+    return redirect()->route('admin.login');
  
 });
 Route::get('try-demo', 'TryDemoController@index')->name('try.demo');
@@ -78,16 +78,5 @@ Route::get('inbox', 'HomeController@inbox');
 Route::get('saveapidata', 'HomeController@saveapi');
 
 
-Route::group(['prefix' => 'Database'], function() {
-           Route::get('Connection', 'Admin\DatabaseConnectionController@DatabaseConnection')->name('admin.database.connection');
-           Route::post('ConnectionStore', 'Admin\DatabaseConnectionController@ConnectionStore')->name('admin.database.conection.store');
-           Route::get('getdata', 'Admin\DatabaseConnectionController@getData')->name('admin.database.conection.getData');
 
-           Route::get('getTable', 'Admin\DatabaseConnectionController@getTable')->name('admin.database.conection.getTable');
-           Route::get('assemblyWisePartNo', 'Admin\DatabaseConnectionController@assemblyWisePartNo')->name('admin.database.conection.assemblyWisePartNo');
-           Route::post('tableRecordStore', 'Admin\DatabaseConnectionController@tableRecordStore')->name('admin.database.conection.tableRecordStore');
-            Route::get('imagestore', 'Admin\DatabaseConnectionController@imageStore')->name('admin.database.conection.imagestore');
-            Route::get('process', 'Admin\DatabaseConnectionController@process')->name('admin.database.conection.process');
-            Route::get('processDelete/{ac_id}/{part_id}', 'Admin\DatabaseConnectionController@processDelete')->name('admin.database.conection.processDelete');
-    });
 

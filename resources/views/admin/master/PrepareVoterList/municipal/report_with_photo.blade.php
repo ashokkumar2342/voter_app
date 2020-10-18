@@ -122,13 +122,13 @@ $i=0;
  	$i=$i+1;
  @endphp 
 @if ($time==0)
-<table style="">
+<table style="padding:-2px">
 	<tbody>
 		<tr>
 			@endif  
 			<td> 
 				<table style="border:1px solid black;
-				font-size:11px;padding:0px;width: 220">
+				font-size:11px;padding:-2px;width: 220;height: 120px">
 				<tbody>
 					<tr>
 						<td style="border: 1px solid black;width: 40px">{{ $voterReport->print_sr_no }}</td>
@@ -137,7 +137,14 @@ $i=0;
 					</tr>
 					<tr>
 						<td style="width: 130px" colspan="2">नाम&nbsp; &nbsp; {{ $voterReport->name_l }}</td>
-						<td style="" rowspan="4">
+						<td style="text-align:center;" rowspan="4">
+							@php
+						 	  $image=$voterReport->image;
+						 	  $name =rand(100000,999999);
+						      $image= \Storage::disk('local')->put("image/".$name.'.jpg', $image);
+						      $image  =\Storage_path("app/image/".$name.'.jpg');
+					 		 @endphp
+					 		 <img src="{{ $image }}" alt="" width="65px" height="70px">
 							{{-- @if ($i==1)
 									@php
 									$photo = "<img src=\"data:image/jpeg;base64, ".$voterReports[0]->image."\"/>";

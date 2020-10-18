@@ -400,6 +400,7 @@ class MasterController extends Controller
             'code' => 'required|unique:blocks_mcs,code,'.$id, 
             'name_english' => 'required', 
             'name_local_language' => 'required', 
+            'block_mc_type_id' => 'required', 
             // 'syllabus' => 'required', 
       ];
 
@@ -419,6 +420,8 @@ class MasterController extends Controller
        $BlocksMc->code=$request->code;
        $BlocksMc->name_e=$request->name_english;
        $BlocksMc->name_l=$request->name_local_language; 
+       $BlocksMc->stamp_l1=$request->stamp_l1; 
+       $BlocksMc->stamp_l2=$request->stamp_l2; 
        $BlocksMc->save();
        if (empty($id)) { 
        $psWard = DB::select(DB::raw("call up_create_ps_ward ('$BlocksMc->id','$request->ps_ward','0')")); 
@@ -435,10 +438,11 @@ class MasterController extends Controller
     public function BlockMCSEdit($id)
     {
        try {
+          $BlockMCTypes=BlockMCType::orderBy('id','ASC')->get();
           $Districts= District::orderBy('name_e','ASC')->get();   
           $States= State::orderBy('name_e','ASC')->get();   
           $BlocksMcs= BlocksMc::find($id);  
-          return view('admin.master.block.edit',compact('Districts','States','BlocksMcs'));
+          return view('admin.master.block.edit',compact('Districts','States','BlocksMcs','BlockMCTypes'));
         } catch (Exception $e) {
             
         }
@@ -1158,11 +1162,16 @@ class MasterController extends Controller
         }
     }
     
-    public function DistrictWiseBlock(Request $request)
+    public function DistrictWiseBlock(Request $request,$print_condition=null)
     {
        try{
-          $admin=Auth::guard('admin')->user(); 
-          $BlocksMcs=DB::select(DB::raw("call up_fetch_block_access ($admin->id, '$request->id')"));  
+          $admin=Auth::guard('admin')->user();
+          if (empty($print_condition)) {
+           $BlocksMcs=DB::select(DB::raw("call up_fetch_block_access ($admin->id, '$request->id')")); 
+           }
+           if (!empty($print_condition)) {
+           $BlocksMcs=DB::select(DB::raw("call up_fetch_block_access_voterlistprint ($admin->id, '$request->id','$print_condition')")); 
+           } 
           return view('admin.master.block.value_select_box',compact('BlocksMcs'));
         } catch (Exception $e) {
             

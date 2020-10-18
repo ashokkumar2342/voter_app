@@ -22,7 +22,7 @@
                                     <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" class="form-control select2" id="district_select_box" onchange="callAjax(this,'{{ route('admin.Master.DistrictWiseBlock') }}','block_select_box')">
+                                        <select name="district" class="form-control select2" id="district_select_box" onchange="callAjax(this,'{{ route('admin.Master.DistrictWiseBlock',2) }}','block_select_box')">
                                             <option selected disabled>Select District</option>
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
@@ -54,20 +54,12 @@
                                          
                                     </div>
                                     <input type="hidden" name="proses_by" id="proses_by" value="0">
-                                    <div class="col-lg-3 form-group">
+                                    <div class="col-lg-6 form-group">
                                        <input type="submit" class="btn btn-success form-control" value="Process And Lock" onclick="$('#proses_by').val(1)">
                                    </div>
-                                   <div class="col-lg-3 form-group">
+                                   <div class="col-lg-6 form-group">
                                        <input type="submit" class="btn btn-danger form-control" value="Unlock" onclick="$('#proses_by').val(2)">
-                                   </div>
-                                   <div class="col-lg-3 form-group">
-                                    <a href="#" class="form-control btn btn-success" target="_blank" id="download_with_poto" onclick="downloadWithPhoto()"> Download With Photo</a>
-                                   </div>
-                                   <div class="col-lg-3 form-group">
-                                    <a href="#" class="form-control btn btn-success" target="_blank" id="download_without_poto" onclick="downloadWithoutPhoto()"> Download Without Photo</a>
-                                   </div>
-                                     
-                                   
+                                   </div> 
                                     </div>
                                 </div> 
                         </form>
@@ -79,14 +71,7 @@
 </section>
 @endsection
 @push('scripts')
-<script>
-    function downloadWithPhoto(){ 
-        $('#download_with_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',1) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
-    }
-    function downloadWithoutPhoto(){  
-        $('#download_without_poto').attr('href','{{ route('admin.voter.PrepareVoterListMunicipalDownload',2) }}'+'?district_id='+$('#district_select_box').val()+'&block_id='+$('#block_select_box').val()+'&village_id='+$('#village_select_box').val()+'&ward_id='+$('#value_div_id').val());
-    }
-</script> 
+ 
 @endpush
  
 

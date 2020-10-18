@@ -122,7 +122,7 @@ $i=0;
  	$i=$i+1;
  @endphp 
 @if ($time==0)
-<table style="">
+<table style="padding:-2">
 	<tbody>
 		<tr>
 			@endif  
