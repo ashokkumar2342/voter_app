@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card card-primary"> 
-                            <form action="{{ route('admin.Master.WardBandiStore') }}" method="post" select-triger="assembly_part_select_box" no-reset="true" no-reset="true" class="add_form">
+                            <form action="{{ route('admin.Master.WardBandiStore') }}" method="post" select-triger="assembly_part_select_box,ward_select_box" no-reset="true" no-reset="true" class="add_form">
                                 {{ csrf_field() }}
                                 <div class="card-body">
                                     <div class="row"> 

@@ -44,7 +44,7 @@
                                         </select>
                                     </div> 
                                     <div class="col-lg-12 form-group text-center">
-                                         
+                                      <input type="hidden" name="ward" value="0">   
                                     </div>
                                     <input type="hidden" name="proses_by" id="proses_by" value="0">
                                     <div class="col-lg-6 form-group">

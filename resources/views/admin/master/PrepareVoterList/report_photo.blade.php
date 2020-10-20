@@ -3,6 +3,12 @@
 <head>
 	<title></title>
 	<style>
+		table,th, td {
+  
+  border-collapse:collapse;
+   
+ 
+}
 		@page {  
 		    header: html_otherpageheader;
 		    footer: html_otherpagesfooter;
@@ -61,8 +67,48 @@
 		<td style="border: 1px solid black;height: 40px;word-spacing:4px" colspan="5">&nbsp;&nbsp;{{ $mainpagedetail->year }} {{ $mainpagedetail->list_type }} {{ $mainpagedetail->election_type }} मतदाता सूचि सम्बन्धित विधानसभा क्षेत्र का नाम : {{ $mainpagedetail->district }}</td>
 		</tr>
 		<tr style="border: 1px solid black;">
-		<td style="border: 1px solid black;height: 40px;word-spacing:4px;padding-left: 20px" colspan="5"><h3><b>जिला का नाम : {{ $mainpagedetail->district }}</b></h3></td>
-		 
+		<td style="border: 1px solid black;height: 40px;word-spacing:4px;padding-left: 20px"><h3><b>जिला का नाम : {{ $mainpagedetail->district }}</b></h3></td>
+		 <td>
+		 	<div>
+		भाग संया  : 16
+	</div>
+	 <table>
+		<thead>
+			<tr>
+				<th style="text-align:center">क्र०से</th>
+				<th style="text-align:center">क्र तक</th>
+				<th style="text-align:center">क्र०से</th>
+				<th style="text-align:center">क्र तक</th>
+				<th style="text-align:center">क्र०से</th>
+				<th style="text-align:center">क्र तक</th>
+				 
+			</tr>
+		</thead>
+		<tbody>
+			@php
+          $time =0;
+        @endphp
+	       @foreach ($voterssrnodetails as $voterssrnodetail)
+	       @if ($time==0)
+	       <tr>
+	       @endif 
+	         <td style="text-align:center"> {!! $voterssrnodetail->fromsrno !!}</td>
+	         <td style="text-align:center"> {!! $voterssrnodetail->tosrno !!} </td>
+	       @if ($time ==2)
+	         </tr>
+	       @endif
+	         @php
+	           $time ++;
+	         @endphp
+	         @if ($time==3)
+	          @php
+	            $time=0;
+	          @endphp
+	         @endif
+	        @endforeach 
+		</tbody>
+	</table>
+		 </td>
 		</tr>
 		<tr style="border: 1px solid black;">
 		<td style="border: 1px solid black;height: 150px;word-spacing: 4px" colspan="5">
@@ -70,7 +116,9 @@
 		<tbody>
 		<tr>
 		<td style="padding-left: 20px;width: 300px">1. वार्ड संख्या</td>
-		<td style="width:200px;height: 40px"><b>{{ $WardVillage->ward_no }}</b></td> 
+		<td style="width:200px;height: 40px">
+			
+		</td> 
 		</tr> 
 		</tbody>
 		</table> 

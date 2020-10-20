@@ -3,6 +3,12 @@
 <head>
 	<title></title>
 	<style>
+		table,th, td {
+  
+  border-collapse:collapse;
+   
+ 
+}
 		@page {  
 		    header: html_otherpageheader;
 		    footer: html_otherpagesfooter;
@@ -70,7 +76,47 @@
 		<tbody>
 		<tr>
 		<td style="padding-left: 20px;width: 300px">1. वार्ड संख्या</td>
-		<td style="width:200px;height: 40px"><b>{{ $WardVillage->ward_no }}</b></td> 
+		<td style="width:200px;height: 40px">
+			<div>
+		भाग संया  : 16
+	</div>
+	 <table style="width: 580px;">
+		<thead>
+			<tr>
+				<th style="text-align:center">क्र०से</th>
+				<th style="text-align:center">क्र तक</th>
+				<th style="text-align:center">क्र०से</th>
+				<th style="text-align:center">क्र तक</th>
+				<th style="text-align:center">क्र०से</th>
+				<th style="text-align:center">क्र तक</th>
+				 
+			</tr>
+		</thead>
+		<tbody>
+			@php
+          $time =0;
+        @endphp
+	       @foreach ($voterssrnodetails as $voterssrnodetail)
+	       @if ($time==0)
+	       <tr>
+	       @endif 
+	         <td style="text-align:center"> {!! $voterssrnodetail->fromsrno !!}</td>
+	         <td style="text-align:center"> {!! $voterssrnodetail->tosrno !!} </td>
+	       @if ($time ==2)
+	         </tr>
+	       @endif
+	         @php
+	           $time ++;
+	         @endphp
+	         @if ($time==3)
+	          @php
+	            $time=0;
+	          @endphp
+	         @endif
+	        @endforeach 
+		</tbody>
+	</table>
+		</td> 
 		</tr> 
 		</tbody>
 		</table> 

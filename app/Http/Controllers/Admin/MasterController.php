@@ -777,8 +777,8 @@ class MasterController extends Controller
     }
     public function MappingAssemblyWisePartNo(Request $request)
     { 
-       $Parts= AssemblyPart::where('assembly_id',$request->id)->get();
-       $OldParts= AssemblyPart::where('village_id',$request->village_id)->pluck('id')->toArray();
+       $Parts= AssemblyPart::where('village_id',0)->where('assembly_id',$request->id)->get();
+       $OldParts= AssemblyPart::where('village_id',0)->pluck('id')->toArray();
        return view('admin.master.assemblypart.part_no_select_box',compact('Parts','OldParts'));  
     }
     public function MappingVillageAssemblyPartStore(Request $request)
@@ -1005,7 +1005,7 @@ class MasterController extends Controller
     {
        try{ 
           $assemblyParts= AssemblyPart::where('village_id',$request->id)->get();   
-          $WardVillages= WardVillage::where('village_id',$request->id)->get();   
+          $WardVillages = DB::select(DB::raw("call up_fetch_ward_village_access ('$request->id','0')"));   
           return view('admin.master.wardbandi.value',compact('assemblyParts','WardVillages'));
         } catch (Exception $e) {
             

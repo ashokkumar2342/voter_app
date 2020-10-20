@@ -45,6 +45,9 @@ class ImageTransfer extends Command
      */
     public function handle()
     { 
+        ini_set('max_execution_time', '3600');
+      ini_set('memory_limit','999M');
+      ini_set("pcre.backtrack_limit", "5000000");
       $VoterImages =VoterImage::get();
       foreach ($VoterImages as $VoterImage) {
         $image=$VoterImage->image;

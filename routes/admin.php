@@ -271,6 +271,7 @@ Route::group(['middleware' => 'admin'], function() {
            
            Route::get('PrepareVoterListPanchayat', 'VoterDetailsController@PrepareVoterListPanchayat')->name('admin.voter.PrepareVoterListPanchayat');
            Route::get('VillageWiseWardMultiple', 'VoterDetailsController@VillageWiseWardMultiple')->name('admin.voter.VillageWiseWardMultiple');
+
            Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate'); 
             
 
@@ -296,7 +297,10 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('/', 'VoterListMasterController@index')->name('admin.VoterListMaster.index');
            Route::post('store/{id?}', 'VoterListMasterController@store')->name('admin.VoterListMaster.store');
            Route::get('default/{id}', 'VoterListMasterController@default')->name('admin.VoterListMaster.default'); 
-           Route::get('edit/{id}', 'VoterListMasterController@edit')->name('admin.VoterListMaster.edit');           
+           Route::get('edit/{id}', 'VoterListMasterController@edit')->name('admin.VoterListMaster.edit');
+
+           Route::get('VoterListDefaultValue', 'VoterListMasterController@VoterListDefaultValue')->name('admin.VoterListMaster.VoterListDefaultValue');           
+           Route::post('VoterListDefaultValueStore/{id?}', 'VoterListMasterController@VoterListDefaultValueStore')->name('admin.VoterListMaster.VoterListDefaultValueStore');           
 	 	 
     });
     Route::group(['prefix' => 'import'], function() {

@@ -91,7 +91,7 @@ class VoterListGeneratePanchayat extends Command
             'nbpgPrefix' => ' कुल ',
             'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
          ]); 
-         $html = view('admin.master.PrepareVoterList.report_photo',compact('mainpagedetails','voterssrnodetails','voterReports','WardVillages')); 
+         $html = view('admin.master.PrepareVoterList.panchayat_report_p',compact('mainpagedetails','voterssrnodetails','voterReports','WardVillages')); 
          $mpdf->WriteHTML($html); 
          $documentUrl = Storage_path() . '/app/voter/'.$voterListMaster->id.'/'.'panchayat';   
         @mkdir($documentUrl, 0755, true);  

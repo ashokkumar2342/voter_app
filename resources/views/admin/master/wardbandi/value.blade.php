@@ -16,7 +16,10 @@
         <select name="ward" id="ward_select_box" disabled class="form-control select2" onchange="callAjax(this,'{{ route('admin.Master.WardBandiFilterward') }}','sr_no_form')">
           <option selected disabled>Select Ward</option> 
           @foreach ($WardVillages as $WardVillage)
-          <option value="{{ $WardVillage->id }}">{{ $WardVillage->ward_no or '' }}--{{ $WardVillage->name_e }}</option> 
+          @if ($WardVillage->lock==1)
+           @else  
+          <option value="{{ $WardVillage->id }}">{{ $WardVillage->ward_no or '' }}</option> 
+          @endif
           @endforeach 
         </select> 
       </div>  

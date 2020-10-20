@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Model\DefaultValue;
 use App\Model\VoterListMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,36 @@ public function edit($id)
 	$VoterListMaster=VoterListMaster::find($id); 
 	return view('admin.voterlistmaster.edit',compact('VoterListMaster'));
 }
+
+//-------------------VoterListDefaultValue-VoterListDefaultValue----VoterListDefaultValue-
+public function VoterListDefaultValue()
+{
+	$VoterListDefaultValue=DefaultValue::first(); 
+	return view('admin.voterlistmaster.default_value',compact('VoterListDefaultValue'));
+}
+public function VoterListDefaultValueStore(Request $request ,$id=null)
+{
+	  
+	$VoterListDefaultValue=DefaultValue::firstOrNew(['id'=>$id]);
+	
+	if (empty($request->page_break)) {
+	$VoterListDefaultValue->page_break=0;  
+	}
+	elseif (!empty($request->page_break)) {
+	$VoterListDefaultValue->page_break=$request->page_break;  
+	}
+	if (empty($request->page_blank)) {
+	$VoterListDefaultValue->page_blank=0;  
+	}
+	elseif (!empty($request->page_blank)) {
+	$VoterListDefaultValue->page_blank=$request->page_blank;  
+	} 
+	$VoterListDefaultValue->status=1;
+	$VoterListDefaultValue->save();
+	$response=['status'=>1,'msg'=>'Submit Successfully'];
+	return response()->json($response);
+}
+ 
 
 }
 

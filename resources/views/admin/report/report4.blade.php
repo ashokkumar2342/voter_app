@@ -2,75 +2,73 @@
 <html>
 <head>
 <style>
-table, th, td {
+ table,th, td {
   border: 1px solid black;
-  padding: 6px;
+  border-collapse:collapse;
+  text-align:center; 
 }
+@page { footer: html_otherpagesfooter; 
+	    header: html_otherpageheader;
+	} 
 </style>
 </head>
 <body>
-@php
-$result1 ='';
-$result2 =''; 
-$time=2;
-foreach ($voterReports as $voterReport) {
-if ($time%2==0) {
-$result1 .='<tr>';
-$result1 .='<td>'.$voterReport->name_l.'</td>';
-$result1 .='<td>'.$voterReport->ward_no.'</td>';
-$result1 .='<td>'.$voterReport->Total_Votes.'</td>';
-$result1 .='</tr>'; 
-} 
-if ($time%2!=0) {
-$result2 .='<tr>'; 
-$result2 .='<td>'.$voterReport->name_l.'</td>';
-$result2 .='<td>'.$voterReport->ward_no.'</td>';
-$result2 .='<td>'.$voterReport->Total_Votes.'</td>';
-$result2 .='</tr>';
-}
-$time++; 
-}
-@endphp
-<table>
-<tbody>
-<tr>
-<td style="width: 662px;background-color: #767d78;color: #fff;text-align: center;"><b>Village Ward Wise--Voter</b></td>
-</tr>
-</tbody>
-</table>
-<table class="table" style="margin-top: 10px">
-<tbody>
-<tr>
-<td>
-<table class="table">
-<thead>
-<tr> 
-<th>Village</th>
-<th>Ward</th>
-<th>Total Voter</th>
-</tr>
-</thead>
-<tbody>
-{!! $result1 !!}
-</tbody>
-</table>
-</td>
-<td>
-<table class="table">
-<thead>
-<tr>
-<th>Village</th>
-<th>Ward</th>
-<th>Total Voter</th>
-</tr>
-</thead>
-<tbody>
-{!! $result2 !!}
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+	<htmlpagefooter name="otherpagesfooter" style="display:none">
+		<div style="text-align:right;">
+			{nbpg}  {PAGENO}
+		</div>
+	    
+	</htmlpagefooter>
+	<htmlpageheader name="otherpageheader" style="display:none">
+		<table>
+			<tbody>
+				<tr>
+					<td style="width: 750px;background-color: #767d78;color: #fff;text-align: center;"><b>Village Ward Wise--Voter</b></td>
+				</tr>
+			</tbody>
+		</table>			 
+	</htmlpageheader> 
+ <table style="width: 750px">
+		<thead>
+			<tr>
+				 <th style="width: 200px">Village</th> 
+                 <th>Ward</th>
+                 <th>Total Voter</th>
+                 <th style="border-style:none"></th>
+                 <th style="width: 200px">Village</th> 
+                 <th>Ward</th>
+                 <th>Total Voter</th>
+			</tr>
+		</thead>
+		<tbody>
+			@php
+          $time =0;
+        @endphp
+	       @foreach ($voterReports as $voterReport)
+	       @if ($time==0)
+	       <tr>
+	       @endif 
+	       @if ($time==1)
+	       	<td style="border-style:none"></td>
+	       @endif
+	        
+	        <td>{{ $voterReport->name_l }}</td>
+			<td>{{ $voterReport->ward_no }}</td>
+			<td>{{ $voterReport->Total_Votes }}</td> 
+	       @if ($time ==1)
+
+	         </tr>
+	       @endif
+	         @php
+	           $time ++;
+	         @endphp
+	         @if ($time==2)
+	          @php
+	            $time=0;
+	          @endphp
+	         @endif
+	        @endforeach 
+		</tbody>
+	</table>
 </body>
 </html>

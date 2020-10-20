@@ -3,6 +3,12 @@
 <head>
 	<title></title>
 	<style>
+		table,th, td {
+  
+  border-collapse:collapse;
+   
+ 
+}
 		@page {  
 		    header: html_otherpageheader;
 		    footer: html_otherpagesfooter;

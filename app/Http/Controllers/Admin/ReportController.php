@@ -16,17 +16,31 @@ class ReportController extends Controller
     } 
     public function PrintVoterListGenerate(Request $request)
     {
-      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setPrintHeader(FALSE); 
-      $pdf->SetCreator(PDF_CREATOR); 
-      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-      $pdf->setFontSubsetting(true); 
-      $pdf->SetFont('freesans', '', 11, '', true); 
-      $pdf->AddPage();
-      if ($request->report==1) {
+      $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+         $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
+         ]); 
+          
+      if ($request->report==1) {  
        $voterReports= DB::select(DB::raw("select `a`.`code`, `a`.`name_e`, `a`.`name_l`, `ap`.`part_no`,(Select Count(*) From `voters` where `assembly_part_id` = `ap`.`id` ) as `Total_Votes`,(Select Count(*) From `voters` where `assembly_part_id` = `ap`.`id` and `village_id` <> 0) as `Mapped_Votes`from `assemblys` `a`Inner Join `assembly_parts` `ap` on `ap`.`assembly_id` = `a`.`id`Order by `a`.`code`, `ap`.`part_no`;"));
+       
       $html = view('admin.report.report1',compact('voterReports'));
       }
       elseif ($request->report==2) {
@@ -42,9 +56,8 @@ class ReportController extends Controller
       $html = view('admin.report.report4',compact('voterReports'));
       }
       
-      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-      ob_end_clean(); 
-      $pdf->Output();
+      $mpdf->WriteHTML($html); 
+      $mpdf->Output();
     }
 
     ///--------------------------------report--------report----------------------------

@@ -2,8 +2,10 @@
 <html>
 <head>
 <style>
- table, th, td {
+ table,th, td {
   border: 1px solid black;
+  border-collapse:collapse;
+  text-align:center;
   padding:2px;
 }
 @page { footer: html_otherpagesfooter; }
@@ -29,6 +31,7 @@
 				<th>Sr.No.</th> 
                 <th>Name </th>
                 <th>F/H Name</th>
+                <th style="border-style:none"></th>
                  
                 <th>Sr.No.</th> 
                 <th>Name </th>
@@ -42,6 +45,9 @@
 	       @foreach ($voterReports as $voterReport)
 	       @if ($time==0)
 	       <tr>
+	       @endif
+	       @if ($time==1)
+	       	<td style="border-style:none"></td>
 	       @endif 
 	        <td>{{ $voterReport->sr_no }}</td>
 			 
