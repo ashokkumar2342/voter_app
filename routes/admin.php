@@ -284,6 +284,7 @@ Route::group(['middleware' => 'admin'], function() {
 
 
            Route::get('VoterListDownload', 'VoterDetailsController@VoterListDownload')->name('admin.voter.VoterListDownload');
+           Route::get('BlockWiseDownloadTable', 'VoterDetailsController@BlockWiseDownloadTable')->name('admin.voter.BlockWiseDownloadTable');
            Route::get('VoterListDownloadPDF/{path}/{condition}', 'VoterDetailsController@VoterListDownloadPDF')->name('admin.voter.VoterListDownloadPDF');
             
     });

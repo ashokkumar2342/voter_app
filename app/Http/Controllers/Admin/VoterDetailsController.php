@@ -288,17 +288,26 @@ class VoterDetailsController extends Controller
  //-------------------VoterListDownload---------------------
     public function VoterListDownload($value='')
     {
-        $voterlistprocesseds=VoterListProcessed::where('status',1)->orderBy('id','desc')->get(); 
-        return view('admin.master.voterlistdownload.index',compact('voterlistprocesseds'));
+        $States= State::orderBy('name_e','ASC')->get();    
+        $voterListMasters= VoterListMaster::orderBy('id','ASC')->get();    
+        return view('admin.master.voterlistdownload.index',compact('States','voterListMasters'));
     }
-    public function VoterListDownloadPDF($file_path,$condition)
+    public function BlockWiseDownloadTable(Request $request)
+    { 
+      $voterlistprocesseds=VoterListProcessed::where('state_id',$request->state_id)->where('district_id',$request->district_id)->where('block_id',$request->block_id)->where('voter_list_master_id',$request->voter_list_master_id)->get();
+      return view('admin.master.voterlistdownload.download_table',compact('voterlistprocesseds')); 
+    }
+    public function VoterListDownloadPDF($id,$condition)
      {  
-        $voterlistprocesseds=VoterListProcessed::find($file_path);
+        $voterlistprocessed=VoterListProcessed::find($id); 
         if ($condition=='p') {
-        $documentUrl = Storage_path().'/'.$voterlistprocesseds->file_path_p; 
+        $documentUrl = Storage_path().$voterlistprocessed->folder_path.$voterlistprocessed->file_path_p; 
         }
         elseif ($condition=='w') {
-        $documentUrl = Storage_path().'/'.$voterlistprocesseds->file_path_w; 
+        $documentUrl = Storage_path().$voterlistprocessed->folder_path.$voterlistprocessed->file_path_w; 
+        }
+        elseif ($condition=='h') {
+        $documentUrl = Storage_path().$voterlistprocessed->folder_path.$voterlistprocessed->file_path_h; 
         }   
         return response()->file($documentUrl);
          

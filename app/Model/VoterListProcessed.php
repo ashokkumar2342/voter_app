@@ -12,7 +12,7 @@ class VoterListProcessed extends Model
 
       public function states()
       {
-      	 return $this->hasOne('App\Model\State','id','states_id');
+      	 return $this->hasOne('App\Model\State','id','state_id');
       }
       public function district()
       {
