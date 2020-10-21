@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">    
-                        <form action="{{ route('admin.voter.PrepareVoterListMunicipalGenerate') }}" method="post" no-reset="true" class="add_form">
+                        <form action="{{ route('admin.voter.GenerateVoterListAll') }}" method="post" no-reset="true" class="add_form">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">  

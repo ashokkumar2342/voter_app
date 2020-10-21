@@ -272,7 +272,10 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('PrepareVoterListPanchayat', 'VoterDetailsController@PrepareVoterListPanchayat')->name('admin.voter.PrepareVoterListPanchayat');
            Route::get('VillageWiseWardMultiple', 'VoterDetailsController@VillageWiseWardMultiple')->name('admin.voter.VillageWiseWardMultiple');
 
-           Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate'); 
+           Route::post('PrepareVoterListGenerate', 'VoterDetailsController@PrepareVoterListGenerate')->name('admin.voter.PrepareVoterListGenerate');
+
+           Route::post('PrepareVoterListGenerate', 'PrepareVoterListController@PrepareVoterListGenerate')->name('admin.voter.GenerateVoterListAll'); 
+             
             
 
            Route::get('PrepareVoterListMunicipal', 'VoterDetailsController@PrepareVoterListMunicipal')->name('admin.voter.PrepareVoterListMunicipal');

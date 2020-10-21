@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title></title><style>
+		 @page {
+        margin-top: 10px;
+		margin-bottom: -40px;
+    }
+		
 	{{-- <style>
 		
       	@page {  
@@ -14,8 +19,7 @@
 		     
 		}
 	</style> --}}
-</head>
-<body>
+
 	{{-- <htmlpageheader name="firstpageheader" style="display:none">
 		<div style="text-align:center;"><h2><b>Annexure-A</b></h2></div> 
 	</htmlpageheader> 
