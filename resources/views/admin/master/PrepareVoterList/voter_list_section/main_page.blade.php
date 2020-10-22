@@ -1,24 +1,23 @@
-{{-- <div class="h{{ $mainpagedetails[0]->ward }}">             --}}
-<table style="border: 0px text-align: center;" width="100%">
+<table id="headertable" style="border: 0px text-align: center;" width="100%">
 	<tr>
-		<td style="align-content: center; text-align: center;">
-			<h2><b>Annexure-A</b></h2>
+		<td style="align-content: center; text-align: center;font-size: 14px; font-weight: bold;">
+			Annexure-A
 		</td>
 	</tr>
 	<tr>
-		<td style="align-content: center; text-align: center;">
-			<h2><b>मुख्य पृष्ठ</b></h2>
+		<td style="align-content: center; text-align: center; font-size: 14px; font-weight: bold;">
+			मुख्य पृष्ठ
 		</td>
 	</tr>
 </table>
 		@foreach ($mainpagedetails as $mainpagedetail)
-		<table style="border: 1px solid black;" width="100%">
+		<table id="detailtable" style="border: 1px solid black;" width="100%">
 		<tbody>
 		<tr>	
 		<td style="height: 40px;word-spacing:4px">
 			<table width="100%">
-				<tr style="border: 1px solid black;">
-					<td>{{ $mainpagedetail->year }} में प्रकाशित {{ $mainpagedetail->election_type }} मतदाता सूचि सम्बन्धित विधानसभा क्षेत्र का नाम : {{ $mainpagedetail->district }}
+				<tr>
+					<td style="border: 1px solid black;" >{{ $mainpagedetail->year }} में प्रकाशित {{ $mainpagedetail->election_type }} मतदाता सूचि सम्बन्धित विधानसभा क्षेत्र का नाम : {{ $mainpagedetail->district }}
 					</td>
 				</tr>
 			</table>
@@ -27,43 +26,50 @@
 		
 		<tr>
 			<td>
-				<table width="100%" style="border: 0px solid black;" >
-					<tr style="border: 0px solid black;">			
+				<table width="100%" >
+					<tr>			
 						@php
 						if ($main_page_type==1) {
-							$colspan='30%';	 
+							$colspan='40%';	 
 		 				}else{
 		  					$colspan='100%';	
 		 				}	
 						@endphp
-						<td style="height: 150px;word-spacing:4px;padding-left: 20px" width="{{ $colspan }}"><h3><b>जिला का नाम : {{ $mainpagedetail->district }}</b></h3></td> 
+						<td style="height: 150px;word-spacing:4px;padding-left: 20px;border: 1px solid black; font-size: 14px; font-weight: bold;" width="{{ $colspan }}">जिला का नाम : {{ $mainpagedetail->district }}</td> 
         				@if ($main_page_type==1) 
-						<td style="height: 150px;word-spacing:4px;padding-left: 20px" width="70%">
+						<td style="height: 150px;word-spacing:4px;padding-left: 2px;border: 1px solid black;" width="60%">
 							<table width="100%">
 							<thead>
 								@php
 									$part_no='';
+									$time=0;
+									$counter=0;
 								@endphp
 								@foreach ($voterssrnodetails as $voterssrnodetail)
 									@if ($part_no!=$voterssrnodetail->partno)
 										@php
 										$part_no=$voterssrnodetail->partno;
-										$time=0; 
+										$time=0;
+										$counter++;
+										$counter++; 
 										@endphp
 					     				<tr>
 					     					<th colspan ="6">भाग संख्या  : {{ $part_no }}</th>
 					     				</tr> 	
 										<tr>
-											<th style="text-align:center;width:95px">क्र०से</th>
-											<th style="text-align:center;width:95px">क्र तक</th>
-											<th style="text-align:center;width:95px">क्र०से</th>
-											<th style="text-align:center;width:95px">क्र तक</th>
-											<th style="text-align:center;width:95px">क्र०से</th>
-											<th style="text-align:center;width:95px">क्र तक</th>
+											<th width = "17%" style="text-align:center;">क्र०से</th>
+											<th width = "17%" style="text-align:center;">क्र तक</th>
+											<th width = "17%" style="text-align:center;">क्र०से</th>
+											<th width = "17%" style="text-align:center;">क्र तक</th>
+											<th width = "16%" style="text-align:center;">क्र०से</th>
+											<th width = "16%" style="text-align:center;">क्र तक</th>
 										</tr>
 									@endif
 
 									@if ($time==0)
+									@php
+									$counter++;
+									@endphp
 	       							<tr>
 	       							@endif 
 	         							<td style="text-align:center"> {!! $voterssrnodetail->fromsrno !!}</td>
@@ -81,6 +87,13 @@
 	         						@endif
 
 								@endforeach
+
+								{{-- @if ($time=1)
+									<td></td> <td></td> <td></td> <td></td> </tr>
+								@endif --}}
+								{{-- @if ($time=2)
+									<td></td> <td></td> </tr>
+								@endif --}}
 
 							</thead>
 							</table>
@@ -118,7 +131,12 @@
 		</tr>
 		<tr>
 			<td width="100%">
-				2- पुनरीक्षण  का विवरण
+				<table width = "100%">
+					<tr>
+						<td style="border: 1px solid black;" width="100%">2- पुनरीक्षण  का विवरण
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		<tr>
@@ -134,9 +152,9 @@
 							<br><br>
 							प्रकाशन की तिथि : <b>{{ $mainpagedetail->publication_date }}</b>  
 						</td>
-						<td style="border: 1px solid black;height: 120px;word-spacing: 4px;padding-left: 20px" width="100%">
+						<td style="border: 1px solid black;height: 120px;word-spacing: 4px;padding-left: 5px;text-align: justify-all;" width="50%">
 							नामावली  पहचान  : 
-							<br><br>
+							<br>
 							नये परिसमिति निर्वाचन क्षेत्रो के विस्तारानुसार सभी अनुपूरकों सहित एकीकृत व  वर्ष <b>{{ $mainpagedetail->year }}</b> की पुनरीक्षित मूल निर्वाचक नामावली 
 						</td>
 					</tr>			
@@ -145,7 +163,11 @@
 		</tr>
 		<tr>
 			<td>
-				मतदाताओं क संख्या 
+				<table width = "100%">
+					<tr>
+						<td style="border: 1px solid black;" width="100%">मतदाताओं की संख्या</td>
+					</tr>
+				</table> 
 			</td>
 		</tr>
 		<tr>
@@ -170,18 +192,37 @@
 				</table>
 			</td>
 		</tr>
-		<tr style="min-height: 200px">
-			<td>
-				&nbsp;
-			</td>
-		</tr>
 		</tbody>
 		</table>
 		@endforeach
 
-	<table width="100%" style="margin-top:5px;">
+		@php
+			$counter = 21-$counter;
+			if ($counter>14){
+				$counter=14;
+			}
+			$margintop = $counter*20;
+			// $margintop = 0;
+		@endphp
+
+	{{-- @push('scripts')
+	<script type="text/javascript">
+		function findtablesheight(){
+			var x = 1000-(document.getElementById('headertable').offsetHeight+document.getElementById('detailtable').offsetHeight);
+
+			document.write("<table style='margin-top:"+ 100 + "px;'>");
+			document.write("<tr><td>&nbsp;"+x+"</td></tr></table>");
+		}
+	</script>
+	@endpush --}}
+
+	@push('scripts')
+	<script type="text/javascript">findtablesheight();</script>
+	@endpush
+	
+	<table width="100%" style='margin-top:{{$margintop}}px;'>
 		<tr>
-			<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->publication_date }} के अनुसार संशोधित </td> 
+			<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->publication_date }} के अनुसार संशोधित</td> 
 			<td width="52%" align="right" style="text-align: right;font-size: 12px;word-spacing: 4px"> कुल {{$totalpage}} पृष्ठों का पृष्ठ 1</td>
 				        
 		</tr>
