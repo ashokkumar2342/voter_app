@@ -14,16 +14,16 @@
 		 	if ($newpagestart==1){
 		 @endphp
 
-		 		<table width = "100%" style="padding: 2px">
+		 		<table width = "100%" style="padding: 2px;font-size: 12px;font-weight: bold;">
 		 			<tr>
-		 				<td style="text-align: left; padding-left: 5px" width="33%">
-		 					<h3><b>{{ $mainpagedetails[0]->village_mc_type }} : {{ $mainpagedetails[0]->village}}</b></h3>
+		 				<td style="text-align: left; padding-left: 5px" width="25%">
+		 					{{ $mainpagedetails[0]->village_mc_type }} : {{ $mainpagedetails[0]->village}}
 		 				</td>
-		 				<td style="text-align: center;" width="33%">
-		 					<h3><b>{{ $mainpagedetails[0]->voter_list_type }} निर्वाचन नामावली {{ $mainpagedetails[0]->year }}</b></h3>
+		 				<td style="text-align: center;" width="50%">
+		 					{{ $mainpagedetails[0]->voter_list_type }} निर्वाचन नामावली {{ $mainpagedetails[0]->year }}
 		 				</td>
-		 				<td style="text-align: right; padding-right: 5px" width="34%">
-		 					<h3><b>वार्ड संख्या : {{ $mainpagedetails[0]->ward}}</b></h3>
+		 				<td style="text-align: right; padding-right: 5px" width="25%">
+		 					वार्ड संख्या : {{ $mainpagedetails[0]->ward}}
 		 				</td>
 		 			</tr>
 		 		</table>
@@ -114,9 +114,9 @@
 		@endforeach
 
 		@php
-			if($newpagestart == 0){$cpageno++;$remaining = 30-$counter;$lrem=(int)((30-$counter-fmod($remaining, 3))/3)*120;
+			if($newpagestart == 0){$cpageno++;$remaining = 30-$counter;$lrem=(int)((30-$counter-fmod($remaining, 3))/3)*100-20;
 		@endphp	
-			<table width="100%" style="margin-top:5px;min-height: {{$lrem}}px" >
+			<table width="100%" style="margin-top:{{$lrem}}px;" >
 				<tr>
 					<td>
 						&nbsp;

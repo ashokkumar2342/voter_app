@@ -77,7 +77,7 @@ class VoterListGenerate extends Command
     $fontDirs = $defaultConfig['fontDir']; 
     $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata']; 
-    $mpdf = new \Mpdf\Mpdf([
+    $mpdf_mainpage = new \Mpdf\Mpdf([
         'fontDir' => array_merge($fontDirs, [
                  __DIR__ . $path,
              ]),
@@ -90,11 +90,6 @@ class VoterListGenerate extends Command
              'default_font' => 'freesans',
          ]);
 
-    $path=Storage_path('fonts/');
-    $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir']; 
-    $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata']; 
     $mpdf_photo = new \Mpdf\Mpdf([
         'fontDir' => array_merge($fontDirs, [
                  __DIR__ . $path,
@@ -107,48 +102,43 @@ class VoterListGenerate extends Command
              ],
              'default_font' => 'freesans',
          ]);
+
+    $mpdf_wp = new \Mpdf\Mpdf([
+        'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+         ]);
     
-
-    $htmlphoto ='';
-    $htmlwithoutphoto ='';
-    $htmmainpage = '';
-
 
     if ($ward_id==0) {$WardVillages=WardVillage::where('village_id',$village_id)->get();$pagetype=1;}
     else{$WardVillages=WardVillage::where('id',$ward_id)->get();$pagetype=2;}  
       
     $html = view('admin.master.PrepareVoterList.voter_list_section.start_pdf');
-    
-
-    // foreach ($WardVillages as $WardVillage) {
-    //     $main_page=$this->prepareHeaderFooter($voterListMaster,$WardVillage->id);
-    //     $html= $html.$main_page;
-    //     }
 
     $html = $html.'</style></head><body>';
 
-    // foreach ($WardVillages as $WardVillage) {
-    //     $main_page=$this->prepareHeaderFooterbody($voterListMaster,$WardVillage->id);
-    //     $html= $html.$main_page; 
-    //     }    
-
-    $htmlphoto =$html;
-    $htmlwithoutphoto =$html;
-    $htmmainpage = $html;
-
+    
     $mpdf_photo->WriteHTML($html);
+    $mpdf_mainpage->WriteHTML($html);
+    $mpdf_wp->WriteHTML($html);
     
     if ($voterListMaster->is_supplement==0) {
         $wardcount = 1;
         foreach ($WardVillages as $WardVillage) {
             if ($wardcount>1){
-                $htmlphoto= $htmlphoto.'<pagebreak>';
-                $htmlwithoutphoto= $htmlwithoutphoto.'<pagebreak>';
                 $mpdf_photo->WriteHTML('<pagebreak>');
+                //$mpdf_mainpage->WriteHTML('<pagebreak>');
+                $mpdf_wp->WriteHTML('<pagebreak>');
                 if(fmod($totalpage, 2)==1){
-                   $htmlphoto= $htmlphoto.'<pagebreak>';
-                   $htmlwithoutphoto= $htmlwithoutphoto.'<pagebreak>';
-                   $mpdf_photo->WriteHTML('<pagebreak>'); 
+                    $mpdf_photo->WriteHTML('<pagebreak>');
+                    $mpdf_wp->WriteHTML('<pagebreak>'); 
                 }    
             }
             $wardcount++;
@@ -165,79 +155,37 @@ class VoterListGenerate extends Command
             $totalpage++;
 
             $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
-            $htmlphoto =$htmlphoto.$main_page;
-            $htmlwithoutphoto =$htmlwithoutphoto.$main_page;
-            $htmmainpage = $htmmainpage.$main_page;
             $mpdf_photo->WriteHTML($main_page);
+            $mpdf_mainpage->WriteHTML($main_page);
+            $mpdf_wp->WriteHTML($main_page);
 
-            // $html= $html.$main_page;
-
+            
             $printphoto = 1;
             $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
-            $htmlphoto =$htmlphoto.$main_page;
             $mpdf_photo->WriteHTML($main_page);
             
             $printphoto = 0;
             $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
-            $htmlwithoutphoto =$htmlwithoutphoto.$main_page;
+            $mpdf_wp->WriteHTML($main_page);
 
-            // $html= $html.$main_page;
-
-            // $main_page=$this->prepareMainPage($voterListMaster,$WardVillage->id,$pagetype);
-            // $html= $html.$main_page;
-
-            // $printphoto = 1;
-            // $main_page=$this->prepareVoterDetail($voterListMaster, $WardVillage->id,$printphoto);
-            // $html= $html.$main_page;            
-
-            // $html= $html.'</div>';
         }
     }
     
          
-    $htmlphoto =$htmlphoto.'</body></html>';
-    $htmlwithoutphoto =$htmlwithoutphoto.'</body></html>';
-    $htmmainpage = $htmmainpage.'</body></html>';
     $mpdf_photo->WriteHTML('</body></html>');
+    $mpdf_mainpage->WriteHTML('</body></html>');
+    $mpdf_wp->WriteHTML('</body></html>');
     
-    // $html= $html.'</body></html>';   
     
-    
-
-    
-
-    // $mpdf = new \Mpdf\Mpdf();
-    // $mpdf->useOddEven = 1;
-
-
-    
-    // $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_p;
-    // $mpdf->WriteHTML($htmlphoto);    
-    // $mpdf->Output($filepath, 'F');
-
-    // $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_w;
-    // $mpdf->WriteHTML($htmlwithoutphoto);    
-    // $mpdf->Output($filepath, 'F');
-
     $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_h;
-    $mpdf->WriteHTML($htmmainpage);    
-    $mpdf->Output($filepath, 'F');
+    $mpdf_mainpage->Output($filepath, 'F');
 
     $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_p;
     $mpdf_photo->Output($filepath, 'F');
 
-    // $mpdf->WriteHTML($html);
-    // if ($ward_id==0) {
-    //     $documentUrl = Storage_path() . '/app/voter/'.$voterListMaster->id.'/'.'panchayat';   
-    //     @mkdir($documentUrl, 0755, true);  
-    //     $mpdf->Output($documentUrl.'/'.'p_'.$blockcode->code.'_'.$villagename->name_e.'.pdf', 'F');
-    // }
-    //  else{
-    //     $documentUrl = Storage_path() . '/app/voter/'.$voterListMaster->id.'/'.'mc';   
-    //     @mkdir($documentUrl, 0755, true);  
-    //     $mpdf->Output($documentUrl.'/'.'p_'.$blockcode->name_e.'_'.$wardno->ward_no.'.pdf', 'F');  
+    $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_w;
+    $mpdf_wp->Output($filepath, 'F');
 
-    // } 
        
       
     }
@@ -248,41 +196,11 @@ class VoterListGenerate extends Command
         return $main_page=view('admin.master.PrepareVoterList.voter_list_section.voter_detail',compact('voterReports', 'mainpagedetails', 'totalpage', 'printphoto'));    
     }
 
-    // public function prepareVoterDetail($voterListMaster,$ward_id,$printphoto)
-    // {
-    //     $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$ward_id;"));
-
-    //     $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `ap`.`part_no`, '/', `v`.`sr_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l`, `v`.`image` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$ward_id And `v`.`status` in (0,1,3) Order By `v`.`print_sr_no`;"));
-
-    //     return $main_page=view('admin.master.PrepareVoterList.voter_list_section.voter_detail',compact('voterReports', 'mainpagedetails', 'printphoto'));    
-    // }
-
-    public function prepareHeaderFooterbody($voterListMaster,$ward_id)
-    {
-        $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$ward_id;"));
-
-        return $main_page=view('admin.master.PrepareVoterList.voter_list_section.header_footer_body',compact('mainpagedetails'));    
-    }
-
-    public function prepareHeaderFooter($voterListMaster,$ward_id)
-    {
-        $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$ward_id;"));
-
-        return $main_page=view('admin.master.PrepareVoterList.voter_list_section.header_footer',compact('mainpagedetails'));
-    }
-
+    
     public function prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $main_page_type)
     {
         return $main_page=view('admin.master.PrepareVoterList.voter_list_section.main_page',compact('mainpagedetails','voterssrnodetails', 'totalpage', 'main_page_type'));    
     }
-
-    // public function prepareMainPage($voterListMaster,$ward_id,$main_page_type)
-    // {
-    //     $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$ward_id;"));
-
-    //     $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $ward_id;"));
-    //     return $main_page=view('admin.master.PrepareVoterList.voter_list_section.main_page',compact('mainpagedetails','voterssrnodetails','main_page_type'));    
-    // }
     
        
 }
