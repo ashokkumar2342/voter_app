@@ -20,13 +20,25 @@
                     <td>{{ $voterlistprocessed->WardVillages->ward_no or '' }}</td> 
                     <td>{{ $voterlistprocessed->report_type or '' }}</td>
                     <td>
+                    @if ($voterlistprocessed->status==1)
                     <a target="_blank" href="{{ route('admin.voter.VoterListDownloadPDF',[$voterlistprocessed->id,'p']) }}" title="">Download</a>  
-                    </td>
-                   <td>
-                    <a target="_blank" href="{{ route('admin.voter.VoterListDownloadPDF',[$voterlistprocessed->id,'w']) }}" title="">Download</a>  
+                    @else
+                        Pending
+                    @endif
                     </td>
                     <td>
+                    @if ($voterlistprocessed->status==1)
+                    <a target="_blank" href="{{ route('admin.voter.VoterListDownloadPDF',[$voterlistprocessed->id,'w']) }}" title="">Download</a>  
+                    @else
+                        Pending
+                    @endif
+                    </td>
+                    <td>
+                    @if ($voterlistprocessed->status==1)
                     <a target="_blank" href="{{ route('admin.voter.VoterListDownloadPDF',[$voterlistprocessed->id,'h']) }}" title="">Download</a>  
+                    @else
+                        Pending
+                    @endif
                     </td>
                 </tr>                                     
                 @endforeach
