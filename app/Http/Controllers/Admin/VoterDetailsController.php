@@ -23,31 +23,6 @@ use Illuminate\Support\Facades\Validator;
 use Imagick;
 use PDF;
 use TCPDF;
-class MYPDF extends TCPDF {
-
-    //Page header
-    public function Header() {
-        // Logo
-        $image_file = K_PATH_IMAGES.'logo_example.jpg';
-        $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-        // Set font
-        $this->SetFont('helvetica', 'B', 20);
-        // Title
-        $this->Cell(0, 15, '<< TCPDF Example 003 >>', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-    }
-
-    // Page footer
-    public function Footer() {
-        // Position at 15 mm from bottom
-        $this->SetY(-15);
-        // Set font
-        $footertext='hello';
-        $this->writeHTML($footertext, false, true, false, true);
-        $this->SetFont('helvetica', 'I', 8);
-        // Page number
-        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-    }
-}
 class VoterDetailsController extends Controller
 {
     /**
@@ -294,7 +269,7 @@ class VoterDetailsController extends Controller
     }
     public function BlockWiseDownloadTable(Request $request)
     { 
-      $voterlistprocesseds=VoterListProcessed::where('state_id',$request->state_id)->where('district_id',$request->district_id)->where('block_id',$request->block_id)->where('voter_list_master_id',$request->voter_list_master_id)->get();
+      $voterlistprocesseds=VoterListProcessed::where('state_id',$request->state_id)->where('district_id',$request->district_id)->where('block_id',$request->block_id)->where('voter_list_master_id',$request->voter_list_master_id)->orderBy('file_path_p','ASC')->get();
       return view('admin.master.voterlistdownload.download_table',compact('voterlistprocesseds')); 
     }
     public function VoterListDownloadPDF($id,$condition)
