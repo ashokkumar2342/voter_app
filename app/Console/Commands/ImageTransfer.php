@@ -48,11 +48,11 @@ class ImageTransfer extends Command
      */
     public function handle()
     { 
-        ini_set('max_execution_time', '3600');
+        ini_set('max_execution_time', '7200');
         ini_set('memory_limit','999M');
         ini_set("pcre.backtrack_limit", "5000000");
         
-        $assembly = Assembly::get();
+        $assembly = Assembly::where('id','>',2)->get();
         foreach ($assembly as $key => $ac_id) {
             $ac_parts = AssemblyPart::where('assembly_id',$ac_id->id)->get();
             foreach ($ac_parts as $key => $ac_part_id) {
