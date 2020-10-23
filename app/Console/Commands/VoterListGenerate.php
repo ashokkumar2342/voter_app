@@ -15,6 +15,7 @@ use App\Model\VoterImage;
 use App\Model\VoterListMaster;
 use App\Model\VoterListProcessed;
 use App\Model\WardVillage;
+use App\Model\MainPageDetails;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -131,6 +132,7 @@ class VoterListGenerate extends Command
     
     if ($voterListMaster->is_supplement==0) {
         $wardcount = 1;
+        $totalpage=0;
         foreach ($WardVillages as $WardVillage) {
             if ($wardcount>1){
                 $mpdf_photo->WriteHTML('<pagebreak>');
@@ -145,29 +147,33 @@ class VoterListGenerate extends Command
 
             $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` in (0,1,3) Order By `v`.`print_sr_no`;"));
             
-            $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$WardVillage->id;"));
             
-            $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $WardVillage->id;"));
 
-            $votercount = count($voterReports);
-            $totalpage = (int)($votercount/30);
-            if ($totalpage*30<$votercount){$totalpage++;}
-            $totalpage++;
+            $mainpagedetails=MainPageDetails::where('voter_list_master_id',$voterListMaster->id)->where('ward_id',$WardVillage->id)->count();
+            if ($mainpagedetails>0){
+                $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$WardVillage->id;"));
+                
+                $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $WardVillage->id;"));
 
-            $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
-            $mpdf_photo->WriteHTML($main_page);
-            $mpdf_mainpage->WriteHTML($main_page);
-            $mpdf_wp->WriteHTML($main_page);
+                $votercount = count($voterReports);
+                $totalpage = (int)($votercount/30);
+                if ($totalpage*30<$votercount){$totalpage++;}
+                $totalpage++;
+
+                $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
+                $mpdf_photo->WriteHTML($main_page);
+                $mpdf_mainpage->WriteHTML($main_page);
+                $mpdf_wp->WriteHTML($main_page);
 
             
-            $printphoto = 1;
-            $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
-            $mpdf_photo->WriteHTML($main_page);
+                $printphoto = 1;
+                $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
+                $mpdf_photo->WriteHTML($main_page);
             
-            $printphoto = 0;
-            $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
-            $mpdf_wp->WriteHTML($main_page);
-
+                $printphoto = 0;
+                $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
+                $mpdf_wp->WriteHTML($main_page);
+            }
         }
     }
     
