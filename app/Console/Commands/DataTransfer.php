@@ -50,15 +50,19 @@ class DataTransfer extends Command
     { 
       // set_time_limit(7200);
       //\Log::info(date('Y-m-d H:i:s'));
-       $voterlistmaster=VoterListMaster::where('status',1)->first(); 
-       $ac_code = $this->argument('ac_code');
-       $part_no = $this->argument('part_no'); 
-       $assembly=Assembly::where('code',$ac_code)->first();
-       $assemblyPart=AssemblyPart::where('assembly_id',$assembly->id)->where('part_no',$part_no)->first();
+      
+      // $dirpath = Storage_path() . "/vimage/".$assembly->id."/".$assemblyPart->id;
+      // @mkdir($dirpath, 0755, true);
+
+      $voterlistmaster=VoterListMaster::where('status',1)->first(); 
+      $ac_code = $this->argument('ac_code');
+      $part_no = $this->argument('part_no'); 
+      $assembly=Assembly::where('code',$ac_code)->first();
+      $assemblyPart=AssemblyPart::where('assembly_id',$assembly->id)->where('part_no',$part_no)->first();
         
-       $totalImport=DB::select(DB::raw("select ifnull(max(`sr_no`),0) as `maxid` from `voters` where `assembly_id` =$assembly->id and `assembly_part_id` =$assemblyPart->id;"));
-       $maxid=$totalImport[0]->maxid;
-       $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no and SlNoInPart > $maxid order by SlNoInPart");
+      $totalImport=DB::select(DB::raw("select ifnull(max(`sr_no`),0) as `maxid` from `voters` where `assembly_id` =$assembly->id and `assembly_part_id` =$assemblyPart->id;"));
+      $maxid=$totalImport[0]->maxid;
+      $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + LastName_EN as name_en, FM_Name_V1 + ' ' + LastName_V1 as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + RLN_L_NM_EN as fname_en, RLN_FM_NM_V1 + ' ' + RLN_L_NM_V1 as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no and SlNoInPart > $maxid order by SlNoInPart");
       foreach ($datas as $key => $value) { 
        // $voterImport=new Voter();
        // $voterImport->assembly_id=$assembly->id;
@@ -141,6 +145,7 @@ class DataTransfer extends Command
        }  
        $newId=DB::select(DB::raw("call up_save_voter_detail('0','$assembly->id','$assemblyPart->id','$value->SlNoInPart','$value->EPIC_No','$value->C_House_no','$value->C_House_No_V1','','$name_e','$name_l','$f_name_e','$f_name_l','$relation','$gender_id','$value->AGE','$value->MOBILE_NO','v','$voterlistmaster->id','0');"));
         //dd($newId[0]->newid);
+
         $VoterImage=new VoterImage();
         $VoterImage->voter_id=$newId[0]->newid; 
         $VoterImage->image=$value->PHOTO;

@@ -20,7 +20,7 @@
 		 					{{ $mainpagedetails[0]->village_mc_type }} : {{ $mainpagedetails[0]->village}}
 		 				</td>
 		 				<td style="text-align: center;" width="50%">
-		 					{{ $mainpagedetails[0]->voter_list_type }} निर्वाचन नामावली {{ $mainpagedetails[0]->year }}
+		 					{{ $mainpagedetails[0]->voter_list_type }} निर्वाचन नामावली  {{ $mainpagedetails[0]->year }}
 		 				</td>
 		 				<td style="text-align: right; padding-right: 5px" width="25%">
 		 					वार्ड संख्या : {{ $mainpagedetails[0]->ward}}
@@ -48,14 +48,13 @@
 								<td style="border: 1px solid black;">&nbsp;{{ $voterReport->part_srno }}</td>
 							</tr>
 							<tr>
-								<td style="width: 130px" colspan="2">नाम&nbsp; &nbsp; {{ $voterReport->name_l }}</td>
+								<td style="width: 130px" colspan="2">नाम&nbsp; &nbsp; {{ $voterReport->name_l }}&nbsp;</td>
 								<td style="text-align:center;" rowspan="4">
 									@php
 									if ($printphoto==1){
-								 	  	$image=$voterReport->image;
+								 	  	$dirpath = '/app/vimage/'.$voterReport->assembly_id.'/'.$voterReport->assembly_part_id;
 								 	  	$name =$voterReport->id;
-								      	$image= \Storage::disk('local')->put("image/".$name.'.jpg', $image);
-								      	$image  =\Storage_path("app/image/".$name.'.jpg');
+								      	$image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 							 		@endphp
 							 		<img src="{{ $image }}" alt="" width="65px" height="70px">
 									@php
@@ -64,10 +63,10 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width: 130px" colspan="2">{{ $voterReport->vrelation }}&nbsp; &nbsp; {{ $voterReport->father_name_l }}</td>
+								<td style="width: 130px" colspan="2">{{ $voterReport->vrelation }}&nbsp; &nbsp; {{ $voterReport->father_name_l }}&nbsp;</td>
 							</tr>
 							<tr>
-								<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp;{{ $voterReport->house_no_l }}</td>
+								<td style="" colspan="2">मकान नं०&nbsp; &nbsp; &nbsp;{{ $voterReport->house_no_l }}&nbsp;</td>
 							</tr>
 							<tr>
 								<td style="" colspan="2">आयु&nbsp; &nbsp; &nbsp;{{ $voterReport->age }} &nbsp; &nbsp;लिंग&nbsp; &nbsp; &nbsp; {{ $voterReport->genders_l }}</td>

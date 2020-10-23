@@ -10,8 +10,11 @@ use App\Model\Sms\EmailTemplate;
 use App\Model\Sms\SentEmailAttachment;
 use App\Model\Sms\SentEmailDetail;
 use App\Model\Sms\SentSmsDetail;
-use App\Model\VoterImage;
+use App\Model\Voter;
+use App\Model\Assembly;
+use App\Model\AssemblyPart;
 use Illuminate\Console\Command;
+
 class ImageTransfer extends Command
 {
     /**
@@ -46,14 +49,27 @@ class ImageTransfer extends Command
     public function handle()
     { 
         ini_set('max_execution_time', '3600');
-      ini_set('memory_limit','999M');
-      ini_set("pcre.backtrack_limit", "5000000");
-      $VoterImages =VoterImage::get();
-      foreach ($VoterImages as $VoterImage) {
-        $image=$VoterImage->image;
-        $name =$VoterImage->voter_id;
-        $image= \Storage::disk('local')->put("voter_image/".$name.'.jpg', $image); 
-      }
-      
+        ini_set('memory_limit','999M');
+        ini_set("pcre.backtrack_limit", "5000000");
+        
+        $assembly = Assembly::get();
+        foreach ($assembly as $key => $ac_id) {
+            $ac_parts = AssemblyPart::where('assembly_id',$ac_id->id)->get();
+            foreach ($ac_parts as $key => $ac_part_id) {
+                
+                $voterimage = Voter::where('assembly_id',$ac_id->id)->where('assembly_part_id',$ac_part_id->id)->get();
+
+                $dirpath = Storage_path() . '/app/vimage/'.$ac_id->id.'/'.$ac_part_id->id;
+                $vpath = '/vimage/'.$ac_id->id.'/'.$ac_part_id->id;
+                @mkdir($dirpath, 0755, true);
+
+                foreach ($voterimage as $key => $img_id) {
+                    $image=$img_id->image;
+                    $name =$img_id->id;
+                    $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg', $image);        
+                }
+
+            }
+        }
     }
 }

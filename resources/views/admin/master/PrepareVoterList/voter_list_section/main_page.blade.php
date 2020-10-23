@@ -1,3 +1,6 @@
+@php
+	$counter = 0;
+@endphp
 <table id="headertable" style="border: 0px text-align: center;" width="100%">
 	<tr>
 		<td style="align-content: center; text-align: center;font-size: 14px; font-weight: bold;">

@@ -60,8 +60,8 @@
 	       @endif
 	        
 	        <td>{{ $voterReport->sr_no }}</td>
-			<td>{{ $voterReport->name_l }}</td>
-			<td>{{ $voterReport->vil_name }}</td>
+			<td>{{ $voterReport->name_l }}&nbsp;</td>
+			<td>{{ $voterReport->vil_name }}&nbsp;</td>
 			<td>{{ $voterReport->ward_no }}</td> 
 			 
 	       @if ($time ==1)
