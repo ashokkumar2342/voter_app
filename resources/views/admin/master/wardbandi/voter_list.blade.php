@@ -12,6 +12,7 @@
             <th>F/H Name</th>
             <th>Village</th>
             <th>Ward</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -22,6 +23,9 @@
               <td>{{ $voterList->father_name_l }}</td>
               <td>{{ $voterList->vil_name }}</td>
               <td>{{ $voterList->ward_no }}</td>
+              <td>
+                <a href="#" onclick="callAjax(this,'{{ route('admin.Master.DeleteVoter',$voterList->id) }}')" select-triger="assembly_part_select_box" success-popup="true" title="Delete" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+              </td>
             </tr> 
           @endforeach
         </tbody>
