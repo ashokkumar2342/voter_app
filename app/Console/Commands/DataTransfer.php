@@ -63,7 +63,7 @@ class DataTransfer extends Command
       $totalImport=DB::select(DB::raw("select ifnull(max(`sr_no`),0) as `maxid` from `voters` where `assembly_id` =$assembly->id and `assembly_part_id` =$assemblyPart->id;"));
       $maxid=$totalImport[0]->maxid;
 
-      $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + isNULL(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNULL(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNULL(RLN_L_NM_V1) as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no and SlNoInPart > $maxid order by SlNoInPart");
+      $datas = DB::connection('sqlsrv')->select("select SlNoInPart, C_House_no, C_House_No_V1, FM_Name_EN + ' ' + IsNULL(LastName_EN,'') as name_en, FM_Name_V1 + ' ' + isNULL(LastName_V1,'') as name_l, RLN_Type, RLN_FM_NM_EN + ' ' + IsNULL(RLN_L_NM_EN,'') as fname_en, RLN_FM_NM_V1 + ' ' + IsNULL(RLN_L_NM_V1,'') as FName_L, EPIC_No, STATUS_TYPE, GENDER, AGE, EMAIL_ID, MOBILE_NO, PHOTO from data where ac_no =$ac_code and part_no =$part_no and SlNoInPart > $maxid order by SlNoInPart");
       foreach ($datas as $key => $value) { 
        
        $name_l=str_replace('਍', '', $value->name_l);

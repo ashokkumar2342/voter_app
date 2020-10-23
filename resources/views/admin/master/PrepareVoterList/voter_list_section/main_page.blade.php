@@ -17,7 +17,7 @@
 		<table id="detailtable" style="border: 1px solid black;" width="100%">
 		<tbody>
 		<tr>	
-		<td style="height: 40px;word-spacing:4px">
+		<td style="height: 40px;">
 			<table width="100%">
 				<tr>
 					<td style="border: 1px solid black;" >{{ $mainpagedetail->year }} में प्रकाशित {{ $mainpagedetail->election_type }} मतदाता सूचि सम्बन्धित विधानसभा क्षेत्र का नाम : {{ $mainpagedetail->district }}
@@ -149,7 +149,7 @@
 						<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="50%">	
 							पुनरीक्षण का वर्ष : <b>{{ $mainpagedetail->year }}</b>
 							<br><br>
-							पुनरीक्षण की तिथि  : <b>{{ $mainpagedetail->publication_date }}</b>
+							पुनरीक्षण की तिथि  : <b>{{ $mainpagedetail->date }}</b>
 							<br><br>
 							पुनरीक्षण का स्वरूप  : <b>{{ $mainpagedetail->list_type }}  {{ $mainpagedetail->year }}</b> 
 							<br><br>
@@ -225,7 +225,7 @@
 	
 	<table width="100%" style='margin-top:{{$margintop}}px;'>
 		<tr>
-			<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->publication_date }} के अनुसार संशोधित</td> 
+			<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->date }} के अनुसार संशोधित</td> 
 			<td width="52%" align="right" style="text-align: right;font-size: 12px;word-spacing: 4px"> कुल {{$totalpage}} पृष्ठों का पृष्ठ 1</td>
 				        
 		</tr>

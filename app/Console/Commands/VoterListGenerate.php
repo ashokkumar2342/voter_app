@@ -192,7 +192,9 @@ class VoterListGenerate extends Command
     $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_w;
     $mpdf_wp->Output($filepath, 'F');
 
-       
+    
+    $newId=DB::select(DB::raw("Update `voter_list_processeds` set `status` = 1 where `id` = $VoterListProcessed->id;"));
+
       
     }
 
