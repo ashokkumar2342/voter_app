@@ -220,6 +220,7 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::post('WardBandiStore', 'MasterController@WardBandiStore')->name('admin.Master.WardBandiStore');	   
 	    Route::get('WardBandiReport', 'MasterController@WardBandiReport')->name('admin.Master.WardBandiReport');	   
 	    Route::post('WardBandiReportGenerate', 'MasterController@WardBandiReportGenerate')->name('admin.Master.WardBandiReportGenerate');	   
+	    Route::get('DeleteVoter/{id}', 'MasterController@DeleteVoter')->name('admin.Master.DeleteVoter');	   
 	     	   
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   

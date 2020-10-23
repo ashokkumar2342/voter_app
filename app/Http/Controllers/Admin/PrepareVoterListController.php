@@ -41,8 +41,15 @@ class PrepareVoterListController extends Controller
             $response["status"]=0;
             $response["msg"]=$errors[0];
         return response()->json($response);// response as json
-       }  
+       }
+       $village=Village::find($request->village); 
       if ($request->proses_by==1) {
+            if ($village->is_locked==1) {
+              $response=array();
+              $response["status"]=0;
+              $response["msg"]='village is locked';
+              return response()->json($response);  
+            }
             if ($request->ward==0) {
                $PrepareVoterListSave= DB::
                select(DB::raw("call up_process_village_voterlist ('$request->village')"));

@@ -19,6 +19,7 @@ use App\Model\TmpImportAssembly;
 use App\Model\TmpImportMapVillageWard;
 use App\Model\TmpImportVillage;
 use App\Model\Village;
+use App\Model\Voter;
 use App\Model\VoterListMaster;
 use App\Model\WardPanchayat;
 use App\Model\WardVillage;
@@ -1014,7 +1015,7 @@ class MasterController extends Controller
     public function WardBandiFilterAssemblyPart(Request $request)
     {
        try{ 
-           $voterLists=DB::select(DB::raw("select `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`, `vil`.`name_l` as `vil_name`, `wv`.`ward_no`from `voters` `v`Left Join `villages` `vil` on `vil`.`id` = `v`.`village_id`Left Join `ward_villages` `wv` on `wv`.`id` = `v`.`ward_id`Where `v`.`assembly_part_id` =$request->id;"));  
+           $voterLists=DB::select(DB::raw("select `v`.`id`, `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`, `vil`.`name_l` as `vil_name`, `wv`.`ward_no`from `voters` `v`Left Join `villages` `vil` on `vil`.`id` = `v`.`village_id`Left Join `ward_villages` `wv` on `wv`.`id` = `v`.`ward_id`Where `v`.`assembly_part_id` =$request->id;"));  
           return view('admin.master.wardbandi.voter_list',compact('voterLists'));
         } catch (Exception $e) {
             
@@ -1148,7 +1149,15 @@ class MasterController extends Controller
 
     }
 
-
+    public function DeleteVoter($id)
+    {
+      $voterDelete=Voter::find($id); 
+      $voterDelete->village_id=0;
+      $voterDelete->ward_id=0;
+      $voterDelete->save();
+      $response=['status'=>1,'msg'=>'Updated Successfully'];
+      return response()->json($response);
+    }
     //---------onchange---------onchange-----------onchange---------------onchange-----------onchange
 
     public function stateWiseDistrict(Request $request)
