@@ -258,6 +258,7 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('AssemblyWisePartNo', 'VoterDetailsController@AssemblyWisePartNo')->name('admin.voter.AssemblyWisePartNo');
            Route::get('VillageWiseWard', 'VoterDetailsController@VillageWiseWard')->name('admin.voter.VillageWiseWard');
            Route::get('calculateAge', 'VoterDetailsController@calculateAge')->name('admin.voter.calculateAge');
+           Route::get('NameConvert/{condition_type}', 'VoterDetailsController@NameConvert')->name('admin.voter.NameConvert');
            Route::post('store', 'VoterDetailsController@store')->name('admin.voter.details.store');
 
     //--------------------Delete----------Delete--------delete----------------------------//       

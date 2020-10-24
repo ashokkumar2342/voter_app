@@ -8,6 +8,7 @@ use App\Model\AssemblyPart;
 use App\Model\BlocksMc;
 use App\Model\District;
 use App\Model\Gender;
+use App\Model\Relation;
 use App\Model\State;
 use App\Model\UserActivity;
 use App\Model\Village;
@@ -33,9 +34,10 @@ class VoterDetailsController extends Controller
     public function index()
     { 
 
-      $genders= Gender::all();  
+      $genders= Gender::orderBy('id','ASC')->get();  
+      $Relations= Relation::orderBy('id','ASC')->get();  
       $Districts= District::orderBy('name_e','ASC')->get();  
-      return view('admin.voterDetails.index',compact('Districts','genders'));   
+      return view('admin.voterDetails.index',compact('Districts','genders','Relations'));   
     }
 
     public function districtWiseAssembly(Request $request)
@@ -65,12 +67,39 @@ class VoterDetailsController extends Controller
         $date2=date_create(date('Y-m-d'));
         $diff=date_diff($date1,$date2);
         return view('admin.voterDetails.age_value',compact('diff')); 
-     } 
+     }
+     public function NameConvert(Request $request,$condition_type)
+    { 
+      if ($condition_type==3) {
+       $name_english= DB::select(DB::raw("select uf_house_convert_e_2_h ('$request->name_english') as 'name_l'"));   
+       }
+       else{  
+       $name_english= DB::select(DB::raw("select uf_name_convert_e_2_h ('$request->name_english') as 'name_l'")); 
+       }
+       
+      $name_l = preg_replace('/[\x00]/', '', $name_english[0]->name_l); 
+      return view('admin.voterDetails.name_hindi_value',compact('name_l','condition_type'));   
+    } 
     public function store(Request $request)
-    {  
-        $rules=[
-            
+    {    
+        $rules=[            
             'district' => 'required', 
+            'block' => 'required', 
+            'village' => 'required', 
+            'ward_no' => 'required', 
+            'assembly' => 'required', 
+            'part_no' => 'required', 
+            'name_english' => 'required', 
+            'name_local_language' => 'required', 
+            'relation' => 'required', 
+            'f_h_name_english' => 'required', 
+            'f_h_name_local_language' => 'required', 
+            'house_no_english' => 'required', 
+            'house_no_local_language' => 'required', 
+            'gender' => 'required', 
+            'age' => 'required', 
+            'voter_id_no' => 'required',  
+            'image' => 'required', 
       ];
 
       $validator = Validator::make($request->all(),$rules);
@@ -81,33 +110,40 @@ class VoterDetailsController extends Controller
           $response["msg"]=$errors[0];
           return response()->json($response);// response as json
       }
-      else {
-            $file =$request->image;
-            $imagedata = file_get_contents($file);
-            $encode = base64_encode($imagedata);
-            $base64=base64_decode($encode);
+      else { 
             $voter=new Voter(); 
             $voter->district_id = $request->district;
-            $voter->assembly_id = $request->assembly;
+            $voter->assembly_id = $request->block;
             $voter->village_id = $request->village;
-            $voter->assembly_part_id = $request->part_no;
             $voter->ward_id = $request->ward_no;
+            $voter->assembly_id = $request->assembly;
+            $voter->assembly_part_id = $request->part_no;
+            $voter->name_e = $request->name_english;
+            $voter->name_l = $request->name_local_language;
+            $voter->father_name_e = $request->f_h_name_english;
+            $voter->father_name_l = $request->f_h_name_local_language;
             $voter->voter_card_no = $request->voter_id_no;
-            $voter->mobile_no = $request->mobile_no;
-            $voter->house_no = $request->house_no;
-            $voter->house_no_e = $request->house_no;
-            $voter->house_no_l = $request->house_no;
-            $voter->name_e = $request->voter_name;
-            $voter->name_l = $request->voter_name;
-            $voter->father_name_e = $request->father_name;
+            $voter->house_no = $request->house_no_english;
+            $voter->house_no_e = $request->house_no_local_language; 
             $voter->relation = $request->relation;
             $voter->gender_id = $request->gender;
             $voter->age = $request->age;
+            $voter->mobile_no = $request->mobile_no;
             $voter->save();
-            $voterimage =new VoterImage();  
-            $voterimage->voter_id = $voter->id;  
-            $voterimage->image = $base64;  
-            $voterimage->save();  
+            //--start-image-save
+            $dirpath = Storage_path() . '/app/vimage/'.$request->assembly.'/'.$request->part_no;
+            $vpath = '/vimage/'.$request->assembly.'/'.$request->part_no;
+            @mkdir($dirpath, 0755, true);
+            $file =$request->image;
+            $imagedata = file_get_contents($file);
+            $encode = base64_encode($imagedata);
+            $image=base64_decode($encode); 
+            $name =$voter->id;
+            $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg',$image);
+            //--end-image-save
+            //--convert--house_no
+            DB::select(DB::raw("select uf_converthno()"));
+            //--end--house_no  
             $response=['status'=>1,'msg'=>'Submit Successfully'];
             return response()->json($response);
       }
