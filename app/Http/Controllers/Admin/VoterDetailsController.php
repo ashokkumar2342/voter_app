@@ -110,7 +110,8 @@ class VoterDetailsController extends Controller
           $response["msg"]=$errors[0];
           return response()->json($response);// response as json
       }
-      else { 
+      else {
+            $house_no=DB::select(DB::raw("Select `uf_converthno`('$request->house_no_english') as 'hno_int';")); 
             $voter=new Voter(); 
             $voter->district_id = $request->district;
             $voter->assembly_id = $request->block;
@@ -123,8 +124,9 @@ class VoterDetailsController extends Controller
             $voter->father_name_e = $request->f_h_name_english;
             $voter->father_name_l = $request->f_h_name_local_language;
             $voter->voter_card_no = $request->voter_id_no;
-            $voter->house_no = $request->house_no_english;
-            $voter->house_no_e = $request->house_no_local_language; 
+            $voter->house_no = $house_no[0]->hno_int;
+            $voter->house_no_e = $request->house_no_english;
+            $voter->house_no_l = $request->house_no_local_language; 
             $voter->relation = $request->relation;
             $voter->gender_id = $request->gender;
             $voter->age = $request->age;
@@ -140,10 +142,7 @@ class VoterDetailsController extends Controller
             $image=base64_decode($encode); 
             $name =$voter->id;
             $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg',$image);
-            //--end-image-save
-            //--convert--house_no
-            DB::select(DB::raw("select uf_converthno()"));
-            //--end--house_no  
+            //--end-image-save 
             $response=['status'=>1,'msg'=>'Submit Successfully'];
             return response()->json($response);
       }
