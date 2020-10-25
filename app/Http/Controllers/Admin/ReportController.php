@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\ReportType;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -74,24 +75,69 @@ class ReportController extends Controller
       select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
       return view('admin.report.report.result_data',compact('villagewards'));  
     }
-    public function ReportGeneratePDF(Request $request)
-    {
-      $user=Auth::guard('admin')->user(); 
-      $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setPrintHeader(FALSE); 
-      $pdf->SetCreator(PDF_CREATOR); 
-      $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
-      $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
-      $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
-      $pdf->setFontSubsetting(true); 
-      $pdf->SetFont('freesans', '', 11, '', true); 
-      $pdf->AddPage(); 
-      $villagewards=DB::
-      select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
-      $html = view('admin.report.report.result_data',compact('villagewards'));  
-      $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-      ob_end_clean(); 
-      $pdf->Output();
+    // public function ReportGeneratePDF(Request $request)
+    // {
+    //   $user=Auth::guard('admin')->user(); 
+    //   $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    //   $pdf->setPrintHeader(FALSE); 
+    //   $pdf->SetCreator(PDF_CREATOR); 
+    //   $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA)); 
+    //   $pdf->SetFooterMargin(PDF_MARGIN_FOOTER); 
+    //   $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO); 
+    //   $pdf->setFontSubsetting(true); 
+    //   $pdf->SetFont('freesans', '', 11, '', true); 
+    //   $pdf->AddPage(); 
+    //   $villagewards=DB::
+    //   select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')"));
+    //   $html = view('admin.report.report.result_data',compact('villagewards'));  
+    //   $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='',$html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+    //   ob_end_clean(); 
+    //   $pdf->Output();
       
+    // }
+
+
+    public function voterCardPrint($value='')
+    {
+      return view('admin.cardprint.index');  
+    }
+    public function voterCardPrintGenerate(Request $request)
+    {
+      $path=Storage_path('fonts/');
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir']; 
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata']; 
+        $mpdf = new \Mpdf\Mpdf([
+             'fontDir' => array_merge($fontDirs, [
+                 __DIR__ . $path,
+             ]),
+             'fontdata' => $fontData + [
+                 'frutiger' => [
+                     'R' => 'FreeSans.ttf',
+                     'I' => 'FreeSansOblique.ttf',
+                 ]
+             ],
+             'default_font' => 'freesans',
+             'pagenumPrefix' => '',
+            'pagenumSuffix' => '',
+            'nbpgPrefix' => ' कुल ',
+            'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
+         ]);
+         //statrt----barcode
+         // $value=$request->voter_card_no;
+         // $barcode = new BarcodeGenerator();
+         // $barcode->setText($value);
+         // $barcode->setType(BarcodeGenerator::Code128);
+         // $barcode->setScale(2);
+         // $barcode->setThickness(25);
+         // $barcode->setFontSize(10);
+         // $code = $barcode->generate();
+         // $data = base64_decode($code);
+        
+         //end--barcode
+         $html = view('admin.cardprint.print',compact('voterReports')); 
+         $mpdf->WriteHTML($html); 
+         $mpdf->Output();  
     } 
 }
