@@ -267,10 +267,10 @@ Route::group(['middleware' => 'admin'], function() {
 
     //--------------------Delete----------Delete--------delete----------------------------//       
            Route::get('DeteleAndRestore', 'VoterDetailsController@DeteleAndRestore')->name('admin.voter.DeteleAndRestore');
-            Route::get('DeteleAndRestoreForm', 'VoterDetailsController@DeteleAndRestoreForm')->name('admin.voter.DeteleAndRestoreForm');
-           Route::get('DeteleAndRestore', 'VoterDetailsController@DeteleAndRestore')->name('admin.voter.DeteleAndRestore');
-           Route::get('DeteleAndRestoreSearch', 'VoterDetailsController@DeteleAndRestoreSearch')->name('admin.voter.DeteleAndRestoreSearch');
-           Route::get('DeteleAndRestoreSearchFilter', 'VoterDetailsController@DeteleAndRestoreSearchFilter')->name('admin.voter.DeteleAndRestoreSearchFilter');
+            Route::post('DeteleAndRestoreShow', 'VoterDetailsController@DeteleAndRestoreShow')->name('admin.voter.DeteleAndRestoreShow');
+           Route::get('DeteleAndRestoreDetele/{id}', 'VoterDetailsController@DeteleAndRestoreDetele')->name('admin.voter.DeteleAndRestoreDetele');
+           Route::get('DeteleAndRestoreRestore/{id}', 'VoterDetailsController@DeteleAndRestoreRestore')->name('admin.voter.DeteleAndRestoreRestore');
+            
 
 
     //-------prepare-voter-list--------------prepare-voter-list-----///

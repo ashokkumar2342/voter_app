@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
 use App\Model\BlocksMc;
+use App\Model\DeleteVoterDetail;
 use App\Model\District;
 use App\Model\Gender;
 use App\Model\Relation;
@@ -111,7 +112,7 @@ class VoterDetailsController extends Controller
             'gender' => 'required', 
             'age' => 'required', 
             'voter_id_no' => 'required',  
-            'image' => 'required', 
+            'image' => 'required|max:500', 
       ];
 
       $validator = Validator::make($request->all(),$rules);
@@ -244,26 +245,64 @@ class VoterDetailsController extends Controller
      */
     public function DeteleAndRestore()
     {
-       
+      $Districts= District::orderBy('name_e','ASC')->get();  
       return view('admin.DeteleAndRestore.index',compact('Districts','genders','voters')); 
     }
-    public function DeteleAndRestoreForm()
+    public function DeteleAndRestoreShow(Request $request)
     {
-      $genders= Gender::all();  
-      $Districts= District::orderBy('name_e','ASC')->get(); 
-      $voterNews=Voter::orderBy('id','DESC')->first(); 
-      $voterDeletes=Voter::where('status',1)->get(); 
-      return view('admin.DeteleAndRestore.form',compact('Districts','genders','voterNews','voterDeletes')); 
+        $rules=[ 
+              'village' => 'required', 
+        ];
+
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+            return response()->json($response);// response as json
+        }
+        $voters =Voter:: 
+                 where('village_id',$request->village)
+               ->where(function($query) use($request){
+                // $query->orWhere('print_sr_no', 'like','%'.$request->print_sr_no.'%'); 
+                $query->orWhere('name_e', 'like','%'.$request->name.'%'); 
+                $query->orWhere('father_name_e', 'like', '%'.$request->father_name.'%');  
+               }) 
+               ->get(); 
+        $response= array();                       
+        $response['status']= 1;                       
+        $response['data']=view('admin.DeteleAndRestore.search_table',compact('voters'))->render();
+        return $response;
+         
+       
     } 
-    public function DeteleAndRestoreSearch()
+    public function DeteleAndRestoreDetele($id)
     {
-      return view('admin.DeteleAndRestore.search_model');    
+      $voter=Voter::find($id);
+      $DeleteVoterDetail= new DeleteVoterDetail();
+      $DeleteVoterDetail->voter_id=$id;
+      $DeleteVoterDetail->voter_list_master_id=$voter->suppliment_no;
+      $DeleteVoterDetail->voter_list_master_id=$voter->suppliment_no;
+      $DeleteVoterDetail->previous_status=$voter->status;
+      $DeleteVoterDetail->status=2;
+      $DeleteVoterDetail->save();
+      $voter->status=2;
+      $voter->save();
+      $response=['status'=>1,'msg'=>'Successfully'];
+      return response()->json($response);
     }
-    public function DeteleAndRestoreSearchFilter(Request $request)
+    public function DeteleAndRestoreRestore($id)
     {
-      $voters=Voter::where('name_e', 'like','%'.$request->id.'%')->orWhere('voter_card_no', 'like','%'.$request->id.'%')->orWhere('house_no', 'like','%'.$request->id.'%')->get(); 
-      return view('admin.DeteleAndRestore.search_table',compact('voters'));    
+      $DeleteVoterDetail=DeleteVoterDetail::where('voter_id',$id)->first();  
+      $voter=Voter::find($id);
+      $voter->status=$DeleteVoterDetail->previous_status;
+      $voter->save();
+      $DeleteVoterDetail->delete();
+      $response=['status'=>1,'msg'=>'Successfully'];
+      return response()->json($response);
     }
+    
 
 
 
