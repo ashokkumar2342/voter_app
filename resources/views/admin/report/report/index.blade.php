@@ -32,7 +32,7 @@
                     <button type="button" data-table-excel-2="village_ward_sample_table" class="btn btn-primary form-control" onclick="callAjax(this,'{{ route('admin.report.ReportGenerate') }}'+'?report_type_id='+$('#report_type_id').val(),'result_data')">Take Result Excel</button> 
                   </div>
                   <div class="col-lg-6 form-group">
-                    <a href="{{ route('admin.report.ReportGeneratePDF') }}" class="btn btn-warning form-control" target="blank">Take Result PDF</a> 
+                    <a onclick="PdfGenerate()" id="download_with_poto" class="btn btn-warning form-control" target="blank">Take Result PDF</a> 
                   </div> 
                  </div>
                  <div class="col-lg-12" id="result_data">
@@ -43,7 +43,13 @@
     </div> 
 </section>
 @endsection
-@push('scripts') 
+@push('scripts')
+<script type="text/javascript">
+  function PdfGenerate() {
+
+    $('#download_with_poto').attr('href','{{ route('admin.report.ReportGeneratePDF') }}'+'?report_type_id='+$('#report_type_id').val()); 
+  }
+</script> 
 <script type="text/javascript" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
