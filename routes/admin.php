@@ -299,7 +299,7 @@ Route::group(['middleware' => 'admin'], function() {
            Route::post('PrintVoterListGenerate', 'ReportController@PrintVoterListGenerate')->name('admin.report.PrintVoterListGenerate');
 
            Route::get('Report', 'ReportController@Report')->name('admin.report.Report');
-           Route::get('ReportGenerate', 'ReportController@ReportGenerate')->name('admin.report.ReportGenerate');
+           Route::get('ReportGenerateExcel', 'ReportController@ReportGenerateExcel')->name('admin.report.ReportGenerate');
            Route::get('ReportGeneratePDF', 'ReportController@ReportGeneratePDF')->name('admin.report.ReportGeneratePDF');
 //----card-----print-----------card----print-----------card-print-----           
            Route::get('voterCardPrint', 'ReportController@voterCardPrint')->name('admin.report.voterCardPrint');

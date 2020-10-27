@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\AcademicYear;
+use App\Model\BlocksMc;
 use App\Model\Cashbook;
 use App\Model\ClassType;
+use App\Model\District;
 use App\Model\Event\EventDetails;
 use App\Model\Exam\ClassTest;
 use App\Model\Homework;
@@ -15,6 +17,8 @@ use App\Model\StudentAttendance;
 use App\Model\StudentFeeDetail;
 use App\Model\StudentRemark;
 use App\Model\StudentUserMap;
+use App\Model\Village;
+use App\Model\WardVillage;
 use App\Student;
 use App\User;
 use Illuminate\Http\Request;
@@ -36,8 +40,11 @@ class DashboardController extends Controller
      */
     public function index()
     {  
-         
-        return view('admin.dashboard.dashboard'); 
+        $District=District::count(); 
+        $block=BlocksMc::count(); 
+        $village=Village::count(); 
+        $wardVillage=WardVillage::count(); 
+        return view('admin.dashboard.dashboard',compact('District','block','village','wardVillage')); 
     }  
 
     /**
