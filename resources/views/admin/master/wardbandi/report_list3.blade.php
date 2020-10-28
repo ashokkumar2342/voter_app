@@ -58,7 +58,7 @@
 	        <td>{{ $voterReport->code }}</td>
 	        <td>{{ $voterReport->part_no }}</td> 
 	        <td>{{ $voterReport->sr_no }}</td>
-			<td>{{ $voterReport->name_l }}</td>
+			<td>{{ $voterReport->name_l }}&nbsp;</td>
 			 
 			 
 	       @if ($time ==1)
