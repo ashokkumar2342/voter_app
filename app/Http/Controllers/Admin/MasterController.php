@@ -873,9 +873,19 @@ class MasterController extends Controller
     }
     public function BlockOrPSwardWiseVillage(Request $request)
      {   
-       $villages=DB::select(DB::raw("select `id`, `name_e` from `villages` where `is_locked` = 0 and `blocks_id` =$request->block_id and `ps_ward_id` not in (Select `id` from `ward_zp` where `blocks_id` =$request->block_id)union select `id`, `name_e` from `villages` where `is_locked` = 0 and `blocks_id` =$request->block_id and `ps_ward_id` =$request->id Order By `name_e`;"));
+       $villages=DB::select(DB::raw("(Select `wv`.`id`, concat(`v`.`name_e`, '-', `wv`.`ward_no`) as `ps_ward_name` From `ward_villages` `wv`
+          Inner Join `villages` `v` on `v`.`id` = `wv`.`village_id`
+          Where `wv`.`is_locked` = 0 and `wv`.`blocks_id` =$request->block_id and (`wv`.`ps_ward_id` =0 Or `wv`.`ps_ward_id` is null))
+          Union (Select `wv`.`id`,  concat(`v`.`name_e`, '-', `wv`.`ward_no`) as `ps_ward_name` From `ward_villages` `wv`
+          Inner Join `villages` `v` on `v`.`id` = `wv`.`village_id`
+          Where `wv`.`is_locked` = 0 and `wv`.`blocks_id` =$request->block_id and `wv`.`ps_ward_id` =$request->id)
+           Order By `ps_ward_name`;"));
 
-       $selectedvillage=DB::select(DB::raw("select `id`, `name_e` from `villages` where `is_locked` = 0 and `blocks_id` =$request->block_id and `ps_ward_id` =$request->id Order By `name_e`;"));
+       $selectedvillage=DB::select(DB::raw("Select `wv`.`id`,  concat(`v`.`name_e`, '-', `wv`.`ward_no`) as `ps_ward_name` From `ward_villages` `wv`
+          Inner Join `villages` `v` on `v`.`id` = `wv`.`village_id`
+          Where `wv`.`is_locked` = 0 and `wv`.`blocks_id` =$request->block_id and `wv`.`ps_ward_id` =$request->id
+          Order By `v`.`name_e`, `wv`.`ward_no`;
+          "));
        if (empty($selectedvillage)) {
          $village_id[]=0;
        }elseif(!empty($selectedvillage)) {
@@ -883,7 +893,7 @@ class MasterController extends Controller
            $village_id[]=$value->id;
         }
        } 
-       return view('admin.master.mappingvillageTozpward.village_move_select_box',compact('villages','selectedvillage','village_id'));    
+       return view('admin.master.mappingvillageTopsward.ward_move_select_box',compact('villages','selectedvillage','village_id'));    
      }
      public function MappingVillageToPSWardStore(Request $request)
      { 
