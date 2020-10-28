@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
 use App\Model\BlocksMc;
+use App\Model\DeleteVoterDetail;
 use App\Model\District;
 use App\Model\Gender;
+use App\Model\Relation;
 use App\Model\State;
 use App\Model\UserActivity;
 use App\Model\Village;
@@ -33,9 +35,10 @@ class VoterDetailsController extends Controller
     public function index()
     { 
 
-      $genders= Gender::all();  
+      $genders= Gender::orderBy('id','ASC')->get();  
+      $Relations= Relation::orderBy('id','ASC')->get();  
       $Districts= District::orderBy('name_e','ASC')->get();  
-      return view('admin.voterDetails.index',compact('Districts','genders'));   
+      return view('admin.voterDetails.index',compact('Districts','genders','Relations'));   
     }
 
     public function districtWiseAssembly(Request $request)
@@ -59,18 +62,57 @@ class VoterDetailsController extends Controller
       $WardVillages= WardVillage::where('village_id',$request->id)->get(['id','ward_no']);
       return view('admin.voterDetails.select_ward_no',compact('WardVillages')); 
     }
+    public function VillageWiseVoterList(Request $request)
+    {
+       $voterlists=Voter::where('village_id',$request->village_id)->where('status',1)->get();
+       return view('admin.voterDetails.voter_list_table',compact('voterlists'));
+    }
+    public function voterListEdit($voter_id)
+    {
+      $genders= Gender::orderBy('id','ASC')->get();  
+      $Relations= Relation::orderBy('id','ASC')->get();
+      $voterlist=Voter::find($voter_id);
+       return view('admin.voterDetails.voter_list_edit',compact('voterlist','genders','Relations')); 
+    }
     public function calculateAge(Request $request)
      { 
         $date1=date_create($request->id);
         $date2=date_create(date('Y-m-d'));
         $diff=date_diff($date1,$date2);
         return view('admin.voterDetails.age_value',compact('diff')); 
-     } 
+     }
+     public function NameConvert(Request $request,$condition_type)
+    { 
+      if ($condition_type==3) {
+       $name_english= DB::select(DB::raw("select uf_house_convert_e_2_h ('$request->name_english') as 'name_l'"));   
+       }
+       else{  
+       $name_english= DB::select(DB::raw("select uf_name_convert_e_2_h ('$request->name_english') as 'name_l'")); 
+       }
+       
+      $name_l = preg_replace('/[\x00]/', '', $name_english[0]->name_l); 
+      return view('admin.voterDetails.name_hindi_value',compact('name_l','condition_type'));   
+    } 
     public function store(Request $request)
-    {  
-        $rules=[
-            
+    {    
+        $rules=[            
             'district' => 'required', 
+            'block' => 'required', 
+            'village' => 'required', 
+            'ward_no' => 'required', 
+            'assembly' => 'required', 
+            'part_no' => 'required', 
+            'name_english' => 'required', 
+            'name_local_language' => 'required', 
+            'relation' => 'required', 
+            'f_h_name_english' => 'required', 
+            'f_h_name_local_language' => 'required', 
+            'house_no_english' => 'required', 
+            'house_no_local_language' => 'required', 
+            'gender' => 'required', 
+            'age' => 'required', 
+            'voter_id_no' => 'required',  
+            'image' => 'required|max:500', 
       ];
 
       $validator = Validator::make($request->all(),$rules);
@@ -82,45 +124,102 @@ class VoterDetailsController extends Controller
           return response()->json($response);// response as json
       }
       else {
-            $file =$request->image;
-            $imagedata = file_get_contents($file);
-            $encode = base64_encode($imagedata);
-            $base64=base64_decode($encode);
+            $house_no=DB::select(DB::raw("Select `uf_converthno`('$request->house_no_english') as 'hno_int';")); 
             $voter=new Voter(); 
             $voter->district_id = $request->district;
-            $voter->assembly_id = $request->assembly;
+            $voter->assembly_id = $request->block;
             $voter->village_id = $request->village;
-            $voter->assembly_part_id = $request->part_no;
             $voter->ward_id = $request->ward_no;
+            $voter->assembly_id = $request->assembly;
+            $voter->assembly_part_id = $request->part_no;
+            $voter->name_e = $request->name_english;
+            $voter->name_l = $request->name_local_language;
+            $voter->father_name_e = $request->f_h_name_english;
+            $voter->father_name_l = $request->f_h_name_local_language;
             $voter->voter_card_no = $request->voter_id_no;
-            $voter->mobile_no = $request->mobile_no;
-            $voter->house_no = $request->house_no;
-            $voter->house_no_e = $request->house_no;
-            $voter->house_no_l = $request->house_no;
-            $voter->name_e = $request->voter_name;
-            $voter->name_l = $request->voter_name;
-            $voter->father_name_e = $request->father_name;
+            $voter->house_no = $house_no[0]->hno_int;
+            $voter->house_no_e = $request->house_no_english;
+            $voter->house_no_l = $request->house_no_local_language; 
             $voter->relation = $request->relation;
             $voter->gender_id = $request->gender;
             $voter->age = $request->age;
+            $voter->mobile_no = $request->mobile_no;
+            $voter->status =1;
             $voter->save();
-            $voterimage =new VoterImage();  
-            $voterimage->voter_id = $voter->id;  
-            $voterimage->image = $base64;  
-            $voterimage->save();  
+            //--start-image-save
+            $dirpath = Storage_path() . '/app/vimage/'.$request->assembly.'/'.$request->part_no;
+            $vpath = '/vimage/'.$request->assembly.'/'.$request->part_no;
+            @mkdir($dirpath, 0755, true);
+            $file =$request->image;
+            $imagedata = file_get_contents($file);
+            $encode = base64_encode($imagedata);
+            $image=base64_decode($encode); 
+            $name =$voter->id;
+            $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg',$image);
+            //--end-image-save 
             $response=['status'=>1,'msg'=>'Submit Successfully'];
             return response()->json($response);
       }
      
 
     }
+    public function voterUpdate(Request $request,$id)
+    {    
+        $rules=[            
+             
+            'name_english' => 'required', 
+            'name_local_language' => 'required', 
+            'relation' => 'required', 
+            'f_h_name_english' => 'required', 
+            'f_h_name_local_language' => 'required', 
+            'house_no_english' => 'required', 
+            'house_no_local_language' => 'required', 
+            'gender' => 'required', 
+            'age' => 'required', 
+            'voter_id_no' => 'required',  
+             
+      ];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\UserActivity  $userActivity
-     * @return \Illuminate\Http\Response
-     */
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+            $house_no=DB::select(DB::raw("Select `uf_converthno`('$request->house_no_english') as 'hno_int';")); 
+            $voter=Voter::find($id);  
+            $voter->name_e = $request->name_english;
+            $voter->name_l = $request->name_local_language;
+            $voter->father_name_e = $request->f_h_name_english;
+            $voter->father_name_l = $request->f_h_name_local_language;
+            $voter->voter_card_no = $request->voter_id_no;
+            $voter->house_no = $house_no[0]->hno_int;
+            $voter->house_no_e = $request->house_no_english;
+            $voter->house_no_l = $request->house_no_local_language; 
+            $voter->relation = $request->relation;
+            $voter->gender_id = $request->gender;
+            $voter->age = $request->age;
+            $voter->mobile_no = $request->mobile_no;
+            $voter->status =1;
+            $voter->save();             
+            $response=['status'=>1,'msg'=>'Update Successfully'];
+            return response()->json($response);
+      }
+     
+
+    }
+    public function voterDelete($voter_id)
+    {
+       $voter=Voter::find($voter_id);   
+       $voter->delete();
+       $response=['status'=>1,'msg'=>'Delete Successfully'];
+            return response()->json($response);   
+    }
+
+    
     public function show(UserActivity $userActivity)
     {
         //
@@ -146,26 +245,64 @@ class VoterDetailsController extends Controller
      */
     public function DeteleAndRestore()
     {
-       
+      $Districts= District::orderBy('name_e','ASC')->get();  
       return view('admin.DeteleAndRestore.index',compact('Districts','genders','voters')); 
     }
-    public function DeteleAndRestoreForm()
+    public function DeteleAndRestoreShow(Request $request)
     {
-      $genders= Gender::all();  
-      $Districts= District::orderBy('name_e','ASC')->get(); 
-      $voterNews=Voter::orderBy('id','DESC')->first(); 
-      $voterDeletes=Voter::where('status',1)->get(); 
-      return view('admin.DeteleAndRestore.form',compact('Districts','genders','voterNews','voterDeletes')); 
+        $rules=[ 
+              'village' => 'required', 
+        ];
+
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+            return response()->json($response);// response as json
+        }
+        $voters =Voter:: 
+                 where('village_id',$request->village)
+               ->where(function($query) use($request){
+                // $query->orWhere('print_sr_no', 'like','%'.$request->print_sr_no.'%'); 
+                $query->orWhere('name_e', 'like','%'.$request->name.'%'); 
+                $query->orWhere('father_name_e', 'like', '%'.$request->father_name.'%');  
+               }) 
+               ->get(); 
+        $response= array();                       
+        $response['status']= 1;                       
+        $response['data']=view('admin.DeteleAndRestore.search_table',compact('voters'))->render();
+        return $response;
+         
+       
     } 
-    public function DeteleAndRestoreSearch()
+    public function DeteleAndRestoreDetele($id)
     {
-      return view('admin.DeteleAndRestore.search_model');    
+      $voter=Voter::find($id);
+      $DeleteVoterDetail= new DeleteVoterDetail();
+      $DeleteVoterDetail->voter_id=$id;
+      $DeleteVoterDetail->voter_list_master_id=$voter->suppliment_no;
+      $DeleteVoterDetail->voter_list_master_id=$voter->suppliment_no;
+      $DeleteVoterDetail->previous_status=$voter->status;
+      $DeleteVoterDetail->status=2;
+      $DeleteVoterDetail->save();
+      $voter->status=2;
+      $voter->save();
+      $response=['status'=>1,'msg'=>'Successfully'];
+      return response()->json($response);
     }
-    public function DeteleAndRestoreSearchFilter(Request $request)
+    public function DeteleAndRestoreRestore($id)
     {
-      $voters=Voter::where('name_e', 'like','%'.$request->id.'%')->orWhere('voter_card_no', 'like','%'.$request->id.'%')->orWhere('house_no', 'like','%'.$request->id.'%')->get(); 
-      return view('admin.DeteleAndRestore.search_table',compact('voters'));    
+      $DeleteVoterDetail=DeleteVoterDetail::where('voter_id',$id)->first();  
+      $voter=Voter::find($id);
+      $voter->status=$DeleteVoterDetail->previous_status;
+      $voter->save();
+      $DeleteVoterDetail->delete();
+      $response=['status'=>1,'msg'=>'Successfully'];
+      return response()->json($response);
     }
+    
 
 
 

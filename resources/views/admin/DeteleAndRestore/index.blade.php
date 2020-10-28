@@ -7,26 +7,70 @@
                 <h3>Delete And Restore</h3>
             </div>
             <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                <button type="button" class="btn btn-default form-control" style="width: 200px" onclick="callPopupLarge(this,'{{ route('admin.voter.DeteleAndRestoreSearch') }}')"> Search &nbsp;&nbsp;&nbsp;<i class="fa fa-search"></i></button>
+                <ol class="breadcrumb float-sm-right"> 
                 </ol>
             </div>
-        </div> 
-        <button type="hidden" hidden="" id="btn_click_by_delete_form" class="hidden remove_weight_button" select-triger="district_select_box" onclick="callAjax(this,'{{ route('admin.voter.DeteleAndRestoreForm') }}','delete_form')">Click form</button>
-        <div id="delete_form">
-            
         </div>
-    </div>
-    </section>
-    @endsection
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-    
-    $("#btn_click_by_delete_form").click();
-        
-    
-    });
+        <div class="card card-info"> 
+            <div class="card-body">
+                <form action="{{ route('admin.voter.DeteleAndRestoreShow') }}" method="post" class="add_form" data-table-all-record="voter_datatable" success-content-id="voter_table" no-reset="true">
+                    {{ csrf_field() }}
+                    <div class="row">  
+                        <div class="col-lg-3 form-group">
+                            <label for="exampleInputEmail1">District</label>
+                            <span class="fa fa-asterisk"></span>
+                            <select name="district" class="form-control" id="district_select_box" onchange="callAjax(this,'{{ route('admin.voter.districtWiseAssembly') }}','assembly_select_box');callAjax(this,'{{ route('admin.voter.districtWiseVillage') }}','village_select_box')">
+                                <option selected disabled>Select District</option>
+                                @foreach ($Districts as $District)
+                                <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <label for="exampleInputEmail1">Assembly</label>
+                            <span class="fa fa-asterisk"></span>
+                            <select name="assembly" class="form-control" id="assembly_select_box" onchange="callAjax(this,'{{ route('admin.voter.AssemblyWisePartNo') }}','part_no_select_box')">
+                                <option selected disabled>Select Assembly</option>
 
-</script>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <label for="exampleInputEmail1">Village</label>
+                            <span class="fa fa-asterisk"></span>
+                            <select name="village" class="form-control" id="village_select_box" onchange="callAjax(this,'{{ route('admin.voter.VillageWiseWard') }}','ward_no_select_box')">
+                                <option selected disabled>Select Village</option> 
+                            </select>
+                        </div> 
+                        <div class="col-lg-3 form-group">
+                            <label for="exampleInputEmail1">Ward No.</label>
+                            <span class="fa fa-asterisk"></span>
+                            <select name="ward_no" class="form-control" id="ward_no_select_box" >
+                                <option selected disabled>Select Ward No.</option> 
+                            </select>
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputEmail1">Print Sr.No.</label>
+                            <input type="text" name="print_sr_no" class="form-control"> 
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputEmail1">Name</label>
+                            <input type="text" name="name" class="form-control"> 
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputEmail1">F/H Name</label>
+                            <input type="text" name="father_name" class="form-control"> 
+                        </div>
+                        <div class="col-lg-12 form-group">
+                             <input type="submit" id="btn_show" value="Show" class="form-control btn btn-success">
+                        </div>
+                    </div>
+                </form>
+                <div id="voter_table">
+                    
+                </div>
+            </div>
+        </div>
+    </div> 
+</section>
+@endsection 
 
