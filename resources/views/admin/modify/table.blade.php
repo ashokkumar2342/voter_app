@@ -13,14 +13,14 @@
         </thead>
         <tbody>
             @foreach ($voters as $voter)
-            @if ($voter->status!=2) 
+            @if ($voter->status!=2&&$voter->status!=3) 
             <tr> 
                 <td>{{ $voter->sr_no }}</td>
                 <td>{{ $voter->name_e }}</td>
                 <td>{{ $voter->father_name_e }}</td>
                 <td>{{ $voter->voter_card_no }}</td> 
                 <td>
-                    <a success-popup="true" button-click="btn_show" onclick="callAjax(this,'{{ route('admin.voter.DeteleAndRestoreDetele',$voter->id) }}')" title="" class="btn btn-xs btn-danger"style="color:white">Delete</a> 
+                    <a success-popup="true" button-click="btn_show" onclick="callPopupLarge(this,'{{ route('admin.voter.VoterDetailsModifyEdit',$voter->id) }}')" title="" class="btn btn-xs btn-primary"style="color:white">Modify</a> 
                 </td> 
             </tr>
             @endif 
@@ -41,7 +41,7 @@
         </thead>
         <tbody>
             @foreach ($voters as $voter)
-            @if ($voter->status==2) 
+            @if ($voter->status==3) 
             <tr> 
                 <td>{{ $voter->sr_no }}</td>
                 <td>{{ $voter->name_e }}</td>
@@ -49,7 +49,7 @@
                 <td>{{ $voter->voter_card_no }}</td> 
                 <td>
                      
-                    <a success-popup="true" button-click="btn_show" onclick="callAjax(this,'{{ route('admin.voter.DeteleAndRestoreRestore',$voter->id) }}')" title="" class="btn btn-xs btn-primary" style="color:white">Restore</a>
+                    <a success-popup="true" button-click="btn_show" onclick="callAjax(this,'{{ route('admin.voter.VoterDetailsModifyReset',$voter->id) }}')" title="" class="btn btn-xs btn-info" style="color:white">Modify Reset</a>
                      
                 </td> 
             </tr>

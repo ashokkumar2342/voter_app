@@ -17,6 +17,7 @@ use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\VoterListMaster;
 use App\Model\VoterListProcessed;
+use App\Model\VoterListModify;
 use App\Model\WardVillage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -220,29 +221,7 @@ class VoterDetailsController extends Controller
     }
 
     
-    public function show(UserActivity $userActivity)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\UserActivity  $userActivity
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserActivity $userActivity)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\UserActivity  $userActivity
-     * @return \Illuminate\Http\Response
-     */
+     
     public function DeteleAndRestore()
     {
       $Districts= District::orderBy('name_e','ASC')->get();  
@@ -264,10 +243,16 @@ class VoterDetailsController extends Controller
         }
         $voters =Voter:: 
                  where('village_id',$request->village)
-               ->where(function($query) use($request){
-                // $query->orWhere('print_sr_no', 'like','%'.$request->print_sr_no.'%'); 
-                $query->orWhere('name_e', 'like','%'.$request->name.'%'); 
-                $query->orWhere('father_name_e', 'like', '%'.$request->father_name.'%');  
+               ->where(function($query) use($request){ 
+                if (!empty($request->print_sr_no)) {
+                $query->where('print_sr_no', 'like','%'.$request->print_sr_no.'%'); 
+                }
+                if (!empty($request->name)) {
+                $query->where('name_e', 'like','%'.$request->name.'%'); 
+                }
+                if (!empty($request->father_name)) {
+                $query->where('father_name_e', 'like','%'.$request->father_name.'%'); 
+                } 
                }) 
                ->get(); 
         $response= array();                       
@@ -289,7 +274,7 @@ class VoterDetailsController extends Controller
       $DeleteVoterDetail->save();
       $voter->status=2;
       $voter->save();
-      $response=['status'=>1,'msg'=>'Successfully'];
+      $response=['status'=>1,'msg'=>'Delete Successfully'];
       return response()->json($response);
     }
     public function DeteleAndRestoreRestore($id)
@@ -299,13 +284,113 @@ class VoterDetailsController extends Controller
       $voter->status=$DeleteVoterDetail->previous_status;
       $voter->save();
       $DeleteVoterDetail->delete();
-      $response=['status'=>1,'msg'=>'Successfully'];
+      $response=['status'=>1,'msg'=>'Restore Successfully'];
       return response()->json($response);
     }
     
 
+  //--modify------modify-------------  
+    public function VoterDetailsModify($value='')
+    {
+       $Districts= District::orderBy('name_e','ASC')->get();  
+      return view('admin.modify.index',compact('Districts')); 
+    }
+    public function VoterDetailsModifyShow(Request $request)
+    {
+        $rules=[ 
+              'village' => 'required', 
+        ];
 
-
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+            return response()->json($response);// response as json
+        }
+        $voters =Voter:: 
+                 where('village_id',$request->village)
+               ->where(function($query) use($request){ 
+                if (!empty($request->print_sr_no)) {
+                $query->where('print_sr_no', 'like','%'.$request->print_sr_no.'%'); 
+                }
+                if (!empty($request->name)) {
+                $query->where('name_e', 'like','%'.$request->name.'%'); 
+                }
+                if (!empty($request->father_name)) {
+                $query->where('father_name_e', 'like','%'.$request->father_name.'%'); 
+                } 
+               }) 
+               ->get(); 
+        $response= array();                       
+        $response['status']= 1;                       
+        $response['data']=view('admin.modify.table',compact('voters'))->render();
+        return $response;
+         
+       
+    }
+    public function VoterDetailsModifyEdit($voter_id)
+    {
+      $genders= Gender::orderBy('id','ASC')->get();  
+      $Relations= Relation::orderBy('id','ASC')->get(); 
+      $voter=Voter::find($voter_id); 
+     return view('admin.modify.edit',compact('voter','genders','Relations'));
+    }
+    public function VoterDetailsModifyStore(Request $request,$id)
+    { 
+      $voter=Voter::find($id);
+      $VoterListModify= new VoterListModify();
+      $VoterListModify->voter_id=$id;
+      $VoterListModify->name_e=$voter->name_e;
+      $VoterListModify->name_l=$voter->name_l;
+      $VoterListModify->father_name_e=$voter->father_name_e;
+      $VoterListModify->father_name_l=$voter->father_name_l;
+      $VoterListModify->house_no_e=$voter->house_no_e;
+      $VoterListModify->house_no_l=$voter->house_no_l;
+      $VoterListModify->age=$voter->age;
+      $VoterListModify->mobile_no=$voter->mobile_no;
+      $VoterListModify->relation=$voter->relation;
+      $VoterListModify->gender_id=$voter->gender_id; 
+      $VoterListModify->previous_status=$voter->status;
+      $VoterListModify->status=3; 
+      $VoterListModify->save(); 
+       
+      $voter->name_e=$request->name_english;
+      $voter->name_l=$request->name_local_language;
+      $voter->father_name_e=$request->f_h_name_english;
+      $voter->father_name_l=$request->f_h_name_local_language;
+      $voter->house_no_e=$request->house_no_english;
+      $voter->house_no_l=$request->house_no_local_language;
+      $voter->age=$request->age;
+      $voter->mobile_no=$request->mobile_no;
+      $voter->relation=$request->relation;
+      $voter->gender_id=$request->gender;  
+      $voter->status=3; 
+      $voter->save();
+      $response=['status'=>1,'msg'=>'Modify Successfully'];
+      return response()->json($response);
+    }
+    public function VoterDetailsModifyReset($id)
+    {
+      $VoterListModify=VoterListModify::where('voter_id',$id)->first();
+      $voter=Voter::find($id); 
+      $voter->name_e=$VoterListModify->name_e;
+      $voter->name_l=$VoterListModify->name_l;
+      $voter->father_name_e=$VoterListModify->father_name_e;
+      $voter->father_name_l=$VoterListModify->father_name_l;
+      $voter->house_no_e=$VoterListModify->house_no_e;
+      $voter->house_no_l=$VoterListModify->house_no_l;
+      $voter->age=$VoterListModify->age;
+      $voter->mobile_no=$VoterListModify->mobile_no;
+      $voter->relation=$VoterListModify->relation;
+      $voter->gender_id=$VoterListModify->gender_id; 
+      $voter->status=$VoterListModify->previous_status; 
+      $voter->save();
+      $VoterListModify->delete(); 
+      $response=['status'=>1,'msg'=>'Modify Successfully'];
+      return response()->json($response);
+    }
 
     //--------Prepare-----Voter--------List-------PrepareVoterList----------
 

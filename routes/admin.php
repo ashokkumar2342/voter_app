@@ -270,6 +270,12 @@ Route::group(['middleware' => 'admin'], function() {
             Route::post('DeteleAndRestoreShow', 'VoterDetailsController@DeteleAndRestoreShow')->name('admin.voter.DeteleAndRestoreShow');
            Route::get('DeteleAndRestoreDetele/{id}', 'VoterDetailsController@DeteleAndRestoreDetele')->name('admin.voter.DeteleAndRestoreDetele');
            Route::get('DeteleAndRestoreRestore/{id}', 'VoterDetailsController@DeteleAndRestoreRestore')->name('admin.voter.DeteleAndRestoreRestore');
+    //-
+           Route::get('VoterDetailsModify', 'VoterDetailsController@VoterDetailsModify')->name('admin.voter.VoterDetailsModify');
+           Route::post('VoterDetailsModifyShow', 'VoterDetailsController@VoterDetailsModifyShow')->name('admin.voter.VoterDetailsModifyShow');
+           Route::get('VoterDetailsModifyEdit/{id}', 'VoterDetailsController@VoterDetailsModifyEdit')->name('admin.voter.VoterDetailsModifyEdit');
+           Route::post('VoterDetailsModifyStore/{id}', 'VoterDetailsController@VoterDetailsModifyStore')->name('admin.voter.VoterDetailsModifyStore');
+           Route::get('VoterDetailsModifyReset/{id}', 'VoterDetailsController@VoterDetailsModifyReset')->name('admin.voter.VoterDetailsModifyReset');
             
 
 
