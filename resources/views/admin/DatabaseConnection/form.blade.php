@@ -18,25 +18,25 @@
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>IP(URL)</label>
-         <input type="text" name="ip" class="form-control" placeholder="Enter IP(URL)" value="{{ $contents['hostname'] }}">
+         <input type="text" name="ip" class="form-control" placeholder="Enter IP(URL)" value="{{ $serverName }}">
          </div> 
          </div> 
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>Database Name</label>
-         <input type="text" name="database" class="form-control" placeholder="Enter Database Name"  value="{{ $contents['database'] }}">
+         <input type="text" name="database" class="form-control" placeholder="Enter Database Name"  value="{{ $database }}">
          </div> 
          </div>
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>User Name</label>
-         <input type="text" name="user_name" class="form-control" autocomplete="false" value="{{ $contents['username'] }}">
+         <input type="text" name="user_name" class="form-control" autocomplete="false" value="{{ $username }}">
          </div> 
          </div> 
          <div class="col-md-12" data-select2-id="29">
          <div class="form-group">
          <label>Password</label>
-         <input type="text" name="password" class="form-control" value="{{ $contents['password'] }}">
+         <input type="text" name="password" class="form-control" value="{{ $passward }}">
          </div> 
          </div>
          <div class="col-md-12" data-select2-id="29">

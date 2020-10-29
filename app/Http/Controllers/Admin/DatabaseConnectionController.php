@@ -27,9 +27,11 @@ class DatabaseConnectionController extends Controller
     public function DatabaseConnection()
     {
         try {
-            $content = Storage::get('file.json');
-            $contents=(array)json_decode($content); 
-            return view('admin.DatabaseConnection.form',compact('contents'));    
+            $serverName=getenv('DB_HOST_2');
+            $database=getenv('DB_DATABASE_2');
+            $username=getenv('DB_USERNAME_2');
+            $passward=getenv('DB_PASSWORD_2'); 
+            return view('admin.DatabaseConnection.form',compact('serverName','database','username','passward'));    
         } catch (Exception $e) {
            return $e; 
         }
@@ -61,8 +63,8 @@ class DatabaseConnectionController extends Controller
     public function ConnectionStore(Request $request)
     {
         try {   
-              $data=['hostname'=>$request->ip,'database'=>$request->database,'username'=>$request->user_name,'password'=>$request->password];
-            Storage::put('file.json',json_encode($data)); 
+            //   $data=['hostname'=>$request->ip,'database'=>$request->database,'username'=>$request->user_name,'password'=>$request->password];
+            // Storage::put('file.json',json_encode($data)); 
 
               $this->changeEnvironmentVariable('DB_HOST_2',$request->ip);
               $this->changeEnvironmentVariable('DB_DATABASE_2',$request->database);
