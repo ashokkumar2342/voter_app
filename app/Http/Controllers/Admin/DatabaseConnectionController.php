@@ -111,7 +111,8 @@ class DatabaseConnectionController extends Controller
       \Artisan::queue('data:transfer',['ac_code'=>$assembly->code,'part_no'=>$part_no]); 
       }
        
-     
+     $response=['status'=>1,'msg'=>'Submit Successfully'];
+          return response()->json($response);
     } 
 
      public function process(){

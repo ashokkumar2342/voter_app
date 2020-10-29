@@ -13,7 +13,7 @@
 </div> 
 <div class="card">
 <div class="card-body">
-<form action="{{ route('admin.database.conection.tableRecordStore') }}" method="post" class="add_form">
+<form action="{{ route('admin.database.conection.tableRecordStore') }}" method="post" class="add_form" no-reset="true">
 {{ csrf_field() }} 
 <div class="row"> 
  <div class="col-lg-12 form-group">
@@ -46,7 +46,7 @@
   </div>
  
 <div class="col-lg-12 form-group">
-<button type="submit" class="btn btn-primary form-group form-control" >Transfer</button>
+<button type="submit" class="btn btn-primary form-group form-control" >Submit</button>
 </div>
 </div>
 </form> 
