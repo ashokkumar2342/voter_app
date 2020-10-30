@@ -56,7 +56,7 @@ class VoterListGenerate extends Command
     { 
     ini_set('max_execution_time', '3600');
     ini_set('memory_limit','999M');
-    ini_set("pcre.backtrack_limit", "5000000");
+    ini_set("pcre.backtrack_limit", "100000000");
     $district_id = $this->argument('district_id');
     $block_id = $this->argument('block_id'); 
     $village_id = $this->argument('village_id'); 
