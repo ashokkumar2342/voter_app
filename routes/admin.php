@@ -357,6 +357,13 @@ Route::group(['middleware' => 'admin'], function() {
                 Route::get('imagestore', 'DatabaseConnectionController@imageStore')->name('admin.database.conection.imagestore');
                 Route::get('process', 'DatabaseConnectionController@process')->name('admin.database.conection.process');
                 Route::get('processDelete/{ac_id}/{part_id}', 'DatabaseConnectionController@processDelete')->name('admin.database.conection.processDelete');
+
+
+                Route::get('MysqlDataTransfer', 'DatabaseConnectionController@MysqlDataTransfer')->name('admin.database.conection.MysqlDataTransfer');
+                Route::get('MysqlDataTransferDistrictWiseBlock', 'DatabaseConnectionController@MysqlDataTransferDistrictWiseBlock')->name('admin.database.conection.MysqlDataTransferDistrictWiseBlock');
+                Route::get('MysqlDataTransferBlockWiseVillage', 'DatabaseConnectionController@MysqlDataTransferBlockWiseVillage')->name('admin.database.conection.MysqlDataTransferBlockWiseVillage');
+                Route::get('MysqlDataTransferVillageWiseWard', 'DatabaseConnectionController@MysqlDataTransferVillageWiseWard')->name('admin.database.conection.MysqlDataTransferVillageWiseWard');
+                Route::post('MysqlDataTransferStore', 'DatabaseConnectionController@MysqlDataTransferStore')->name('admin.database.conection.MysqlDataTransferStore');
         });
 
  });

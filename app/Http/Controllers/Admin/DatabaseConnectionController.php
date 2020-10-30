@@ -6,10 +6,14 @@ use App\Helper\MyFuncs;
 use App\Http\Controllers\Controller;
 use App\Model\Assembly;
 use App\Model\AssemblyPart;
+use App\Model\BlocksMc;
+use App\Model\District;
 use App\Model\History;
+use App\Model\Village;
 use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\VoterListMaster;
+use App\Model\WardVillage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
@@ -115,19 +119,39 @@ class DatabaseConnectionController extends Controller
           return response()->json($response);
     } 
 
-     public function process(){
-      $history=History::where('status',1)->first();
-      if (empty($history)) {
-         return '';
-      }
-      return view('admin.DatabaseConnection.progres_page',compact('history'));    
-     }
-     public function processDelete($ac_id,$part_id)
-     {  
-       DB::select(DB::raw("call up_delete_part_port_voter ('$ac_id','$part_id')"));
-        return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
-     }  
+      
+   public function processDelete($ac_id,$part_id)
+   {  
+     DB::select(DB::raw("call up_delete_part_port_voter ('$ac_id','$part_id')"));
+      return redirect()->back()->with(['message'=>'Delete Successfully','class'=>'success']);  
+   }  
      
     
-        
+   public function MysqlDataTransfer()
+   {
+     $Districts=District::orderBy('name_e','ASC')->get();
+     return view('admin.DatabaseConnection.mysqldatatransfer.index',compact('Districts'));      
+   }
+   public function MysqlDataTransferDistrictWiseBlock(Request $request)
+   {
+     $blocks=BlocksMc::where('districts_id',$request->id)->orderBy('name_e','ASC')->get();
+     return view('admin.DatabaseConnection.mysqldatatransfer.block_select_box',compact('blocks'));     
+   }
+   public function MysqlDataTransferBlockWiseVillage(Request $request)
+   {
+     $villages=Village::where('blocks_id',$request->id)->orderBy('name_e','ASC')->get();
+     return view('admin.DatabaseConnection.mysqldatatransfer.village_select_box',compact('villages'));     
+   }
+   public function MysqlDataTransferVillageWiseWard(Request $request)
+   {
+     $wards=WardVillage::where('village_id',$request->id)->orderBy('ward_no','ASC')->get();
+     return view('admin.DatabaseConnection.mysqldatatransfer.ward_select_box',compact('wards'));     
+   }
+   public function MysqlDataTransferStore(Request $request)
+  {   
+      \Artisan::queue('mysqldata:transfer',['district_id'=>$request->district_id,'block_id'=>$request->block_id,'village_id'=>$request->village_id,'ward_id'=>$request->ward_id]);
+
+      $response=['status'=>1,'msg'=>'Submit Successfully'];
+          return response()->json($response);
+  }      
 }
