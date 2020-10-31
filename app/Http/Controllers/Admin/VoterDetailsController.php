@@ -482,6 +482,12 @@ class VoterDetailsController extends Controller
             return response()->json($response);
       }      
     } 
+ //-------------------Prepare-Voter-List-Booth-Wise---------------------
+    public function PrepareVoterListBoothWise()
+    {
+      $Districts= District::orderBy('name_e','ASC')->get();
+      return view('admin.master.PrepareVoterList.booth.index',compact('Districts'));
+    }
  //-------------------VoterListDownload---------------------
     public function VoterListDownload($value='')
     {

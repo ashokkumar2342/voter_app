@@ -33,6 +33,7 @@ class PrepareVoterListController extends Controller
             'block' => 'required', 
             'village' => 'required',            
             'ward' => 'required',            
+            'booth' => 'required',            
         ];
         $validator = Validator::make($request->all(),$rules);
         if ($validator->fails()) {
@@ -58,7 +59,7 @@ class PrepareVoterListController extends Controller
                $PrepareVoterListSave= DB::
                select(DB::raw("call up_process_voterlist ('$request->ward')")); 
             } 
-          \Artisan::queue('voterlist:generate',['district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village,'ward_id'=>$request->ward]);
+          \Artisan::queue('voterlist:generate',['district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village,'ward_id'=>$request->ward,'booth_id'=>$request->booth]);
            }
       else if($request->proses_by==2) {
            if ($request->ward==0) {

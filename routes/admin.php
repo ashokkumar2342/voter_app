@@ -302,6 +302,9 @@ Route::group(['middleware' => 'admin'], function() {
 
            Route::get('PrepareVoterListMunicipal', 'VoterDetailsController@PrepareVoterListMunicipal')->name('admin.voter.PrepareVoterListMunicipal');
            Route::post('PrepareVoterListMunicipalGenerate', 'VoterDetailsController@PrepareVoterListMunicipalGenerate')->name('admin.voter.PrepareVoterListMunicipalGenerate');
+
+           Route::get('PrepareVoterListBoothWise', 'VoterDetailsController@PrepareVoterListBoothWise')->name('admin.voter.PrepareVoterListBoothWise');
+            
             
 
 
