@@ -210,8 +210,10 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('MappingWardBoothSelectBooth', 'MasterController@MappingWardBoothSelectBooth')->name('admin.Master.MappingWardBoothSelectBooth');
 	    Route::post('MappingWardBoothStore', 'MasterController@MappingWardBoothStore')->name('admin.Master.MappingWardBoothStore');
 	    Route::get('MappingWardBoothEdit/{id}', 'MasterController@MappingWardBoothEdit')->name('admin.Master.MappingWardBoothEdit');
-	    
-	  
+	    //mapping-ward-with-multiple-booth////
+	  	Route::get('MappingWardWithMultipleBooth', 'MasterController@MappingWardWithMultipleBooth')->name('admin.Master.MappingWardWithMultipleBooth');
+	  	Route::get('MappingWardWithMultipleBoothWardWiseBooth', 'MasterController@MappingWardWithMultipleBoothWardWiseBooth')->name('admin.Master.MappingWardWithMultipleBoothWardWiseBooth');
+	  	Route::post('MappingWardWithMultipleBoothStore', 'MasterController@MappingWardWithMultipleBoothStore')->name('admin.Master.MappingWardWithMultipleBoothStore');
 	     //mapping-village-ward////
 	    Route::get('WardBandi', 'MasterController@WardBandi')->name('admin.Master.WardBandi');	   
 	    Route::get('WardBandiFilter', 'MasterController@WardBandiFilter')->name('admin.Master.WardBandiFilter');	   
@@ -220,7 +222,9 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::post('WardBandiStore', 'MasterController@WardBandiStore')->name('admin.Master.WardBandiStore');	   
 	    Route::get('WardBandiReport', 'MasterController@WardBandiReport')->name('admin.Master.WardBandiReport');	   
 	    Route::post('WardBandiReportGenerate', 'MasterController@WardBandiReportGenerate')->name('admin.Master.WardBandiReportGenerate');	   
-	    Route::get('DeleteVoter/{id}', 'MasterController@DeleteVoter')->name('admin.Master.DeleteVoter');	   
+	    Route::get('DeleteVoter/{id}', 'MasterController@DeleteVoter')->name('admin.Master.DeleteVoter');
+	    //-----------------ward-bandi-with-booth--------------------------//
+	    Route::get('WardBandiWithBooth', 'MasterController@WardBandiWithBooth')->name('admin.Master.WardBandiWithBooth');	   
 	     	   
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   

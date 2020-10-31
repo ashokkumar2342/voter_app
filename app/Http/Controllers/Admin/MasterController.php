@@ -994,7 +994,43 @@ class MasterController extends Controller
    {
     $BoothWardVoterMapping=BoothWardVoterMapping::find($id);
     return view('admin.master.mappingWardBooth.edit',compact('BoothWardVoterMapping'));      
-   }    
+   }
+//--------MappingWardWithMultipleBooth---------
+   public function MappingWardWithMultipleBooth()
+   {
+        $States= State::orderBy('name_e','ASC')->get();  
+        return view('admin.master.MappingWardWithMultipleBooth.index',compact('States'));     
+   }
+   public function MappingWardWithMultipleBoothWardWiseBooth(Request $request)
+   {
+
+   $booths = DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` =$request->village_id and `id` not in (select `boothid` from `booth_ward_voter_mapping` where  `is_complete_booth` = 1) Union 
+      Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
+
+   $selectbooth= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
+   if (empty($selectbooth)) {
+         $booth_id[]=0;
+       }elseif(!empty($selectbooth)) {
+         foreach ($selectbooth as $key => $value) {
+           $booth_id[]=$value->id;
+        }
+       }         
+    return view('admin.master.MappingWardWithMultipleBooth.select_box',compact('booths','booth_id'));     
+   }
+   public function MappingWardWithMultipleBoothStore(Request $request)
+  {   
+     if (!empty($request->booth)) {
+         $booth_id=implode(',',$request->booth);  
+        }
+        elseif (empty($request->booth)) {
+           $booth_id=0;  
+         }
+         return "call up_map_ward_booths('$request->ward','$booth_id')";
+    $saveBooth = DB::select(DB::raw("call up_map_ward_booths('$request->ward','$booth_id')"));
+
+   $response=['status'=>1,'msg'=>'Submit Successfully']; 
+   return response()->json($response); 
+  }    
   //----------ward-bandi----------WardBandi----------------------------------------------------//
     public function WardBandi()
     {
@@ -1168,7 +1204,24 @@ class MasterController extends Controller
       $response=['status'=>1,'msg'=>'Updated Successfully'];
       return response()->json($response);
     }
-    //---------onchange---------onchange-----------onchange---------------onchange-----------onchange
+    //---------onchange---------onchange-----------onchange--------
+    
+    public function WardBandiWithBooth()
+    {
+       try {
+          $VoterListMaster=VoterListMaster::where('status',1)->first();
+         if (empty($VoterListMaster)) {
+          return 'Voter List Not Selected Contact Your Admin';  
+         }
+          $Districts= District::orderBy('name_e','ASC')->get();   
+          $States= State::orderBy('name_e','ASC')->get();   
+          $BlocksMcs= BlocksMc::orderBy('name_e','ASC')->get();   
+          $Villages= Village::orderBy('name_e','ASC')->get();  
+          return view('admin.master.wardbandiwithbooth.index',compact('Districts','States','Villages','BlocksMcs'));
+        } catch (Exception $e) {
+            
+        }
+    }
 
     public function stateWiseDistrict(Request $request)
     {
