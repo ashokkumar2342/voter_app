@@ -29,10 +29,10 @@
 		 		if ($mainpagedetails[0]->booth_id>0){
 		 	@endphp
 
-		 		<table width = "100%" style="padding: 2px;font-size: 12px;font-weight: bold;">
+		 		<table width = "100%" style="padding: 2px;font-size: 12px;font-weight: bold;margin-top:-10px;">
 		 			<tr>
 		 				<td style="text-align: left; padding-left: 5px" width="100%">
-		 					मतदान केन्द्र संख्या व नाम: {{ $mainpagedetails[0]->booth_no }} : {{ $mainpagedetails[0]->booth_name}}
+		 					मतदान केन्द्र संख्या व नाम: {{ $mainpagedetails[0]->booth_no }} - {{ $mainpagedetails[0]->booth_name}}
 		 				</td>
 		 			</tr>
 		 		</table>

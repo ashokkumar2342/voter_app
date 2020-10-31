@@ -52,12 +52,16 @@ class PrepareVoterListController extends Controller
               return response()->json($response);  
             }
             if ($request->ward==0) {
-               $PrepareVoterListSave= DB::
-               select(DB::raw("call up_process_village_voterlist ('$request->village')"));
-             }
+              $PrepareVoterListSave= DB::
+              select(DB::raw("call up_process_village_voterlist ('$request->village')"));
+            }
+            elseif ($request->booth == 0){
+              $PrepareVoterListSave= DB::
+              select(DB::raw("call up_process_voterlist ('$request->ward')")); 
+            }
             else{
-               $PrepareVoterListSave= DB::
-               select(DB::raw("call up_process_voterlist ('$request->ward')")); 
+              $PrepareVoterListSave= DB::
+              select(DB::raw("call up_process_voterlist_booth ('$request->ward', '$request->booth')")); 
             } 
           \Artisan::queue('voterlist:generate',['district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village,'ward_id'=>$request->ward,'booth_id'=>$request->booth]);
            }
@@ -66,9 +70,13 @@ class PrepareVoterListController extends Controller
               $unlock_village_voterlist = DB::
               select(DB::raw("call up_unlock_village_voterlist ('$request->village')"));
            }
-           else {
+           elseif ($request->booth == 0){
               $unlock_village_voterlist = DB::
               select(DB::raw("call up_unlock_voterlist ('$request->ward')"));
+            }
+            else{
+              $unlock_village_voterlist = DB::
+              select(DB::raw("call up_unlock_voterlist_booth ('$request->ward', '$request->booth')"));  
             }
       
      $response=['status'=>1,'msg'=>'Unlock Successfully'];
