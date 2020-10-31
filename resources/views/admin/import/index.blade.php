@@ -128,6 +128,33 @@
                 </div> 
               </div>
             </div>
+          </div>
+          <div class="col-lg-6"> 
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Import Vote</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                </div>
+              </div>
+              <form action="{{ route('admin.import.importVote') }}" method="post" class="add_form" no-reset="true"> 
+              <div class="card-body row"> 
+              <div class="col-lg-8 form-group">
+              <label for="exampleInputFile">Import File</label>
+              <div class="input-group">
+              <div class="custom-file">
+              <input type="file" class="custom-file-input" id="exampleInputFile" name="import_file">
+              <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+              </div> 
+              </div>
+              </div> 
+              <div class="col-lg-4 form-group">
+               <input type="submit" class="btn btn-success" style="margin-top: 30px">
+              </div> 
+              </div>
+              </form>  
+            </div>
           </div> 
         </div> 
       </div> 

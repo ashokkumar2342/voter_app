@@ -24,6 +24,26 @@ class ImportExportController extends Controller
     $villagewards=DB::select(DB::raw("call up_fetch_import_map_wards_sample ('$user->id')")); 
       return view('admin.import.index',compact('Districts','assemblys','blocks','villages','villagewards'));
    }
+
+   public function importVote(Request $request)
+   {
+     if($request->hasFile('import_file')){  
+        $path = $request->file('import_file')->getRealPath();
+        $results = Excel::load($path, function($reader) {})->get();
+        foreach ($results as $key => $value) {
+          $saveVote= DB::select(DB::raw("call up_import_wardbandi_booth ('$value->ac_no','$value->part_no','$value->from_sr_no','$value->to_sr_no','$value->ward_id','$value->booth_id',)")); 
+        }
+        $response=['status'=>1,'msg'=>'Import Successfully'];
+            return response()->json($response);
+      }
+      $response=['status'=>0,'msg'=>'File Not Select'];
+            return response()->json($response); 
+   }
+
+
+
+
+
    public function DistrictExportSample($value='')
    {
     $user=Auth::guard('admin')->user(); 

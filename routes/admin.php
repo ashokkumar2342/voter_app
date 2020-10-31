@@ -338,6 +338,7 @@ Route::group(['middleware' => 'admin'], function() {
     Route::group(['prefix' => 'import'], function() {
            Route::get('', 'ImportExportController@index')->name('admin.import.index');
 
+           Route::post('importVote', 'ImportExportController@importVote')->name('admin.import.importVote');
 
            Route::get('DistrictExportSample', 'ImportExportController@DistrictExportSample')->name('admin.import.DistrictExportSample');
            Route::get('DistrictImportForm', 'ImportExportController@DistrictImportForm')->name('admin.import.DistrictImportForm');
