@@ -67,8 +67,8 @@ class DataTransfer extends Command
       foreach ($datas as $key => $value) { 
        
        $name_l=str_replace('਍', '', $value->name_l);
-       $name_e=str_replace('਍', '', $value->name_en);
-       $f_name_e=str_replace('਍', '', $value->fname_en);
+       $name_e=substr(str_replace('਍', '', $value->name_en),0,49);
+       $f_name_e=substr(str_replace('਍', '', $value->fname_en),0,49);
        $f_name_l=str_replace('਍', '', $value->FName_L);
        if ($value->RLN_Type=='F') {
         $relation=1;  
@@ -96,7 +96,10 @@ class DataTransfer extends Command
        }else{
         $gender_id=3;  
        }  
-       $newId=DB::select(DB::raw("call up_save_voter_detail('0','$assembly->id','$assemblyPart->id','$value->SlNoInPart','$value->EPIC_No','$value->C_House_no','$value->C_House_No_V1','','$name_e','$name_l','$f_name_e','$f_name_l','$relation','$gender_id','$value->AGE','$value->MOBILE_NO','v','$voterlistmaster->id','0');"));
+       $house_e = substr(str_replace('\\',' ', $value->C_House_no),0,49);
+       $house_l = str_replace('\\',' ', $value->C_House_No_V1);
+       
+       $newId=DB::select(DB::raw("call up_save_voter_detail('0','$assembly->id','$assemblyPart->id','$value->SlNoInPart','$value->EPIC_No','$house_e','$house_l','','$name_e','$name_l','$f_name_e','$f_name_l','$relation','$gender_id','$value->AGE','$value->MOBILE_NO','v','$voterlistmaster->id','0');"));
         
         $image=$value->PHOTO;
         $name =$newId[0]->newid;
