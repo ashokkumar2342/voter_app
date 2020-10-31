@@ -16,6 +16,7 @@ use App\Model\VoterListMaster;
 use App\Model\VoterListProcessed;
 use App\Model\WardVillage;
 use App\Model\MainPageDetails;
+use App\Model\PollingBooth;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +27,7 @@ class VoterListGenerate extends Command
      *
      * @var string
      */
-    protected $signature = 'voterlist:generate {district_id} {block_id} {village_id} {ward_id}';
+    protected $signature = 'voterlist:generate {district_id} {block_id} {village_id} {ward_id} {booth_id}';
 
 
     /**
@@ -61,13 +62,15 @@ class VoterListGenerate extends Command
     $block_id = $this->argument('block_id'); 
     $village_id = $this->argument('village_id'); 
     $ward_id = $this->argument('ward_id');
+    $booth_id = $this->argument('booth_id');
 
     $voterListMaster=VoterListMaster::where('status',1)->first(); 
     $blockcode=BlocksMc::find($block_id);
     $wardno=WardVillage::find($ward_id); 
     $villagename=Village::find($village_id);
+    $pollingboothdetail=PollingBooth::find($booth_id);
     
-    $VoterListProcessed=VoterListProcessed::where('district_id',$district_id)->where('block_id',$block_id)->where('village_id',$village_id)->where('ward_id',$ward_id)->where('voter_list_master_id',$voterListMaster->id)->first();
+    $VoterListProcessed=VoterListProcessed::where('district_id',$district_id)->where('block_id',$block_id)->where('village_id',$village_id)->where('ward_id',$ward_id)->where('voter_list_master_id',$voterListMaster->id)->where('booth_id',$booth_id)->first();
 
 
     $dirpath = Storage_path() . $VoterListProcessed->folder_path;
@@ -119,7 +122,8 @@ class VoterListGenerate extends Command
     
 
     if ($ward_id==0) {$WardVillages=WardVillage::where('village_id',$village_id)->get();$pagetype=1;}
-    else{$WardVillages=WardVillage::where('id',$ward_id)->get();$pagetype=2;}  
+    elseif ($booth_id==0) {$WardVillages=WardVillage::where('id',$ward_id)->get();$pagetype=2;}
+    else {$WardVillages=WardVillage::where('id',$ward_id)->get();$pagetype=3;}  
       
     $html = view('admin.master.PrepareVoterList.voter_list_section.start_pdf');
 
@@ -136,7 +140,6 @@ class VoterListGenerate extends Command
         foreach ($WardVillages as $WardVillage) {
             if ($wardcount>1){
                 $mpdf_photo->WriteHTML('<pagebreak>');
-                //$mpdf_mainpage->WriteHTML('<pagebreak>');
                 $mpdf_wp->WriteHTML('<pagebreak>');
                 if(fmod($totalpage, 2)==1){
                     $mpdf_photo->WriteHTML('<pagebreak>');
@@ -145,15 +148,17 @@ class VoterListGenerate extends Command
             }
             $wardcount++;
 
-            $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` in (0,1,3) Order By `v`.`print_sr_no`;"));
+            if ($booth_id==0){$booth_condition = "";}else{$booth_condition = " And `v`.`booth_id` = $booth_id";}
+
+            $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` in (0,1,3) $booth_condition Order By `v`.`print_sr_no`;"));
             
             
 
-            $mainpagedetails=MainPageDetails::where('voter_list_master_id',$voterListMaster->id)->where('ward_id',$WardVillage->id)->count();
+            $mainpagedetails=MainPageDetails::where('voter_list_master_id',$voterListMaster->id)->where('ward_id',$WardVillage->id)->where('booth_id',$booth_id)->count();
             if ($mainpagedetails>0){
-                $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$WardVillage->id;"));
+                $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$WardVillage->id and `booth_id` = $booth_id;"));
                 
-                $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $WardVillage->id;"));
+                $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $WardVillage->id And booth_id = $booth_id;"));
 
                 $votercount = count($voterReports);
                 $totalpage = (int)($votercount/30);

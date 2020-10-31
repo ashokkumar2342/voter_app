@@ -32,14 +32,14 @@
 				<table width="100%" >
 					<tr>			
 						@php
-						if ($main_page_type==1) {
-							$colspan='40%';	 
+						if ($main_page_type==2) {
+							$colspan='100%';	 
 		 				}else{
-		  					$colspan='100%';	
+		  					$colspan='40%';	
 		 				}	
 						@endphp
 						<td style="height: 150px;word-spacing:4px;padding-left: 20px;border: 1px solid black; font-size: 14px; font-weight: bold;" width="{{ $colspan }}">जिला का नाम : {{ $mainpagedetail->district }}</td> 
-        				@if ($main_page_type==1) 
+        				@if ($main_page_type!=2) 
 						<td style="height: 150px;word-spacing:4px;padding-left: 2px;border: 1px solid black;" width="60%">
 							<table width="100%">
 							<thead>
@@ -91,13 +91,7 @@
 
 								@endforeach
 
-								{{-- @if ($time=1)
-									<td></td> <td></td> <td></td> <td></td> </tr>
-								@endif --}}
-								{{-- @if ($time=2)
-									<td></td> <td></td> </tr>
-								@endif --}}
-
+								
 							</thead>
 							</table>
 						</td>
@@ -122,10 +116,19 @@
 						<br> 
 						(घ) जिला परिषद व वार्ड संख्या: <b>{{ $mainpagedetail->district }}&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;{{ $mainpagedetail->zp_ward }}</b>   
 						</td> 
+		 			@elseif($main_page_type==2)
+		 				<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="100%"> {{ $mainpagedetail->election_type }} का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
+						<br>
+						<br>
+						</td>
 		 			@else
 		 				<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="100%"> {{ $mainpagedetail->election_type }} का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
 						<br>
 						<br>
+						मतदान केन्द्र संख्या : <b>{{ $mainpagedetail->booth_no }} </b>
+						<br>
+						<br>
+						मतदान केन्द्र का नाम : <b>{{ $mainpagedetail->booth_name }} </b>
 						</td>
 		 			@endif 
 					</tr>	
@@ -208,17 +211,7 @@
 			// $margintop = 0;
 		@endphp
 
-	{{-- @push('scripts')
-	<script type="text/javascript">
-		function findtablesheight(){
-			var x = 1000-(document.getElementById('headertable').offsetHeight+document.getElementById('detailtable').offsetHeight);
-
-			document.write("<table style='margin-top:"+ 100 + "px;'>");
-			document.write("<tr><td>&nbsp;"+x+"</td></tr></table>");
-		}
-	</script>
-	@endpush --}}
-
+	
 	@push('scripts')
 	<script type="text/javascript">findtablesheight();</script>
 	@endpush
@@ -232,4 +225,4 @@
 	</table>
 	<pagebreak>	
 
-	{{-- </div> --}}
+	

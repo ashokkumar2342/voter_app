@@ -1,12 +1,10 @@
-{{-- <div class="ho{{ $mainpagedetails[0]->ward }}"> --}}
-{{-- <div style="page-break-before: always;"></div> --}}
-
 		@php
 		$time=0;
 		$cpageno =1;
 		$newpagestart = 1;
 		$counter = 0;
 		$totalCount=count($voterReports);
+		$headerheight = 20;
 		$i=0;
 		@endphp
 		@foreach ($voterReports as $voterReport)
@@ -27,8 +25,20 @@
 		 				</td>
 		 			</tr>
 		 		</table>
+		 	@php
+		 		if ($mainpagedetails[0]->booth_id>0){
+		 	@endphp
+
+		 		<table width = "100%" style="padding: 2px;font-size: 12px;font-weight: bold;">
+		 			<tr>
+		 				<td style="text-align: left; padding-left: 5px" width="100%">
+		 					मतदान केन्द्र संख्या व नाम: {{ $mainpagedetails[0]->booth_no }} : {{ $mainpagedetails[0]->booth_name}}
+		 				</td>
+		 			</tr>
+		 		</table>
 		 @php
-		 		
+		 		$headerheight = 35;
+		 		}
 		 		$newpagestart=0;
 		 	}
 		 	$i=$i+1;
@@ -113,7 +123,7 @@
 		@endforeach
 
 		@php
-			if($newpagestart == 0){$cpageno++;$remaining = 30-$counter;$lrem=(int)((30-$counter-fmod($remaining, 3))/3)*100-20;
+			if($newpagestart == 0){$cpageno++;$remaining = 30-$counter;$lrem=(int)((30-$counter-fmod($remaining, 3))/3)*100-$headerheight;
 		@endphp	
 			<table width="100%" style="margin-top:{{$lrem}}px;" >
 				<tr>
@@ -137,7 +147,3 @@
 
 		@endphp
 </div>
-
-
-{{-- <newpage resetpagenum="1"> --}}
-		{{-- <table><tr><td>test voter</td></tr></table> --}}

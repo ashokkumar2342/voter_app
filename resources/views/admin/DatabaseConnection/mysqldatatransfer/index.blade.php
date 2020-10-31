@@ -13,7 +13,7 @@
         </div> 
         <div class="card">
             <div class="card-body login-card-body">
-            <form action="{{ route('admin.database.conection.MysqlDataTransferStore') }}" method="post" class="add_form">
+            <form action="{{ route('admin.database.conection.MysqlDataTransferStore') }}" method="post" class="add_form" no-reset="true">
                 <div class="row">
                     <div class="col-lg-3 form-group">
                         <label>District</label>

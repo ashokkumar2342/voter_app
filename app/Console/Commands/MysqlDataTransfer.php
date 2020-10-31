@@ -9,7 +9,7 @@ use App\Model\AssemblyPart;
 use App\Model\DefaultValue;
 use App\Model\History;
 use App\Model\Voter;
-use App\Model\VoterImage;
+use App\Model\WardVillage;
 use App\Model\VoterListMaster;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
@@ -21,7 +21,7 @@ class MysqlDataTransfer extends Command
      *
      * @var string
      */
-    protected $signature = 'mysqldata:transfer';
+    protected $signature = 'mysqldata:transfer {district_id} {block_id} {village_id} {ward_id}';
 
 
     /**
@@ -61,24 +61,49 @@ class MysqlDataTransfer extends Command
       die( print_r( sqlsrv_errors(), true));
       }
       
-      $query = "Truncate Table [District]"; 
-      $result = sqlsrv_query($conn,$query); 
+      // $query = "Truncate Table [District]"; 
+      // $result = sqlsrv_query($conn,$query); 
 
-      $query = "Truncate Table [Block]"; 
-      $result = sqlsrv_query($conn,$query); 
+      // $query = "Truncate Table [Block]"; 
+      // $result = sqlsrv_query($conn,$query); 
 
-      $query = "Truncate Table [Panchayat]"; 
-      $result = sqlsrv_query($conn,$query); 
+      // $query = "Truncate Table [Panchayat]"; 
+      // $result = sqlsrv_query($conn,$query); 
 
-      $query = "Truncate Table [b02]"; 
-      $result = sqlsrv_query($conn,$query); 
+      // $query = "Truncate Table [b02]"; 
+      // $result = sqlsrv_query($conn,$query); 
 
       echo "Porting Stared.".date("d-m-y H:i:s")."\n";
+
+      $did = $this->argument('district_id');
+      $bid = $this->argument('block_id');
+      $vid = $this->argument('village_id');
+      $wid = $this->argument('ward_id');
+      
+      $dcondition = "";
+      $bcondition = "";
+      $vcondition = "";
+      $wcondition = "";
+      $wcodecondition = "";
+      if($did > 0){
+        $dcondition = " Where `d`.`id` = $did ";  
+      }
+      if($bid > 0){
+        $bcondition = " And `bl`.`id` = $bid ";  
+      }
+      if($vid > 0){
+        $vcondition = " And `vl`.`id` = $vid ";  
+      }
+      if($wid > 0){
+        $wardcode = WardVillage::where('id', $wid)->first();
+        $wcondition = " And `vd`.`ward_id` = $wid ";
+        $wcodecondition = " And GP_Ward = $wardcode->ward_no ";  
+      }
 
       $districts=DB::
         select(DB::raw("select `d`.`id`, `s`.`code` as `scode`, `s`.`name_e` as `sname`, `d`.`name_e`, `d`.`code` 
           from `districts` `d`
-          Inner Join `states` `s` on `s`.`id` = `d`.`state_id`;"));
+          Inner Join `states` `s` on `s`.`id` = `d`.`state_id` $dcondition;"));
 
       foreach ($districts as $district) {
         echo "Porting District '$district->name_e'.\n";
@@ -88,32 +113,45 @@ class MysqlDataTransfer extends Command
         if(strlen($district->code)>2){
           die( "length of District Code cannot be more than 2.\n");
         }
+        $query = "Delete From [District] Where [DisttCode] = '$district->code'"; 
+        $result = sqlsrv_query($conn,$query);
+        
         $query = "Insert Into [District] ([State_code], [State_Name], [DisttName], [DisttCode], [flag]) Values ('$district->scode', '$district->sname', '$district->name_e', '$district->code', 'Y')"; 
         $result = sqlsrv_query($conn,$query);
 
 
         $blocks=DB::
-          select(DB::raw("Select `bl`.`id`, `bl`.`code` as `blcode`, `bl`.`name_l` as `blname_l`, `d`.`code`, `d`.`name_e`, `bl`.`name_e` as `blname_e` From `blocks_mcs` `bl` Inner Join `districts` `d` On `d`.`id` = `bl`.`districts_id` where `bl`.`districts_id` = '$district->id';"));
+          select(DB::raw("Select `bl`.`id`, `bl`.`code` as `blcode`, `bl`.`name_l` as `blname_l`, `d`.`code`, `d`.`name_e`, `bl`.`name_e` as `blname_e` From `blocks_mcs` `bl` Inner Join `districts` `d` On `d`.`id` = `bl`.`districts_id` where `bl`.`districts_id` = '$district->id' $bcondition;"));
 
         foreach ($blocks as $block) {
           echo "Porting Block '$block->blname_e'.\n";
           if(strlen($block->blcode)>2){
             die( "length of Block Code cannot be more than 2.\n");
           }
-        
+          
+          $query = "Delete From [Block] Where [CODE] = '$block->blcode'"; 
+          $result = sqlsrv_query($conn,$query);
+
           $query = "Insert Into [Block] ([CODE], [desc1], [distt], [disttcode], [NAme_eng]) Values ('$block->blcode', N'$block->blname_l', '$block->name_e', '$block->code', '$block->blname_e')"; 
           $result = sqlsrv_query($conn,$query);
 
 
           $villages=DB::
-            select(DB::raw("select `vl`.`id`, `bl`.`code` as `blcode`, `vl`.`code` as `vlcode`, `vl`.`name_e`, `vl`.`name_l`, `d`.`code` as `dcode` from `villages` `vl` inner join `blocks_mcs` `bl` on `bl`.`id` = `vl`.`blocks_id` inner join `districts` `d` on `d`.`id` = `vl`.`districts_id` where `vl`.`blocks_id` = $block->id;"));
+            select(DB::raw("select `vl`.`id`, `bl`.`code` as `blcode`, `vl`.`code` as `vlcode`, `vl`.`name_e`, `vl`.`name_l`, `d`.`code` as `dcode` from `villages` `vl` inner join `blocks_mcs` `bl` on `bl`.`id` = `vl`.`blocks_id` inner join `districts` `d` on `d`.`id` = `vl`.`districts_id` where `vl`.`blocks_id` = $block->id $vcondition;"));
 
           foreach ($villages as $village) {
             echo "Porting Village '$village->name_e'.\n";
             if(strlen($village->vlcode)>3){
               die( "length of Panchayat Code cannot be more than 3.\n");
             }
-        
+            
+            $query = "Delete From [Panchayat] Where [V_CODE] = '$village->vlcode'"; 
+            $result = sqlsrv_query($conn,$query);
+
+            $query = "Delete From [b02] Where [DisttCode] = '$district->code' And [Block_Code] = '$block->blcode' And [GP_Code] = '$village->vlcode' $wcodecondition"; 
+            $result = sqlsrv_query($conn,$query);
+
+
             $query = "Insert Into [Panchayat] ([BLOCK], [V_CODE], [NAME], [HNAME], [PCODE], [disttcode]) Values ('$village->blcode', '$village->vlcode', '$village->name_e', N'$village->name_l', '$village->vlcode', '$village->dcode')"; 
             $result = sqlsrv_query($conn,$query);
 
@@ -121,7 +159,7 @@ class MysqlDataTransfer extends Command
             $voters=DB::
             select(DB::raw("select `ac`.`code`, `wv`.`ward_no`, `ap`.`part_no`, `vd`.`sr_no`, `vd`.`house_no_e`,
               `vd`.`name_e`, `vd`.`father_name_e`, `vd`.`voter_card_no`, `vd`.`age`, `g`.`code` as `gcode`, `rl`.`code` as `rcode`, `vd`.`name_l`, `vd`.`father_name_l`, `vd`.`house_no`, `vd`.`print_sr_no`, `vd`.`mobile_no` 
-              from `voters` `vd` Inner Join `assemblys` `ac` on `ac`.`id` = `vd`.`assembly_id` inner join `assembly_parts` `ap` on `ap`.`id` =`vd`.`assembly_part_id` Inner Join `relation` `rl` on `rl`.`id` = `vd`.`relation` inner Join `genders` `g` on `g`.`id` = `vd`.`gender_id` inner Join `ward_villages` `wv` on `wv`.`id` = `vd`.`ward_id` Where `vd`.`status` in (0,1,2) And `vd`.`village_id` = $village->id;"));
+              from `voters` `vd` Inner Join `assemblys` `ac` on `ac`.`id` = `vd`.`assembly_id` inner join `assembly_parts` `ap` on `ap`.`id` =`vd`.`assembly_part_id` Inner Join `relation` `rl` on `rl`.`id` = `vd`.`relation` inner Join `genders` `g` on `g`.`id` = `vd`.`gender_id` inner Join `ward_villages` `wv` on `wv`.`id` = `vd`.`ward_id` Where `vd`.`status` in (0,1,3) And `vd`.`village_id` = $village->id $wcondition;"));
 
             foreach ($voters as $voter) {
         
