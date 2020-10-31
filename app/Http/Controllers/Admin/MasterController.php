@@ -1114,7 +1114,7 @@ class MasterController extends Controller
          else if ($request->to_sr_no!=null) {
            $to_sr_no=$request->to_sr_no;
          } 
-        $message=DB::select(DB::raw("call up_ward_bandi_voters ('$request->assembly_part','$request->ward','$from_sr_no','$to_sr_no','$forcefully')"));
+        $message=DB::select(DB::raw("call up_ward_bandi_voters ('$request->assembly_part','$request->ward','0','$from_sr_no','$to_sr_no','$forcefully')"));
         if ($message[0]->save_status=='Saved Successfully') {
           $response=['status'=>1,'msg'=>$message[0]->save_status];  
          }else{ 
@@ -1222,7 +1222,94 @@ class MasterController extends Controller
             
         }
     }
+    public function VillageWiseAssemblyWard(Request $request)
+    {
+        
+       try{ 
+          $assemblyParts= AssemblyPart::where('village_id',$request->id)->get();   
+          $WardVillages = DB::select(DB::raw("call up_fetch_ward_village_access ('$request->id','0')"));   
+          return view('admin.master.wardbandiwithbooth.assembly_ward_select_box',compact('assemblyParts','WardVillages'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function WardWiseBooth(Request $request)
+    { 
+      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
+      return view('admin.master.wardbandiwithbooth.booth_select_box',compact('selectbooths'));
+    }
+    public function WardBandiWithBoothStore(Request $request)
+    {  
+      $rules=[
+            'states' => 'required', 
+            'district' => 'required', 
+            'block' => 'required', 
+            'village' => 'required', 
+            'assembly_part' => 'required', 
+            'ward' => 'required', 
+            'booth' => 'required', 
+             
+      ];
 
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        if ($request->forcefully==1) {
+         $forcefully=1; 
+        }else{
+         $forcefully=0; 
+        }
+        if ($request->from_sr_no==null) {
+           $from_sr_no=0;
+         }
+         else if ($request->from_sr_no!=null) {
+           $from_sr_no=$request->from_sr_no;
+         }
+         if ($request->to_sr_no==null) {
+           $to_sr_no=0;
+         }
+         else if ($request->to_sr_no!=null) {
+           $to_sr_no=$request->to_sr_no;
+         } 
+        $message=DB::select(DB::raw("call up_ward_bandi_voters ('$request->assembly_part','$request->ward','$request->booth','$from_sr_no','$to_sr_no','$forcefully')"));
+        if ($message[0]->save_status=='Saved Successfully') {
+          $response=['status'=>1,'msg'=>$message[0]->save_status];  
+         }else{ 
+          $response=['status'=>0,'msg'=>$message[0]->save_status];
+         } 
+       return response()->json($response);
+      }
+    }
+    public function BoothWiseTotalMappedWard(Request $request)
+    {
+       try{ 
+          $total_mapped=DB::select(DB::raw("select count(*) as `total_mapped` from `voters` where `booth_id` = $request->id;"));   
+          return view('admin.master.wardbandiwithbooth.sr_no_form',compact('total_mapped'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function AssemblywisevoterMapped(Request $request)
+    {  
+       try{ 
+           $voterLists=DB::select(DB::raw("Select `v`.`id`, `v`.`sr_no`, `v`.`name_l`, `v`.`father_name_l`, `wv`.`ward_no`, `po`.`Booth_No`
+              From `Voters` `v`
+              Left join `ward_villages` `wv` on `wv`.`id` = `v`.`ward_id`
+              Left Join `polling_booths` `po` on `po`.`id` = `v`.`Booth_Id`
+              Where `v`.`assembly_part_id` =$request->id
+              Order By `v`.`sr_no`;"));  
+          return view('admin.master.wardbandiwithbooth.voter_list',compact('voterLists'));
+        } catch (Exception $e) {
+            
+        }
+    }
+//----------------------------------------------
     public function stateWiseDistrict(Request $request)
     {
        try{ 

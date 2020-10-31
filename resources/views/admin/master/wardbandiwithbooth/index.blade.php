@@ -12,7 +12,7 @@
             </div>
         </div> 
         <div class="card card-info"> 
-            <form action="{{ route('admin.Master.WardBandiStore') }}" method="post" select-triger="assembly_part_select_box,ward_select_box" no-reset="true" no-reset="true" class="add_form">
+            <form action="{{ route('admin.Master.WardBandiWithBoothStore') }}" method="post" select-triger="assembly_part_select_box,booth_select_box" no-reset="true" no-reset="true" class="add_form">
                 {{ csrf_field() }}
                 <div class="card-body">
                     <div class="row"> 
@@ -43,15 +43,15 @@
                         <div class="col-lg-3 form-group">
                             <label for="exampleInputEmail1">Village</label>
                             <span class="fa fa-asterisk"></span>
-                            <select name="village" class="form-control select2" id="village_select_box" select2="true" onchange="callAjax(this,'{{ route('admin.Master.WardBandiFilter') }}','value_div_id')">
+                            <select name="village" class="form-control select2" id="village_select_box" select2="true" onchange="callAjax(this,'{{ route('admin.Master.VillageWiseAssemblyWard') }}','value_div_id')">
                                 <option selected disabled>Select Village</option>
 
                             </select>
                         </div>
-                    </div>
-                    <div class="row" id="value_div_id">
+                        <div class="col-lg-12" id="value_div_id">
 
-                    </div> 
+                        </div> 
+                    </div>
                 </form>
 
             </div> 

@@ -225,6 +225,12 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('DeleteVoter/{id}', 'MasterController@DeleteVoter')->name('admin.Master.DeleteVoter');
 	    //-----------------ward-bandi-with-booth--------------------------//
 	    Route::get('WardBandiWithBooth', 'MasterController@WardBandiWithBooth')->name('admin.Master.WardBandiWithBooth');	   
+	    Route::get('VillageWiseAssemblyWard', 'MasterController@VillageWiseAssemblyWard')->name('admin.Master.VillageWiseAssemblyWard');	   
+	    Route::get('WardWiseBooth', 'MasterController@WardWiseBooth')->name('admin.Master.WardWiseBooth');	   
+	    Route::get('BoothWiseTotalMappedWard', 'MasterController@BoothWiseTotalMappedWard')->name('admin.Master.BoothWiseTotalMappedWard');	   
+	    Route::get('AssemblywisevoterMapped', 'MasterController@AssemblywisevoterMapped')->name('admin.Master.AssemblywisevoterMapped');	   
+	    Route::post('WardBandiWithBoothStore', 'MasterController@WardBandiWithBoothStore')->name('admin.Master.WardBandiWithBoothStore');	   
+	     
 	     	   
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   
