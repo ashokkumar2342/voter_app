@@ -1025,7 +1025,7 @@ class MasterController extends Controller
         elseif (empty($request->booth)) {
            $booth_id=0;  
          }
-         return "call up_map_ward_booths('$request->ward','$booth_id')";
+    
     $saveBooth = DB::select(DB::raw("call up_map_ward_booths('$request->ward','$booth_id')"));
 
    $response=['status'=>1,'msg'=>'Submit Successfully']; 
