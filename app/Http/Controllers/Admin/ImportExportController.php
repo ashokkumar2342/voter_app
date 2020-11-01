@@ -31,7 +31,7 @@ class ImportExportController extends Controller
         $path = $request->file('import_file')->getRealPath();
         $results = Excel::load($path, function($reader) {})->get();
         foreach ($results as $key => $value) {
-          $saveVote= DB::select(DB::raw("call up_import_wardbandi_booth ('$value->ac_no','$value->part_no','$value->from_sr_no','$value->to_sr_no','$value->ward_id','$value->booth_id',)")); 
+          $saveVote= DB::select(DB::raw("call up_import_wardbandi_booth ('$value->ac_no','$value->part_no','$value->from_sr_no','$value->to_sr_no','$value->ward_id','$value->booth_id')")); 
         }
         $response=['status'=>1,'msg'=>'Import Successfully'];
             return response()->json($response);
