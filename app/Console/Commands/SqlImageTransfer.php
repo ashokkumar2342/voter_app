@@ -47,7 +47,7 @@ class SqlImageTransfer extends Command
         
          
 
-        $ACPARTS = DB::connection('sqlsrv')->select("Select Distinct Ac_No, Part_No from data where Ac_No > 41 Order By AC_NO, Part_No");
+        $ACPARTS = DB::connection('sqlsrv')->select("Select Distinct Ac_No, Part_No from data Order By AC_NO, Part_No");
         
         foreach ($ACPARTS as $key => $ac_part) {
             // $dirpath = Storage_path() . '/app/imageall/'.$ac_part->Ac_No.'/'.$ac_part->Part_No;

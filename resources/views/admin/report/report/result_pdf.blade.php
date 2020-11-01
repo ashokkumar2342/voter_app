@@ -21,63 +21,11 @@
 	    
 	</htmlpagefooter>
 	<htmlpageheader name="otherpageheader" style="display:none">
-		<table>
+		<table width = "100%">
 			<tbody>
 				<tr>
-					<td style="width: 750px;background-color: #767d78;color: #fff;text-align: center;"><b>Assembly :   , Assembly Part : </b></td>
+					<td style="width: 100%;background-color: #767d78;color: #fff;text-align: center;"><b>{{ $report_header }}</b></td>
 				</tr>
 			</tbody>
 		</table>			 
 	</htmlpageheader>
- 
- <table style="width: 750px">
-		<thead>
-			<tr>
-				<th style="width: 50px">Sr.No.</th>
-                <th style="width: 120px">Name </th>
-                <th style="width: 140px">Village</th>
-                <th style="width: 50px">Wards</th>
-                <th style="border-style:none"></th> 
-                <th style="width: 50px;">Sr.No.</th>
-                <th style="width: 120px">Name </th>
-                <th style="width: 140px">Village</th>
-                <th style="width: 50px">Ward</th>
-                 
-                 
-                 
-			</tr>
-		</thead>
-		<tbody>
-			@php
-          $time =0;
-        @endphp
-	       @foreach ($voterReports as $voterReport)
-	       @if ($time==0)
-	       <tr>
-	       @endif 
-	       @if ($time==1)
-	       	<td style="border-style:none"></td>
-	       @endif
-	        
-	        <td></td>
-			<td>&nbsp;</td>
-			<td>{{ $voterReport->name_l }}&nbsp;</td>
-			<td>{{ $voterReport->ward_no }}</td> 
-			 
-	       @if ($time ==1)
-
-	         </tr>
-	       @endif
-	         @php
-	           $time ++;
-	         @endphp
-	         @if ($time==2)
-	          @php
-	            $time=0;
-	          @endphp
-	         @endif
-	        @endforeach 
-		</tbody>
-	</table>
-</body>
-</html>

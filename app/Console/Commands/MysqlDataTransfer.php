@@ -61,18 +61,6 @@ class MysqlDataTransfer extends Command
       die( print_r( sqlsrv_errors(), true));
       }
       
-      // $query = "Truncate Table [District]"; 
-      // $result = sqlsrv_query($conn,$query); 
-
-      // $query = "Truncate Table [Block]"; 
-      // $result = sqlsrv_query($conn,$query); 
-
-      // $query = "Truncate Table [Panchayat]"; 
-      // $result = sqlsrv_query($conn,$query); 
-
-      // $query = "Truncate Table [b02]"; 
-      // $result = sqlsrv_query($conn,$query); 
-
       echo "Porting Stared.".date("d-m-y H:i:s")."\n";
 
       $did = $this->argument('district_id');
@@ -129,7 +117,7 @@ class MysqlDataTransfer extends Command
             die( "length of Block Code cannot be more than 2.\n");
           }
           
-          $query = "Delete From [Block] Where [CODE] = '$block->blcode'"; 
+          $query = "Delete From [Block] Where [CODE] = '$block->blcode' And [disttcode] = '$block->code'"; 
           $result = sqlsrv_query($conn,$query);
 
           $query = "Insert Into [Block] ([CODE], [desc1], [distt], [disttcode], [NAme_eng]) Values ('$block->blcode', N'$block->blname_l', '$block->name_e', '$block->code', '$block->blname_e')"; 
@@ -145,7 +133,7 @@ class MysqlDataTransfer extends Command
               die( "length of Panchayat Code cannot be more than 3.\n");
             }
             
-            $query = "Delete From [Panchayat] Where [V_CODE] = '$village->vlcode'"; 
+            $query = "Delete From [Panchayat] Where [V_CODE] = '$village->vlcode' And [BLOCK] = '$village->blcode' And [disttcode] = '$village->dcode'"; 
             $result = sqlsrv_query($conn,$query);
 
             $query = "Delete From [b02] Where [DisttCode] = '$district->code' And [Block_Code] = '$block->blcode' And [GP_Code] = '$village->vlcode' $wcodecondition"; 
