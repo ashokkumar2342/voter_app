@@ -32,6 +32,6 @@ class VoterListProcessed extends Model
       }
       public function booths()
       {
-             return $this->hasOne('App\Model\VoterListProcessed','id','booth_id');
+             return $this->hasOne('App\Model\PollingBooth','id','booth_id');
       }
 }
