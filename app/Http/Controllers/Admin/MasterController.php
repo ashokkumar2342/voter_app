@@ -1200,6 +1200,7 @@ class MasterController extends Controller
       $voterDelete=Voter::find($id); 
       $voterDelete->village_id=0;
       $voterDelete->ward_id=0;
+      $voterDelete->booth_id=0;
       $voterDelete->save();
       $response=['status'=>1,'msg'=>'Updated Successfully'];
       return response()->json($response);
