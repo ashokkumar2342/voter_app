@@ -209,7 +209,7 @@ class ReportController extends Controller
         $fontDirs = $defaultConfig['fontDir']; 
         $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
         $fontData = $defaultFontConfig['fontdata']; 
-        $mpdf = new \Mpdf\Mpdf([
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [55, 88],
              'fontDir' => array_merge($fontDirs, [
                  __DIR__ . $path,
              ]),
@@ -225,19 +225,9 @@ class ReportController extends Controller
             'nbpgPrefix' => ' कुल ',
             'nbpgSuffix' => ' पृष्ठों का पृष्ठ'
          ]);
-         //statrt----barcode
-         // $value=$request->voter_card_no;
-         // $barcode = new BarcodeGenerator();
-         // $barcode->setText($value);
-         // $barcode->setType(BarcodeGenerator::Code128);
-         // $barcode->setScale(2);
-         // $barcode->setThickness(25);
-         // $barcode->setFontSize(10);
-         // $code = $barcode->generate();
-         // $data = base64_decode($code);
-        
-         //end--barcode
-         $html = view('admin.cardprint.print',compact('voterReports')); 
+          
+         $value=$request->voter_card_no; 
+         $html = view('admin.cardprint.print',compact('voterReports','value')); 
          $mpdf->WriteHTML($html); 
          $mpdf->Output();  
     } 
