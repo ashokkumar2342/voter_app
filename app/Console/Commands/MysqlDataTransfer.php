@@ -146,8 +146,8 @@ class MysqlDataTransfer extends Command
 
             $voters=DB::
             select(DB::raw("select `ac`.`code`, `wv`.`ward_no`, `ap`.`part_no`, `vd`.`sr_no`, `vd`.`house_no_e`,
-              `vd`.`name_e`, `vd`.`father_name_e`, `vd`.`voter_card_no`, `vd`.`age`, `g`.`code` as `gcode`, `rl`.`code` as `rcode`, `vd`.`name_l`, `vd`.`father_name_l`, `vd`.`house_no`, `vd`.`print_sr_no`, `vd`.`mobile_no` 
-              from `voters` `vd` Inner Join `assemblys` `ac` on `ac`.`id` = `vd`.`assembly_id` inner join `assembly_parts` `ap` on `ap`.`id` =`vd`.`assembly_part_id` Inner Join `relation` `rl` on `rl`.`id` = `vd`.`relation` inner Join `genders` `g` on `g`.`id` = `vd`.`gender_id` inner Join `ward_villages` `wv` on `wv`.`id` = `vd`.`ward_id` Where `vd`.`status` in (0,1,3) And `vd`.`village_id` = $village->id $wcondition;"));
+              `vd`.`name_e`, `vd`.`father_name_e`, `vd`.`voter_card_no`, `vd`.`age`, `g`.`code` as `gcode`, `rl`.`code` as `rcode`, `vd`.`name_l`, `vd`.`father_name_l`, `vd`.`house_no`, `vd`.`print_sr_no`, `vd`.`mobile_no`, `pb`.`booth_no` 
+              from `voters` `vd` Inner Join `assemblys` `ac` on `ac`.`id` = `vd`.`assembly_id` inner join `assembly_parts` `ap` on `ap`.`id` =`vd`.`assembly_part_id` Inner Join `relation` `rl` on `rl`.`id` = `vd`.`relation` inner Join `genders` `g` on `g`.`id` = `vd`.`gender_id` inner Join `ward_villages` `wv` on `wv`.`id` = `vd`.`ward_id` Left Join `polling_booths` `pb` on `pb`.`id` = `vd`.`booth_id` Where `vd`.`status` in (0,1,3) And `vd`.`village_id` = $village->id $wcondition;"));
 
             foreach ($voters as $voter) {
         
@@ -155,13 +155,13 @@ class MysqlDataTransfer extends Command
               [GP_Ward], [PART_NO], [SLNOINPART], [HOUSE_NO], 
               [FM_NAME], [RLN_FM_NM], [IDCARD_NO], [SEX],
               [AGE], [status], [name_eng], [fname_eng],
-              [Rln], [numric_hno], [srn], [mobileno], [uflag]
+              [Rln], [numric_hno], [srn], [mobileno], [uflag], [booth]
               ) 
                 Values ('$district->code', '$voter->code', '$block->blcode', '$village->vlcode',
                 '$voter->ward_no', '$voter->part_no', '$voter->sr_no', '$voter->house_no_e',
                 N'$voter->name_l', N'$voter->father_name_l', '$voter->voter_card_no', '$voter->gcode',
                 '$voter->age', 'O', '$voter->name_e', '$voter->father_name_e',
-                '$voter->rcode', '$voter->house_no', '$voter->print_sr_no', '$voter->mobile_no', 0
+                '$voter->rcode', '$voter->house_no', '$voter->print_sr_no', '$voter->mobile_no', 0, '$voter->booth_no'
                 )"; 
               $result = sqlsrv_query($conn,$query);
 
