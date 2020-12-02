@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Model\Assembly;
+use App\Model\AssemblyPart;
+use App\Model\BlocksMc;
+use App\Model\District;
+use App\Model\Gender;
+use App\Model\State;
+use App\Model\UserActivity;
+use App\Model\Village;
+use App\Model\Voter;
+use App\Model\VoterImage;
+use App\Model\VoterListMaster;
+use App\Model\VoterListProcessed;
+use App\Model\WardVillage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Imagick;
+use PDF;
+use TCPDF;
+
+class PrepareVoterSlipController extends Controller
+{ 
+    public function index($value='')
+    {   
+      $Districts= District::orderBy('name_e','ASC')->get();
+      return view('admin.master.PrepareVoterSlip.index',compact('Districts'));
+    }
+    public function PrepareVoterSlipGenerate(Request $request)
+    {   
+        $rules=[            
+            'district' => 'required', 
+            'block' => 'required', 
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+        return response()->json($response);// response as json
+       } 
+        \Artisan::queue('preparevoterslip:generate',['district_id'=>$request->district,'block_id'=>$request->block]);
+        $response=['status'=>1,'msg'=>'Submit Successfully'];
+        return response()->json($response);
+    }  
+}

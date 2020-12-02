@@ -14,6 +14,7 @@ use App\Model\BoothWardVoterMapping;
 use App\Model\District;
 use App\Model\Gender;
 use App\Model\PollingBooth;
+use App\Model\PollingDayTime;
 use App\Model\State;
 use App\Model\TmpImportAssembly;
 use App\Model\TmpImportMapVillageWard;
@@ -1452,5 +1453,57 @@ class MasterController extends Controller
        $response=['status'=>1,'msg'=>'Delete Successfully'];
        return response()->json($response);
            
+    }
+    public function pollingDayTime()
+    {
+      try {
+          $Districts= District::orderBy('name_e','ASC')->get(); 
+          return view('admin.master.pollingDayTime.index',compact('Districts'));
+        } catch (Exception $e) {
+            
+        }      
+    }
+    public function pollingDayTimeStore(Request $request,$id=null)
+   { 
+       $rules=[ 
+            'block' => 'required',  
+            'polling_day_time_english' => 'required', 
+            'polling_day_time_local' => 'required', 
+            'signature' => 'required', 
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+      if ($validator->fails()) {
+          $errors = $validator->errors()->all();
+          $response=array();
+          $response["status"]=0;
+          $response["msg"]=$errors[0];
+          return response()->json($response);// response as json
+      }
+      else {
+        $PollingDayTime=PollingDayTime::firstOrNew(['id'=>$id]); 
+        $PollingDayTime->block_id=$request->block; 
+        $PollingDayTime->polling_day_time_e=$request->polling_day_time_english;
+        $PollingDayTime->polling_day_time_l=$request->polling_day_time_local;
+        $PollingDayTime->save();
+        //--start-image-save
+        $dirpath = Storage_path() . '/app/voterslip';
+        $vpath = '/voterslip';
+        @mkdir($dirpath, 0755, true);
+        $file =$request->signature;
+        $imagedata = file_get_contents($file);
+        $encode = base64_encode($imagedata);
+        $image=base64_decode($encode); 
+        $name =$request->block;
+        $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg',$image);
+        //--end-image-save  
+       $response=['status'=>1,'msg'=>'Submit Successfully'];
+       return response()->json($response);
+      }
+    }
+    public function pollingDayTimeList(Request $request)
+    {
+      $PollingDayTimes= PollingDayTime::where('block_id',$request->id)->orderBy('polling_day_time_e','ASC')->get(); 
+      return view('admin.master.pollingDayTime.list',compact('PollingDayTimes'));      
     }     
 }

@@ -258,7 +258,9 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('boothDelete/{id}', 'MasterController@boothDelete')->name('admin.Master.boothDelete');   
 	 
 	       
-	    
+	    Route::get('pollingDayTime', 'MasterController@pollingDayTime')->name('admin.Master.pollingDayTime');
+	    Route::post('pollingDayTimeStore', 'MasterController@pollingDayTimeStore')->name('admin.Master.pollingDayTimeStore');
+	    Route::get('pollingDayTimeList', 'MasterController@pollingDayTimeList')->name('admin.Master.pollingDayTimeList');
 	     
 	});
     Route::group(['prefix' => 'VoterDetails'], function() {
@@ -312,6 +314,10 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('BlockWiseDownloadTable', 'VoterDetailsController@BlockWiseDownloadTable')->name('admin.voter.BlockWiseDownloadTable');
            Route::get('VoterListDownloadPDF/{path}/{condition}', 'VoterDetailsController@VoterListDownloadPDF')->name('admin.voter.VoterListDownloadPDF');
             
+    });
+	Route::group(['prefix' => 'PrepareVoterSlip'], function() {
+           Route::get('/', 'PrepareVoterSlipController@index')->name('admin.prepare.voter.slip');
+           Route::post('PrepareVoterSlipGenerate', 'PrepareVoterSlipController@PrepareVoterSlipGenerate')->name('admin.prepare.voter.slip.generate');
     });
     Route::group(['prefix' => 'Report'], function() {
            Route::get('PrintVoterList', 'ReportController@PrintVoterList')->name('admin.report.PrintVoterList');
