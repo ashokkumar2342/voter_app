@@ -122,7 +122,7 @@ class ReportController extends Controller
           from `ward_villages` `wv`
           Inner Join `villages` `v` on `v`.`id` = `wv`.`village_id`
           Inner Join `blocks_mcs` `b` on `b`.`id` = `v`.`blocks_id`
-          Left Join `ward_ps` `wps` on `wps`.`id` = `v`.`ps_ward_id` $condition
+          Left Join `ward_ps` `wps` on `wps`.`id` = `wv`.`ps_ward_id` $condition
           Order By `b`.`name_e`, `v`.`name_e`, `wv`.`ward_no`;"));
       }elseif ($report_type == 3){
         $tcols = 6;
