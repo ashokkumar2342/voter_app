@@ -36,6 +36,9 @@ class PrepareVoterSlipController extends Controller
         $rules=[            
             'district' => 'required', 
             'block' => 'required', 
+            'village' => 'required', 
+            'ward' => 'required', 
+            'booth' => 'required', 
         ];
         $validator = Validator::make($request->all(),$rules);
         if ($validator->fails()) {
@@ -45,7 +48,7 @@ class PrepareVoterSlipController extends Controller
             $response["msg"]=$errors[0];
         return response()->json($response);// response as json
        } 
-        \Artisan::queue('preparevoterslip:generate',['district_id'=>$request->district,'block_id'=>$request->block]);
+        \Artisan::queue('preparevoterslip:generate',['district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village,'ward_id'=>$request->ward,'booth_id'=>$request->booth]);
         $response=['status'=>1,'msg'=>'Submit Successfully'];
         return response()->json($response);
     }  

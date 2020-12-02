@@ -27,7 +27,7 @@ class PrepareVoterSlip extends Command
      *
      * @var string
      */
-    protected $signature = 'preparevoterslip:generate {district_id} {block_id}';
+    protected $signature = 'preparevoterslip:generate {district_id} {block_id} {village_id} {ward_id} {booth_id}';
 
 
     /**
@@ -61,10 +61,10 @@ class PrepareVoterSlip extends Command
     ini_set("pcre.backtrack_limit", "100000000");
     $district_id = $this->argument('district_id'); 
     $block_id = $this->argument('block_id'); 
-    $blockcode=BlocksMc::find($block_id); 
-    // $VoterListProcessed=VoterListProcessed::where('district_id',$district_id)->where('block_id',$block_id)->where('village_id',$village_id)->where('ward_id',$ward_id)->where('voter_list_master_id',$voterListMaster->id)->where('booth_id',$booth_id)->first();
-
-
+    $village_id = $this->argument('village_id'); 
+    $ward_id = $this->argument('ward_id'); 
+    $booth_id = $this->argument('booth_id'); 
+     
     $dirpath = Storage_path() . '/app/voterslip/'.$block_id;
     @mkdir($dirpath, 0755, true);
     $filepath = Storage_path() . '/app/voterslip/'.$block_id .'/'.$block_id.'.pdf';
