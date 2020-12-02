@@ -379,5 +379,9 @@ Route::group(['middleware' => 'admin'], function() {
                 Route::get('MysqlDataTransferVillageWiseWard', 'DatabaseConnectionController@MysqlDataTransferVillageWiseWard')->name('admin.database.conection.MysqlDataTransferVillageWiseWard');
                 Route::post('MysqlDataTransferStore', 'DatabaseConnectionController@MysqlDataTransferStore')->name('admin.database.conection.MysqlDataTransferStore');
         });
+    Route::group(['prefix' => 'PDFFileUpload'], function() {
+               Route::get('/', 'PDFFileUploadController@index')->name('admin.PDFFileUpload.index');
+               Route::post('Upload', 'PDFFileUploadController@Upload')->name('admin.PDFFileUpload.Upload');
 
+ 	});
  });
