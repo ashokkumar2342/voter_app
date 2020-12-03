@@ -15,6 +15,7 @@ use App\Model\Voter;
 use App\Model\VoterImage;
 use App\Model\VoterListMaster;
 use App\Model\VoterListProcessed;
+use App\Model\VoterSlipProcessed;
 use App\Model\WardVillage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -51,5 +52,22 @@ class PrepareVoterSlipController extends Controller
         \Artisan::queue('preparevoterslip:generate',['district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village,'ward_id'=>$request->ward,'booth_id'=>$request->booth]);
         $response=['status'=>1,'msg'=>'Submit Successfully'];
         return response()->json($response);
-    }  
+    }
+    public function PrepareVoterSlipDownload( )
+    {
+      $States= State::orderBy('name_e','ASC')->get();    
+        $voterListMasters= VoterListMaster::orderBy('id','ASC')->get();    
+        return view('admin.master.PrepareVoterSlip.download',compact('States','voterListMasters'));    
+    }
+    public function PrepareVoterSlipDownloadResult(Request $request)
+    {
+        $VoterSlipProcesseds=VoterSlipProcessed::where('state_id',$request->state_id)->where('district_id',$request->district_id)->where('block_id',$request->block_id)->orderBy('file_path','ASC')->get();
+        return view('admin.master.PrepareVoterSlip.download_result',compact('VoterSlipProcesseds'));
+    }
+    public function VoterListDownloadPDF($id,$condition)
+     {  
+        $VoterSlipProcessed=VoterSlipProcessed::find($id); 
+        $documentUrl = Storage_path().$VoterSlipProcessed->folder_path;  
+        return response()->file($documentUrl); 
+     }   
 }
