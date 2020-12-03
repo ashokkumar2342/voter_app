@@ -1237,7 +1237,7 @@ class MasterController extends Controller
     }
     public function WardWiseBooth(Request $request)
     { 
-      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
+      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id) Order by `booth_name`;"));
       return view('admin.master.wardbandiwithbooth.booth_select_box',compact('selectbooths'));
     }
     public function WardBandiWithBoothStore(Request $request)

@@ -21,13 +21,13 @@
 </tr>
 <tr style="height: 13px;">
 <td style="width: 75px; height: 13px;font-size:20px;word-spacing:5px;">वार्ड न० :</td>
-<td style="width: 74px; height: 13px;font-size:20px;word-spacing:5px">1</td>
+<td style="width: 74px; height: 13px;font-size:20px;word-spacing:5px">{{$wardno}}</td>
 <td style="width: 93px; height: 13px;font-size:20px;word-spacing:5px">Part No. :</td>
-<td style="width: 249px; height: 13px;font-size:20px;word-spacing:5px">50</td>
+<td style="width: 249px; height: 13px;font-size:20px;word-spacing:5px">{{$voterReport->part_no}}</td>
 <td style="width: 91px; height: 67px;" rowspan="4">
 @php	
-$dirpath = '/app/vimage/2/355';
-$name =37796;
+$dirpath = '/app/vimage/'.$voterReport->assembly_id.'/'.$voterReport->assembly_part_id;
+$name =$voterReport->id;
 $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 @endphp
 <img src="{{ $image }}" alt="" width="130px" height="130px">
@@ -39,24 +39,24 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 </tr>
 <tr style="height: 18px;">
 <td style="width: 65px; height: 18px;font-size:20px;word-spacing:5px">लिंग</td>
-<td style="width: 74px; height: 18px;font-size:20px;word-spacing:5px">पुष</td>
+<td style="width: 74px; height: 18px;font-size:20px;word-spacing:5px">{{$voterReport->genders_l}}</td>
 <td style="width: 93px; height: 18px;font-size:20px;word-spacing:5px">EPIC No. :</td>
 <td style="width: 249px; height: 18px;font-size:20px;word-spacing:5px">{{ $voterReport->voter_card_no }}</td>
 </tr>
 <tr style="height: 18px;">
-<td style="width: 65px; height: 18px;font-size:20px;word-spacing:5px">पिता</td>
+<td style="width: 65px; height: 18px;font-size:20px;word-spacing:5px">{{ $voterReport->vrelation }}</td>
 <td style="width: 74px; height: 18px;font-size:20px;word-spacing:5px">{{ $voterReport->father_name_l }}</td>
 <td style="width: 93px; height: 18px;font-size:20px;word-spacing:5px">&nbsp;</td>
 <td style="width: 249px; height: 18px;font-size:20px;word-spacing:5px">&nbsp;</td>
 </tr>
 <tr style="height: 18px;">
-<td style="width: 572px; height: 16px;font-size:20px;word-spacing:5px" colspan="5">मतदाता क्रमांक संख्या : 2419</td>
+<td style="width: 572px; height: 16px;font-size:20px;word-spacing:5px" colspan="5">मतदाता क्रमांक संख्या : {{ $voterReport->print_sr_no }}</td>
 </tr>
 <tr>
-<td colspan="5" style="font-size:18px;word-spacing:5px">Polling Station No. and Name : 1 कार्यालय उत्तर हरियाण बिजली वित्रण निगम </td>
+<td colspan="5" style="font-size:18px;word-spacing:5px">Polling Station No. and Name : {{ $voterReport->booth_no }} -  {{ $voterReport->pb_name }} </td>
 </tr>
 <tr>
-<td colspan="5" style="font-size:18px;word-spacing:5px">Poll Date, Day and Time : 22/05/2016 (sunday) From 07:00 AM to 05:00 PM</td>
+<td colspan="5" style="font-size:18px;word-spacing:5px">Poll Date, Day and Time : {{ $polldatetime->polling_day_time_l }}</td>
 </tr>
 <tr>
 <td colspan="5">Note: 1 This Voter Slip can also be produced as an identification document</td>
@@ -77,8 +77,8 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 <td style="width: 50px;text-align:center" align="center">
 	@php	
 $dirpath = '/app/voterslip';
-$name ='signature';
-$image  =\Storage_path($dirpath.'/'.$name.'.jpeg');
+$name =$polldatetime->signature;
+$image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 @endphp
 <img src="{{ $image }}" alt="" width="55px" height="60px" align="center">
 </td>

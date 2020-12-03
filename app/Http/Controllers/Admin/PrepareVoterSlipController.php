@@ -49,6 +49,9 @@ class PrepareVoterSlipController extends Controller
             $response["msg"]=$errors[0];
         return response()->json($response);// response as json
        } 
+       $PrepareVoterSlipSave= DB::
+              select(DB::raw("call up_process_voter_slip ($request->district, $request->block, $request->village, $request->ward, $request->booth)"));
+
         \Artisan::queue('preparevoterslip:generate',['district_id'=>$request->district,'block_id'=>$request->block,'village_id'=>$request->village,'ward_id'=>$request->ward,'booth_id'=>$request->booth]);
         $response=['status'=>1,'msg'=>'Submit Successfully'];
         return response()->json($response);
