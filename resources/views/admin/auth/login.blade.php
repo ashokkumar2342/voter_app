@@ -39,6 +39,7 @@
             </div>
           </div>
         </div>
+        <p class="text-danger">{{ $errors->first('email') }}</p>
         <div class="input-group mb-3">
           <input type="password" name="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
@@ -47,6 +48,7 @@
             </div>
           </div>
         </div>
+        <p class="text-danger">{{ $errors->first('password') }}</p>
         <div class="captcha">
          <span>{!! captcha_img('math') !!}</span>
          <button type="button" class="btn btn-success" id="refresh"><i class="fas fa-1x fa-sync-alt" ></i></button>
@@ -58,7 +60,8 @@
                
             </div>
           </div>
-        </div> 
+        </div>
+        <p class="text-danger">{{ $errors->first('captcha') }}</p>
         <div class="row"> 
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
