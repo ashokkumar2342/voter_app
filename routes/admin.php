@@ -324,7 +324,7 @@ Route::group(['middleware' => 'admin'], function() {
            Route::post('PrepareVoterSlipGenerate', 'PrepareVoterSlipController@PrepareVoterSlipGenerate')->name('admin.prepare.voter.slip.generate');
            Route::get('PrepareVoterSlipDownload', 'PrepareVoterSlipController@PrepareVoterSlipDownload')->name('admin.prepare.voter.slip.download');
            Route::get('PrepareVoterSlipDownloadResult', 'PrepareVoterSlipController@PrepareVoterSlipDownloadResult')->name('admin.prepare.voter.slip.download.result');
-           Route::get('PrepareVoterSlipResultDownload/{folder_path}', 'PrepareVoterSlipController@PrepareVoterSlipResultDownload')->name('admin.prepare.voter.slip.result.download');
+           Route::get('PrepareVoterSlipResultDownload/{id}', 'PrepareVoterSlipController@PrepareVoterSlipResultDownload')->name('admin.prepare.voter.slip.result.download');
     });
     Route::group(['prefix' => 'Report'], function() {
            Route::get('PrintVoterList', 'ReportController@PrintVoterList')->name('admin.report.PrintVoterList');

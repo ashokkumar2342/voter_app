@@ -82,10 +82,10 @@ class PrepareVoterSlipController extends Controller
         $VoterSlipProcesseds=VoterSlipProcessed::where('state_id',$request->state_id)->where('district_id',$request->district_id)->where('block_id',$request->block_id)->orderBy('file_path','ASC')->get();
         return view('admin.master.PrepareVoterSlip.download_result',compact('VoterSlipProcesseds'));
     }
-    public function VoterListDownloadPDF($id,$condition)
+    public function PrepareVoterSlipResultDownload($id)
      {  
         $VoterSlipProcessed=VoterSlipProcessed::find($id); 
-        $documentUrl = Storage_path().$VoterSlipProcessed->folder_path;  
+        $documentUrl = Storage_path().$VoterSlipProcessed->folder_path.'/'.$VoterSlipProcessed->file_path;  
         return response()->file($documentUrl); 
      }   
 }

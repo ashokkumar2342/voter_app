@@ -114,7 +114,10 @@ class PrepareVoterSlip extends Command
 
         if ($booth_id==0){$booth_condition = "";}else{$booth_condition = " And `v`.`booth_id` = $booth_id";}
 
-        $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, `ap`.`part_no`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `g`.`genders_l`, `pb`.`booth_no`, `pb`.`name_l` as `pb_name` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` left join `polling_booths` `pb` on `pb`.`id` = `v`.`booth_id` where `v`.`ward_id` =$WardVillage->id And `v`.`status` in (0,1,3) $booth_condition Order By `v`.`print_sr_no`;"));
+        $booth_condition = "";
+        $query = "select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, `ap`.`part_no`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `g`.`genders_l`, `pb`.`booth_no`, `pb`.`name_l` as `pb_name` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` left join `polling_booths` `pb` on `pb`.`id` = `v`.`booth_id` where `v`.`ward_id` =$WardVillage->id And `v`.`status` in (0,1,3) $booth_condition Order By `v`.`print_sr_no`;";
+        // dd($query);
+        $voterReports = DB::select(DB::raw("$query"));
         
         $polldatetime = PollingDayTime::where('block_id',$block_id)->first();
 
@@ -127,7 +130,7 @@ class PrepareVoterSlip extends Command
     $mpdf_slip->WriteHTML('</body></html>');
     
     
-    $filepath = Storage_path() . $VoterSlipProcessed->folder_path . $VoterSlipProcessed->file_path;
+    $filepath = Storage_path() . $VoterSlipProcessed->folder_path .'/'. $VoterSlipProcessed->file_path;
     $mpdf_slip->Output($filepath, 'F');
 
     
