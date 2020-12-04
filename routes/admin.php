@@ -316,7 +316,11 @@ Route::group(['middleware' => 'admin'], function() {
             
     });
 	Route::group(['prefix' => 'PrepareVoterSlip'], function() {
-           Route::get('/', 'PrepareVoterSlipController@index')->name('admin.prepare.voter.slip');
+           Route::get('/', 'PrepareVoterSlipController@index')->name('admin.prepare.voter.slip'); 
+           
+           Route::get('village-wise-ward', 'PrepareVoterSlipController@villageWiseWard')->name('admin.prepare.voter.slip.village.wise.ward');
+           Route::get('village-wise-booth', 'PrepareVoterSlipController@villageWiseBooth')->name('admin.prepare.voter.slip.village.wise.booth');
+
            Route::post('PrepareVoterSlipGenerate', 'PrepareVoterSlipController@PrepareVoterSlipGenerate')->name('admin.prepare.voter.slip.generate');
            Route::get('PrepareVoterSlipDownload', 'PrepareVoterSlipController@PrepareVoterSlipDownload')->name('admin.prepare.voter.slip.download');
            Route::get('PrepareVoterSlipDownloadResult', 'PrepareVoterSlipController@PrepareVoterSlipDownloadResult')->name('admin.prepare.voter.slip.download.result');

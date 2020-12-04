@@ -1237,7 +1237,7 @@ class MasterController extends Controller
     }
     public function WardWiseBooth(Request $request)
     { 
-      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id) Order by `booth_name`;"));
+      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
       return view('admin.master.wardbandiwithbooth.booth_select_box',compact('selectbooths'));
     }
     public function WardBandiWithBoothStore(Request $request)
@@ -1485,7 +1485,7 @@ class MasterController extends Controller
         $PollingDayTime->block_id=$request->block; 
         $PollingDayTime->polling_day_time_e=$request->polling_day_time_english;
         $PollingDayTime->polling_day_time_l=$request->polling_day_time_local;
-        $PollingDayTime->save();
+        
         //--start-image-save
         $dirpath = Storage_path() . '/app/voterslip';
         $vpath = '/voterslip';
@@ -1496,7 +1496,9 @@ class MasterController extends Controller
         $image=base64_decode($encode); 
         $name =$request->block;
         $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg',$image);
-        //--end-image-save  
+        //--end-image-save
+        $PollingDayTime->signature=$vpath.'/'.$name.'.jpg'; 
+        $PollingDayTime->save(); 
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response);
       }

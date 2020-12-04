@@ -8,6 +8,7 @@ use App\Model\AssemblyPart;
 use App\Model\BlocksMc;
 use App\Model\District;
 use App\Model\Gender;
+use App\Model\PollingBooth;
 use App\Model\State;
 use App\Model\UserActivity;
 use App\Model\Village;
@@ -31,6 +32,20 @@ class PrepareVoterSlipController extends Controller
     {   
       $Districts= District::orderBy('name_e','ASC')->get();
       return view('admin.master.PrepareVoterSlip.index',compact('Districts'));
+    }
+    public function villageWiseWard(Request $request)
+    {
+      $wards=WardVillage::where('village_id',$request->village_id)->orderBy('ward_no','ASC')->get();
+      return view('admin.master.PrepareVoterSlip.ward_select_box',compact('wards'));   
+    }
+    public function villageWiseBooth(Request $request)
+    {
+        if ($request->ward_id!=0) { 
+            $booths=PollingBooth::where('village_id',$request->village_id)->orderBy('booth_no','ASC')->get();
+        }else{
+           $booths=[]; 
+        }
+        return view('admin.master.PrepareVoterSlip.booth_select_box',compact('booths'));   
     }
     public function PrepareVoterSlipGenerate(Request $request)
     {   
@@ -59,7 +74,7 @@ class PrepareVoterSlipController extends Controller
     public function PrepareVoterSlipDownload( )
     {
       $States= State::orderBy('name_e','ASC')->get();    
-        $voterListMasters= VoterListMaster::orderBy('id','ASC')->get();    
+      $voterListMasters= VoterListMaster::orderBy('id','ASC')->get();    
         return view('admin.master.PrepareVoterSlip.download',compact('States','voterListMasters'));    
     }
     public function PrepareVoterSlipDownloadResult(Request $request)
