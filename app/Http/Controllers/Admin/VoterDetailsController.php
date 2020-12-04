@@ -368,6 +368,19 @@ class VoterDetailsController extends Controller
       $voter->gender_id=$request->gender;  
       $voter->status=3; 
       $voter->save();
+      //--start-image-save
+      if ($request->hasFile('image')) {
+          $dirpath = Storage_path() . '/app/vimage/'.$voter->assembly_id.'/'.$voter->assembly_part_id;
+          $vpath = '/vimage/'.$voter->assembly_id.'/'.$voter->assembly_part_id;
+          @mkdir($dirpath, 0755, true);
+          $file =$request->image;
+          $imagedata = file_get_contents($file);
+          $encode = base64_encode($imagedata);
+          $image=base64_decode($encode); 
+          $name =$voter->id;
+          $image= \Storage::disk('local')->put($vpath.'/'.$name.'.jpg',$image);
+      }
+      //--end-image-save 
       $response=['status'=>1,'msg'=>'Modify Successfully'];
       return response()->json($response);
     }
