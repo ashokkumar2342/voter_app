@@ -5,7 +5,7 @@
 	<table width="100%">
 		<tbody>
 			<tr style="height: 18px;">
-				<td style="text-align:center;font-size:22px;word-spacing:5px"><b>General Election to the नगर पालका झजर - 2016</b></td>
+				<td style="text-align:center;font-size:22px;word-spacing:5px"><b>{{$slipheader}}</b></td>
 			</tr>
 		</tbody>
 	</table>
@@ -83,9 +83,9 @@ $image  =\Storage_path('/app'.$polldatetime->signature);
 				</td>
 			</tr>
 			<tr style="height: 18px;">
-				<td style="width: 200px;font-size: 18px">&nbsp;Date : 01/01/2020</td>
+				<td style="width: 200px;font-size: 18px">&nbsp;Date : {{date('d-m-Y')}}</td>
 				<td style="width: 300px">&nbsp;</td> 
-				<td style="width: 220px;font-size: 22px">Returning Officer Municipal Committee Jhajjar</td>
+				<td style="width: 220px;font-size: 22px">{{ $blockMcs[0]->stamp_l1 }}<br>{{ $blockMcs[0]->stamp_l2 }}</td>
 			</tr>
 		</tbody>
 	</table> 

@@ -47,14 +47,13 @@
                                     <label for="exampleInputEmail1">Ward No.</label>
                                     <span class="fa fa-asterisk"></span>
                                     <select name="ward" class="form-control multiselect" id="value_div_id" onchange="callAjax(this,'{{ route('admin.prepare.voter.slip.village.wise.booth') }}'+'?ward_id='+this.value+'&village_id='+$('#village_select_box').val(),'booth_select_box')">
-                                      <option selected disabled>Select Ward</option> 
+                                      <option value="0">All</option> 
                                     </select>
                                     </div>
                                     <div class="col-lg-6 form-group"> 
                                     <label for="exampleInputEmail1">Booth No.</label>
                                     <span class="fa fa-asterisk"></span>
                                     <select name="booth" class="form-control multiselect" id="booth_select_box">
-                                      <option selected disabled>Select Booth No.</option> 
                                       <option value="0">All</option> 
                                     </select>
                                     </div>
