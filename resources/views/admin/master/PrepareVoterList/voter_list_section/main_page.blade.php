@@ -189,18 +189,27 @@
 					</tr>
 					<tr style="border: 1px solid black;">
 						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->from_sr_no }}</td>
-						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->total }}</td>
+						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->to_sr_no }}</td>
 						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->male }}</td>
 						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->female }}</td>
 						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->transgender }}</td>
 						<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->total }}</td>
-					</tr>			
+					</tr>
+					@if ($mainpagedetail->deleted_total>0)
+						<tr style="border: 1px solid black;">
+							<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">विलोपन संख्या</td>
+							<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px"></td>
+							<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->deleted_male }}</td>
+							<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->deleted_female }}</td>
+							<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->deleted_third }}</td>
+							<td style="border: 1px solid black;height: 40px;text-align:center;word-spacing: 4px">{{ $mainpagedetail->deleted_total }}</td>
+						</tr>
+					@endif
 				</table>
 			</td>
 		</tr>
 		</tbody>
 		</table>
-		@endforeach
 
 		@php
 			$counter = 21-$counter;
@@ -210,19 +219,23 @@
 			$margintop = $counter*20;
 			// $margintop = 0;
 		@endphp
+		<table width="100%" style='margin-top:{{$margintop}}px;'>
+			<tr>
+				<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetail->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetail->date }} के अनुसार संशोधित</td> 
+				<td width="52%" align="right" style="text-align: right;font-size: 12px;word-spacing: 4px"> कुल {{$totalpage}} पृष्ठों का पृष्ठ 1</td>
+					        
+			</tr>
+		</table>
+		@endforeach
+
+		
 
 	
 	@push('scripts')
 	<script type="text/javascript">findtablesheight();</script>
 	@endpush
 	
-	<table width="100%" style='margin-top:{{$margintop}}px;'>
-		<tr>
-			<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->date }} के अनुसार संशोधित</td> 
-			<td width="52%" align="right" style="text-align: right;font-size: 12px;word-spacing: 4px"> कुल {{$totalpage}} पृष्ठों का पृष्ठ 1</td>
-				        
-		</tr>
-	</table>
+	
 	<pagebreak>	
 
 	

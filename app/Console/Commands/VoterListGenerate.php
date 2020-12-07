@@ -164,7 +164,6 @@ class VoterListGenerate extends Command
                 $totalpage = (int)($votercount/30);
                 if ($totalpage*30<$votercount){$totalpage++;}
                 $totalpage++;
-
                 $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
                 $mpdf_photo->WriteHTML($main_page);
                 $mpdf_mainpage->WriteHTML($main_page);
@@ -178,6 +177,120 @@ class VoterListGenerate extends Command
                 $printphoto = 0;
                 $main_page=$this->prepareVoterDetail($voterReports, $mainpagedetails, $totalpage, $printphoto);
                 $mpdf_wp->WriteHTML($main_page);
+            }
+        }
+    }else{ //Code For Print Suppliment
+        $wardcount = 1;
+        $totalpage=0;
+        foreach ($WardVillages as $WardVillage) {
+            if ($wardcount>1){
+                $mpdf_photo->WriteHTML('<pagebreak>');
+                $mpdf_wp->WriteHTML('<pagebreak>');
+                if(fmod($totalpage, 2)==1){
+                    $mpdf_photo->WriteHTML('<pagebreak>');
+                    $mpdf_wp->WriteHTML('<pagebreak>'); 
+                }    
+            }
+            $wardcount++;
+
+            if ($booth_id==0){$booth_condition = "";}else{$booth_condition = " And `v`.`booth_id` = $booth_id";}
+
+            
+            
+            
+            // $pre_voter_list_ids = DB::select(DB::raw("(Select ifnull(max(`id`),0) as `pre_list_id` from `voter_list_master` Where `id` < $voterListMaster->id and `is_supplement` = 0);"));
+
+            // $pre_voter_list_id = $pre_voter_list_ids[0]->pre_list_id;
+            
+            // if ($pre_voter_list_id == 0){
+                $mainpagedetails=MainPageDetails::where('voter_list_master_id',$voterListMaster->id)->where('ward_id',$WardVillage->id)->where('booth_id',$booth_id)->count();
+            // }else{
+            //     $mainpagedetails=MainPageDetails::where('voter_list_master_id','>=',$pre_voter_list_id)->where('ward_id',$WardVillage->id)->where('booth_id',$booth_id)->count();
+            // }
+            
+            
+            if ($mainpagedetails>0){
+
+                $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` = 1 and `v`.`suppliment_no` = $voterListMaster->id  $booth_condition Order By `v`.`print_sr_no`;"));
+
+                $votermodifiedReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` = 3 and `v`.`suppliment_no` = $voterListMaster->id  $booth_condition Order By `v`.`print_sr_no`;"));
+
+                $voterDeletedReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` = 2 and `v`.`suppliment_no` = $voterListMaster->id  $booth_condition Order By `v`.`print_sr_no`;"));
+
+                $mainpagedetails= DB::select(DB::raw("Select * From `main_page_detail` where `voter_list_master_id` =$voterListMaster->id and `ward_id` =$WardVillage->id and `booth_id` = $booth_id;"));
+                
+                $voterssrnodetails = DB::select(DB::raw("Select * From `voters_srno_detail` where `voter_list_master_id` =$voterListMaster->id and `wardid` = $WardVillage->id And booth_id = $booth_id;"));
+
+                $votercount = count($voterReports);
+                $votermodifiedcount = count($votermodifiedReports);
+                $voterdeletedcount = count($voterDeletedReports);
+
+                $totalnewrows = (int)($votercount/3);
+                if ($totalnewrows*3<$votercount){$totalnewrows++;}
+
+                $totalmodifiedrows = (int)($votermodifiedcount/3);
+                if ($totalmodifiedrows*3<$votermodifiedcount){$totalmodifiedrows++;}
+
+                $totaldeletedrows = (int)($voterdeletedcount/3);
+                if ($totaldeletedrows*3<$voterdeletedcount){$totaldeletedrows++;}
+                
+                $totalRows = $totalnewrows + $totalmodifiedrows + $totaldeletedrows;
+                $totalpage = (int)($totalRows/10);
+                if ($totalpage*10<$totalRows){$totalpage++;}
+                $totalpage++;
+
+                $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
+                $mpdf_photo->WriteHTML($main_page);
+                $mpdf_mainpage->WriteHTML($main_page);
+                $mpdf_wp->WriteHTML($main_page);
+
+            
+                $printphoto = 1;
+                if ($votercount>0){
+                    $SuchiType = 'परिवर्धन सूचि';
+                    $PrintedRows = 0;
+                    $main_page=$this->prepareVoterDetailSuppliment($voterReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
+                    $mpdf_photo->WriteHTML($main_page);
+                }
+
+                if ($votermodifiedcount>0){
+                    $SuchiType = 'संसोधन सूचि';
+                    $PrintedRows = $totalnewrows;
+                    $main_page=$this->prepareVoterDetailSuppliment($votermodifiedReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
+                    $mpdf_photo->WriteHTML($main_page);
+                }
+
+                if ($voterdeletedcount>0){
+                    $SuchiType = 'विलोपन सूचि';
+                    $PrintedRows = $totalnewrows + $totalmodifiedrows;
+                    $main_page=$this->prepareVoterDetailSuppliment($voterDeletedReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
+                    $mpdf_photo->WriteHTML($main_page);
+                }
+
+                // $mpdf_photo->WriteHTML('<pagebreak>');
+
+                $printphoto = 0;
+                if ($votercount>0){
+                    $SuchiType = 'परिवर्धन सूचि';
+                    $PrintedRows = 0;
+                    $main_page=$this->prepareVoterDetailSuppliment($voterReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
+                    $mpdf_wp->WriteHTML($main_page);
+                }
+
+                if ($votermodifiedcount>0){
+                    $SuchiType = 'संसोधन सूचि';
+                    $PrintedRows = $totalnewrows;
+                    $main_page=$this->prepareVoterDetailSuppliment($votermodifiedReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
+                    $mpdf_wp->WriteHTML($main_page);
+                }
+
+                if ($voterdeletedcount>0){
+                    $SuchiType = 'विलोपन सूचि';
+                    $PrintedRows = $totalnewrows + $totalmodifiedrows;
+                    $main_page=$this->prepareVoterDetailSuppliment($voterDeletedReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
+                    $mpdf_wp->WriteHTML($main_page);
+                }
+                // $mpdf_wp->WriteHTML('<pagebreak>');
             }
         }
     }
@@ -207,6 +320,12 @@ class VoterListGenerate extends Command
     {
         
         return $main_page=view('admin.master.PrepareVoterList.voter_list_section.voter_detail',compact('voterReports', 'mainpagedetails', 'totalpage', 'printphoto'));    
+    }
+
+    public function prepareVoterDetailSuppliment($voterReports, $mainpagedetails, $totalpage,$printphoto, $SuchiType, $PrintedRows)
+    {
+        
+        return $main_page=view('admin.master.PrepareVoterList.voter_list_section.voter_detail_suppliment',compact('voterReports', 'mainpagedetails', 'totalpage', 'printphoto', 'SuchiType', 'PrintedRows'));    
     }
 
     
