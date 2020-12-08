@@ -5,10 +5,11 @@
 		if ($PrintedRows==0){
 			$newpagestart = 1;
 		}
-		$counter = 0;
+		$counter = $PrintedRows*3;
 		$totalCount=count($voterReports);
 		$headerheight = 20;
 		$i=0;
+		$printsuchi = 1;
 		@endphp
 		@foreach ($voterReports as $voterReport)
 		@php
@@ -44,15 +45,22 @@
 		 		}
 		 		$newpagestart=0;
 		 	}
+		 @endphp
+		 	@if ($printsuchi==1)	
+		 		<table width = "100%" style="padding: 2px;font-size: 12px;font-weight: bold;margin-top:10px;">
+ 		 			<tr>
+ 		 				<td style="text-align: left; padding-left: 15px" width="100%">
+ 		 					{{$SuchiType}}
+ 		 				</td>
+ 		 			</tr>
+ 		 		</table>
+ 		 		@php
+ 		 			$printsuchi = 0;
+ 		 		@endphp
+ 		 	@endif
+		 @php
 		 	$i=$i+1;
 		 @endphp
-		<table width = "100%" style="padding: 2px;font-size: 12px;font-weight: bold;margin-top:-10px;">
- 			<tr>
- 				<td style="text-align: left; padding-left: 5px" width="100%">
- 					{{$SuchiType}}
- 				</td>
- 			</tr>
- 		</table>
 		@if ($time==0)
 		<table style="padding:-2px">
 			<tbody>
@@ -113,7 +121,7 @@
 
 		@php
 			$counter++;
-			if($counter==30){$counter=0;$cpageno++;$newpagestart = 1;
+			if($counter==27){$counter=0;$cpageno++;$newpagestart = 1;
 		@endphp	
 
 			<table width="100%" style="margin-top:5px;">
@@ -123,7 +131,7 @@
 				        
 				</tr>
 			</table>
-			{{-- <pagebreak> --}}
+			<pagebreak>
 
 		@php
 			}
@@ -131,29 +139,4 @@
 		@endphp
 
 		@endforeach
-
-		@php
-			if($newpagestart == 0){$cpageno++;$remaining = 30-$counter;$lrem=(int)((30-$counter-fmod($remaining, 3))/3)*100-$headerheight;
-		@endphp	
-			<table width="100%" style="margin-top:{{$lrem}}px;" >
-				<tr>
-					<td>
-						&nbsp;
-					</td>
-				        
-				</tr>
-			</table>
-			<table width="100%" style="margin-top:5px;">
-				<tr>
-					<td width="48%" style="text-align: left;font-size: 11px;word-spacing: 4px"><b>*</b> {{ $mainpagedetails[0]->year }} को अंतिम प्रकाशित विधानसभा मतदाता सूचि का क्रo/भाग  नo आयु {{ $mainpagedetails[0]->date }} के अनुसार संशोधित </td> 
-					<td width="52%" align="right" style="text-align: right;font-size: 12px;word-spacing: 4px"> कुल {{$totalpage}} पृष्ठों का पृष्ठ {{$cpageno}}</td>
-				        
-				</tr>
-			</table>
-			
-
-		@php
-			}
-
-		@endphp
 </div>

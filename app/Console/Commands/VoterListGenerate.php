@@ -69,7 +69,8 @@ class VoterListGenerate extends Command
     $wardno=WardVillage::find($ward_id); 
     $villagename=Village::find($village_id);
     $pollingboothdetail=PollingBooth::find($booth_id);
-    
+
+
     $VoterListProcessed=VoterListProcessed::where('district_id',$district_id)->where('block_id',$block_id)->where('village_id',$village_id)->where('ward_id',$ward_id)->where('voter_list_master_id',$voterListMaster->id)->where('booth_id',$booth_id)->first();
 
 
@@ -164,7 +165,7 @@ class VoterListGenerate extends Command
                 $totalpage = (int)($votercount/30);
                 if ($totalpage*30<$votercount){$totalpage++;}
                 $totalpage++;
-                $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
+                $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype, 0);
                 $mpdf_photo->WriteHTML($main_page);
                 $mpdf_mainpage->WriteHTML($main_page);
                 $mpdf_wp->WriteHTML($main_page);
@@ -183,33 +184,22 @@ class VoterListGenerate extends Command
         $wardcount = 1;
         $totalpage=0;
         foreach ($WardVillages as $WardVillage) {
-            if ($wardcount>1){
-                $mpdf_photo->WriteHTML('<pagebreak>');
-                $mpdf_wp->WriteHTML('<pagebreak>');
-                if(fmod($totalpage, 2)==1){
-                    $mpdf_photo->WriteHTML('<pagebreak>');
-                    $mpdf_wp->WriteHTML('<pagebreak>'); 
-                }    
-            }
-            $wardcount++;
-
             if ($booth_id==0){$booth_condition = "";}else{$booth_condition = " And `v`.`booth_id` = $booth_id";}
 
-            
-            
-            
-            // $pre_voter_list_ids = DB::select(DB::raw("(Select ifnull(max(`id`),0) as `pre_list_id` from `voter_list_master` Where `id` < $voterListMaster->id and `is_supplement` = 0);"));
+            $mainpagedetails=MainPageDetails::where('voter_list_master_id',$voterListMaster->id)->where('ward_id',$WardVillage->id)->where('booth_id',$booth_id)->count();
 
-            // $pre_voter_list_id = $pre_voter_list_ids[0]->pre_list_id;
-            
-            // if ($pre_voter_list_id == 0){
-                $mainpagedetails=MainPageDetails::where('voter_list_master_id',$voterListMaster->id)->where('ward_id',$WardVillage->id)->where('booth_id',$booth_id)->count();
-            // }else{
-            //     $mainpagedetails=MainPageDetails::where('voter_list_master_id','>=',$pre_voter_list_id)->where('ward_id',$WardVillage->id)->where('booth_id',$booth_id)->count();
-            // }
-            
             
             if ($mainpagedetails>0){
+
+                if ($wardcount>1){
+                    $mpdf_photo->WriteHTML('<pagebreak>');
+                    $mpdf_wp->WriteHTML('<pagebreak>');
+                    if(fmod($totalpage, 2)==1){
+                        $mpdf_photo->WriteHTML('<pagebreak>');
+                        $mpdf_wp->WriteHTML('<pagebreak>'); 
+                    }    
+                }
+                $wardcount++;
 
                 $voterReports = DB::select(DB::raw("select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, case `source` when 'V' then concat('*', `v`.`sr_no`, '/', `ap`.`part_no`) Else 'New' End as `part_srno`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `v`.`house_no_l`, `v`.`age`, `g`.`genders_l` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` where `v`.`ward_id` =$WardVillage->id And `v`.`status` = 1 and `v`.`suppliment_no` = $voterListMaster->id  $booth_condition Order By `v`.`print_sr_no`;"));
 
@@ -235,11 +225,11 @@ class VoterListGenerate extends Command
                 if ($totaldeletedrows*3<$voterdeletedcount){$totaldeletedrows++;}
                 
                 $totalRows = $totalnewrows + $totalmodifiedrows + $totaldeletedrows;
-                $totalpage = (int)($totalRows/10);
-                if ($totalpage*10<$totalRows){$totalpage++;}
+                $totalpage = (int)($totalRows/9);
+                if ($totalpage*9<$totalRows){$totalpage++;}
                 $totalpage++;
 
-                $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype);
+                $main_page=$this->prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $pagetype, 1);
                 $mpdf_photo->WriteHTML($main_page);
                 $mpdf_mainpage->WriteHTML($main_page);
                 $mpdf_wp->WriteHTML($main_page);
@@ -290,12 +280,17 @@ class VoterListGenerate extends Command
                     $main_page=$this->prepareVoterDetailSuppliment($voterDeletedReports, $mainpagedetails, $totalpage, $printphoto, $SuchiType, $PrintedRows);
                     $mpdf_wp->WriteHTML($main_page);
                 }
+
+                if ($totalRows>0){
+                    $main_page=$this->prepareWardEndSuppliment($mainpagedetails, $totalpage, $votercount, $votermodifiedcount, $voterdeletedcount, $totalnewrows, $totalmodifiedrows, $totaldeletedrows);
+                    $mpdf_photo->WriteHTML($main_page);
+                    $mpdf_wp->WriteHTML($main_page);
+                }
                 // $mpdf_wp->WriteHTML('<pagebreak>');
             }
         }
     }
-    
-         
+
     $mpdf_photo->WriteHTML('</body></html>');
     $mpdf_mainpage->WriteHTML('</body></html>');
     $mpdf_wp->WriteHTML('</body></html>');
@@ -310,10 +305,17 @@ class VoterListGenerate extends Command
     $filepath = Storage_path() . $VoterListProcessed->folder_path . $VoterListProcessed->file_path_w;
     $mpdf_wp->Output($filepath, 'F');
 
-    
+
     $newId=DB::select(DB::raw("Update `voter_list_processeds` set `status` = 1 where `id` = $VoterListProcessed->id;"));
 
       
+    }
+
+
+    public function prepareWardEndSuppliment($mainpagedetails, $totalpage, $votercount, $votermodifiedcount, $voterdeletedcount, $totalnewrows, $totalmodifiedrows, $totaldeletedrows)
+    {
+        
+        return $main_page=view('admin.master.PrepareVoterList.voter_list_section.ward_end_suppliment',compact('mainpagedetails', 'totalpage', 'votercount', 'votermodifiedcount', 'voterdeletedcount', 'totalnewrows', 'totalmodifiedrows', 'totaldeletedrows'));    
     }
 
     public function prepareVoterDetail($voterReports, $mainpagedetails, $totalpage,$printphoto)
@@ -329,9 +331,9 @@ class VoterListGenerate extends Command
     }
 
     
-    public function prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $main_page_type)
+    public function prepareMainPage($mainpagedetails, $voterssrnodetails, $totalpage, $main_page_type, $is_suppliment)
     {
-        return $main_page=view('admin.master.PrepareVoterList.voter_list_section.main_page',compact('mainpagedetails','voterssrnodetails', 'totalpage', 'main_page_type'));    
+        return $main_page=view('admin.master.PrepareVoterList.voter_list_section.main_page',compact('mainpagedetails','voterssrnodetails', 'totalpage', 'main_page_type', 'is_suppliment'));    
     }
     
        
