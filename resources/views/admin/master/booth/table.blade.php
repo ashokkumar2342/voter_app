@@ -7,6 +7,7 @@
                  <th class="text-nowrap">Block MCS</th>
                  <th class="text-nowrap">Village MCS</th>
                  <th class="text-nowrap">Booth No.</th>
+                 <th class="text-nowrap">Booth No. Character</th>
                  <th class="text-nowrap">Booth Name (Eng)</th>
                  <th class="text-nowrap">Booth Name (Local Lang)</th>
                  <th class="text-nowrap">Action</th>
@@ -22,6 +23,7 @@
                  <td>{{ $booth->blockMCS->name_e or '' }}</td>
                  <td>{{ $booth->village->name_e or '' }}</td>
                  <td>{{ $booth->booth_no }}</td>
+                 <td>{{ $booth->booth_no_c }}</td>
                  <td>{{ $booth->name_e }}</td>
                  <td>{{ $booth->name_l }}</td>
                  <td>

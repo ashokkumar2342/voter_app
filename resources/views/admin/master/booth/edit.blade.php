@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">Edit</h4>
@@ -14,17 +14,22 @@
                 <input type="hidden" name="district" value="{{ $booth->districts_id }}"> 
                 <input type="hidden" name="block" value="{{ $booth->blocks_id }}"> 
                 <input type="hidden" name="village" value="{{ $booth->village_id }}"> 
-                    <div class="col-lg-4 form-group">
+                    <div class="col-lg-6 form-group">
                         <label for="exampleInputEmail1">Booth No.</label>
                         <span class="fa fa-asterisk"></span>
                         <input type="text" name="booth_no" id="booth_no" class="form-control" placeholder="" maxlength="5" value="{{ $booth->booth_no }}">
                     </div>
-                    <div class="col-lg-4 form-group">
+                    <div class="col-lg-6 form-group">
+                        <label for="exampleInputEmail1">Booth No. Character</label>
+                        <span class="fa fa-asterisk"></span>
+                        <input type="text" name="booth_no_c" id="booth_no_c" class="form-control" placeholder="" maxlength="5">
+                    </div>
+                    <div class="col-lg-6 form-group">
                         <label for="exampleInputEmail1">Booth Name (English)</label>
                         <span class="fa fa-asterisk"></span>
                         <input type="text" name="booth_name_english" id="booth_name_english" class="form-control" placeholder="" maxlength="50" value="{{ $booth->name_e }}">
                     </div>
-                    <div class="col-lg-4 form-group">
+                    <div class="col-lg-6 form-group">
                         <label for="exampleInputEmail1">Booth Name (Local Language)</label>
                         <span class="fa fa-asterisk"></span>
                         <input type="text" name="booth_name_local" id="booth_name_local" class="form-control" placeholder="" maxlength="50" value="{{ $booth->name_l }}">
@@ -32,6 +37,7 @@
                     <div class="col-lg-12 form-group">
                         <input type="submit" class="form-control btn btn-primary" value="Update" style="margin-top: 30px">
                     </div>
+                </div>
                 </form>
             </div>
         </div>

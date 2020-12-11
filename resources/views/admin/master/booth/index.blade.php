@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12"> 
-                            <form action="{{ route('admin.Master.boothStore') }}" method="post" class="add_form" no-reset="true" reset-input-text="booth_no,booth_name_english,booth_name_local" select-triger="village_select_box">
+                            <form action="{{ route('admin.Master.boothStore') }}" method="post" class="add_form" no-reset="true" reset-input-text="booth_no,booth_name_english,booth_name_local,booth_no_c" select-triger="village_select_box">
                             {{ csrf_field() }} 
                                     <div class="row"> 
                                     <div class="col-lg-3 form-group">
@@ -50,17 +50,22 @@
                                             
                                         </select>
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Booth No.</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="booth_no" id="booth_no" class="form-control" placeholder="" maxlength="5">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
+                                        <label for="exampleInputEmail1">Booth No. Character</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <input type="text" name="booth_no_c" id="booth_no_c" class="form-control" placeholder="" maxlength="5">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Booth Name (English)</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="booth_name_english" id="booth_name_english" class="form-control" placeholder="" maxlength="50">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Booth Name (Local Language)</label>
                                         <span class="fa fa-asterisk"></span>
                                         <input type="text" name="booth_name_local" id="booth_name_local" class="form-control" placeholder="" maxlength="50">
