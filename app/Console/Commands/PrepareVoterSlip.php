@@ -96,7 +96,20 @@ class PrepareVoterSlip extends Command
     if ($ward_id==0) {$WardVillages=WardVillage::where('village_id',$village_id)->get();$pagetype=1;}
     elseif ($booth_id==0) {$WardVillages=WardVillage::where('id',$ward_id)->get();$pagetype=2;}
     else {$WardVillages=WardVillage::where('id',$ward_id)->get();$pagetype=3;}  
-      
+    
+    $query = "select * from `voter_list_master` where `status` = 1;";
+    $voterListMaster = DB::select(DB::raw("$query"));
+
+    $query = "select * from `blocks_mcs` where `id` = $block_id;";
+    $blockMcs = DB::select(DB::raw("$query"));
+
+    if ($blockMcs[0]->block_mc_type_id==1){
+        $slipheader = 'पंचायत ('.$blockMcs[0]->name_l.') '.$voterListMaster[0]->remarks1.' - '.$voterListMaster[0]->year_base;
+    }else{
+        $slipheader = $blockMcs[0]->name_l.' '.$voterListMaster[0]->remarks1.' - '.$voterListMaster[0]->year_base;
+    }
+
+
     $html = view('admin.master.PrepareVoterList.voter_list_section.start_pdf');
 
     $html = $html.'</style></head><body>';
@@ -114,14 +127,14 @@ class PrepareVoterSlip extends Command
 
         if ($booth_id==0){$booth_condition = "";}else{$booth_condition = " And `v`.`booth_id` = $booth_id";}
 
-        $booth_condition = "";
+        // $booth_condition = "";
         $query = "select `v`.`id`, `v`.`assembly_id`, `v`.`assembly_part_id`, `v`.`print_sr_no`, `v`.`voter_card_no`, `ap`.`part_no`, `v`.`name_l`, `r`.`relation_l` as `vrelation`, `v`.`father_name_l`, `g`.`genders_l`, `pb`.`booth_no`, `pb`.`name_l` as `pb_name` From `voters` `v` inner join `assembly_parts` `ap` on `ap`.`id` = `v`.`assembly_part_id` Inner Join `genders` `g` on `g`.`id` = `v`.`gender_id` Inner Join `relation` `r` on `r`.`id` = `v`.`relation` left join `polling_booths` `pb` on `pb`.`id` = `v`.`booth_id` where `v`.`ward_id` =$WardVillage->id And `v`.`status` in (0,1,3) $booth_condition Order By `v`.`print_sr_no`;";
         // dd($query);
         $voterReports = DB::select(DB::raw("$query"));
         
         $polldatetime = PollingDayTime::where('block_id',$block_id)->first();
 
-        $main_page=$this->prepareVoterSlip($voterReports, $ward_no, $polldatetime);
+        $main_page=$this->prepareVoterSlip($voterReports, $ward_no, $polldatetime, $slipheader, $blockMcs);
         $mpdf_slip->WriteHTML($main_page);
     
     }
@@ -139,10 +152,10 @@ class PrepareVoterSlip extends Command
       
     }
 
-    public function prepareVoterSlip($voterReports, $wardno, $polldatetime)
+    public function prepareVoterSlip($voterReports, $wardno, $polldatetime, $slipheader, $blockMcs)
     {
         
-        return $main_page=view('admin.master.PrepareVoterSlip.slip',compact('voterReports', 'wardno', 'polldatetime'));    
+        return $main_page=view('admin.master.PrepareVoterSlip.slip',compact('voterReports', 'wardno', 'polldatetime', 'slipheader', 'blockMcs'));    
     }
        
 }

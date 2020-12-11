@@ -943,6 +943,9 @@ class MasterController extends Controller
            $ward=0;  
          } 
        
+       
+       DB::select(DB::raw("call up_process_booth_ward_voters ('$request->booth','$ward', $request->village)"));
+
        DB::select(DB::raw("call up_map_booth_ward ('$request->booth','$ward')"));
        $response=['status'=>1,'msg'=>'Submit Successfully'];
        return response()->json($response); 
@@ -980,6 +983,8 @@ class MasterController extends Controller
       else if (!empty($request->id)) {
          $id=$request->id;
       }
+       $message=DB::select(DB::raw("call up_process_ward_booth_voters ('$request->booth','$request->ward','$from_sr_no','$to_sr_no')"));
+
        $message=DB::select(DB::raw("call up_map_ward_booth_voters ('$id','$request->ward','$from_sr_no','$to_sr_no','$request->booth')"));
        if ($message[0]->Save_Result!='Save Successfully') {
          $response=['status'=>0,'msg'=>$message[0]->Save_Result];
