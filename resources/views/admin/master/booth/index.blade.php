@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="col-lg-3 form-group">
                                         <label for="exampleInputEmail1">Booth No. Character</label>
-                                        <span class="fa fa-asterisk"></span>
+                                         
                                         <input type="text" name="booth_no_c" id="booth_no_c" class="form-control" placeholder="" maxlength="5">
                                     </div>
                                     <div class="col-lg-3 form-group">

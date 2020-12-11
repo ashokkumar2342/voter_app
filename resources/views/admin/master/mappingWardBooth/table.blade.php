@@ -1,6 +1,6 @@
 @foreach ($booths as $booth)
 	<tr>
-		<td>{{ $booth->booth_no }}-{{ $booth->booth_no_c }}</td>
+		<td>{{ $booth->booth_no }}{{ $booth->booth_no_c }}</td>
 		<td>{{ $booth->fromsrno }}</td>
 		<td>{{ $booth->tosrno }}</td>
 		<td>

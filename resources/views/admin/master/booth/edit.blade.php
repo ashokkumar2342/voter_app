@@ -21,8 +21,8 @@
                     </div>
                     <div class="col-lg-6 form-group">
                         <label for="exampleInputEmail1">Booth No. Character</label>
-                        <span class="fa fa-asterisk"></span>
-                        <input type="text" name="booth_no_c" id="booth_no_c" class="form-control" placeholder="" maxlength="5">
+                         
+                        <input type="text" name="booth_no_c" id="booth_no_c" class="form-control" placeholder="" maxlength="5" value="{{ $booth->booth_no_c }}">
                     </div>
                     <div class="col-lg-6 form-group">
                         <label for="exampleInputEmail1">Booth Name (English)</label>

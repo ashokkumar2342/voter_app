@@ -959,12 +959,12 @@ class MasterController extends Controller
    }
    public function MappingWardBoothTable(Request $request)
    {
-      $booths=DB::select(DB::raw("select `bwm`.`id`, `pb`.`booth_no`,`pb`.`booth_no_c`, `pb`.`name_l`, `bwm`.`fromsrno`, `bwm`.`tosrno` from `booth_ward_voter_mapping` `bwm` Inner Join `polling_booths` `pb` on `pb`.`id` = `bwm`.`boothid` Where `bwm`.`wardId` =$request->id Order By `bwm`.`fromsrno`;"));
+      $booths=DB::select(DB::raw("select `bwm`.`id`, `pb`.`booth_no`,`pb`.`booth_no_c`,`pb`.`name_e`, `pb`.`name_l`, `bwm`.`fromsrno`, `bwm`.`tosrno` from `booth_ward_voter_mapping` `bwm` Inner Join `polling_booths` `pb` on `pb`.`id` = `bwm`.`boothid` Where `bwm`.`wardId` =$request->id Order By `bwm`.`fromsrno`;"));
       return view('admin.master.mappingWardBooth.table',compact('booths'));   
    }
    public function MappingWardBoothSelectBooth(Request $request)
    {
-      $booths=DB::select(DB::raw("select `id`, `booth_no`,`booth_no_c` from `polling_booths` Where `village_id` =$request->village_id And `id` not in (Select `boothid` from `booth_ward_voter_mapping`  Where `wardId` =$request->id) Order By `booth_no`;"));
+      $booths=DB::select(DB::raw("select `id`, `booth_no`,`booth_no_c`,`name_e` from `polling_booths` Where `village_id` =$request->village_id And `id` not in (Select `boothid` from `booth_ward_voter_mapping`  Where `wardId` =$request->id) Order By `booth_no`;"));
       return view('admin.master.booth.booth_select_box',compact('booths'));
    }
    public function MappingWardBoothStore(Request $request)
@@ -1010,10 +1010,10 @@ class MasterController extends Controller
    public function MappingWardWithMultipleBoothWardWiseBooth(Request $request)
    {
 
-   $booths = DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `booth_no_c`) as `booth_name` From `polling_booths` Where `village_id` =$request->village_id and `id` not in (select `boothid` from `booth_ward_voter_mapping` where  `is_complete_booth` = 1) Union 
+   $booths = DB::select(DB::raw("Select `id`, concat(`booth_no`, `booth_no_c`,' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` =$request->village_id and `id` not in (select `boothid` from `booth_ward_voter_mapping` where  `is_complete_booth` = 1) Union 
       Select `id`, concat(`booth_no`, ' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
 
-   $selectbooth= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `booth_no_c`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
+   $selectbooth= DB::select(DB::raw("Select `id`, concat(`booth_no`, `booth_no_c`,' - ', `name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
    if (empty($selectbooth)) {
          $booth_id[]=0;
        }elseif(!empty($selectbooth)) {
@@ -1242,7 +1242,7 @@ class MasterController extends Controller
     }
     public function WardWiseBooth(Request $request)
     { 
-      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`, ' - ', `booth_no_c`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
+      $selectbooths= DB::select(DB::raw("Select `id`, concat(`booth_no`,`booth_no_c`,' - ',`name_e`) as `booth_name` From `polling_booths` Where `village_id` = $request->village_id and `id` in (select `boothid` from `booth_ward_voter_mapping` where `wardId` =$request->ward_id and `is_complete_booth` = 1) Order by `booth_name`;"));
       return view('admin.master.wardbandiwithbooth.booth_select_box',compact('selectbooths'));
     }
     public function WardBandiWithBoothStore(Request $request)
@@ -1415,7 +1415,7 @@ class MasterController extends Controller
             'block' => 'required', 
             'village' => 'required', 
             'booth_no' => 'required|numeric', 
-            'booth_no_c' => 'required', 
+            
             'booth_name_english' => 'required', 
             'booth_name_local' => 'required', 
       ];

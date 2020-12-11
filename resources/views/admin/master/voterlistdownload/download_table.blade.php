@@ -19,7 +19,7 @@
                 <tr> 
                     <td>{{ $voterlistprocessed->Villages->name_e or '' }}</td>
                     <td>{{ $voterlistprocessed->WardVillages->ward_no or '' }}</td> 
-                    <td>{{ $voterlistprocessed->booths->booth_no or '' }}</td> 
+                    <td>{{ $voterlistprocessed->booths->booth_no or '' }}{{ $voterlistprocessed->booths->booth_no_c or '' }}</td> 
                     <td>{{ $voterlistprocessed->report_type or '' }}</td>
                     <td>
                     @if ($voterlistprocessed->status==1)
