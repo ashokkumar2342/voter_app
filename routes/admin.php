@@ -315,7 +315,13 @@ Route::group(['middleware' => 'admin'], function() {
            Route::get('VoterListDownloadPDF/{path}/{condition}', 'VoterDetailsController@VoterListDownloadPDF')->name('admin.voter.VoterListDownloadPDF');
             
     });
-	Route::group(['prefix' => 'PrepareVoterSlip'], function() {
+	Route::group(['prefix' => 'BoothVoterList'], function() {
+           Route::get('/', 'BoothVoterListController@index')->name('admin.booth.voter.list');
+           Route::get('block-wise-booth-list', 'BoothVoterListController@blockWiseBoothList')->name('admin.booth.voter.list.block.wise.booth.list');
+           Route::post('booth-voter-list-process', 'BoothVoterListController@BoothVoterListProcess')->name('admin.booth.voter.list.process');
+           Route::get('booth-voter-list-download/{id}', 'BoothVoterListController@boothVoterListDownload')->name('admin.booth.voter.list.download');
+    });
+    Route::group(['prefix' => 'PrepareVoterSlip'], function() {
            Route::get('/', 'PrepareVoterSlipController@index')->name('admin.prepare.voter.slip'); 
            
            Route::get('village-wise-ward', 'PrepareVoterSlipController@villageWiseWard')->name('admin.prepare.voter.slip.village.wise.ward');
