@@ -15,7 +15,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">    
-                        <form action="{{ route('admin.Master.pollingDayTimeStore') }}" method="post" no-reset="true" class="add_form">
+                        <form action="{{ route('admin.Master.pollingDayTimeStore') }}" method="post" no-reset="true" class="add_form" select-triger="block_select_box" reset-input-text="polling_day_time_english,polling_day_time_local,signature">
                             {{ csrf_field() }}
                             <div class="card-body">
                                 <div class="row">  
@@ -39,17 +39,17 @@
                                     <div class="col-lg-4 form-group">
                                     <label>Polling Day Time (Local English)</label>
                                     <span class="fa fa-asterisk"></span>
-                                    <input type="text" name="polling_day_time_english" class="form-control"> 
+                                    <input type="text" name="polling_day_time_english" id="polling_day_time_english" class="form-control"> 
                                     </div>
                                     <div class="col-lg-4 form-group">
                                     <label>Polling Day Time (Local Language)</label>
                                     <span class="fa fa-asterisk"></span>
-                                    <input type="text" name="polling_day_time_local" class="form-control"> 
+                                    <input type="text" name="polling_day_time_local" class="form-control" id="polling_day_time_local"> 
                                     </div>
                                     <div class="col-lg-4 form-group">
                                     <label>Signature</label>
                                     <span class="fa fa-asterisk"></span>
-                                    <input type="file" name="signature" class="form-control"> 
+                                    <input type="file" name="signature" id="signature" class="form-control"> 
                                     </div> 
                                    <div class="col-lg-12 form-group">
                                        <input type="submit" class="btn btn-primary form-control">

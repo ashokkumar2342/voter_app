@@ -7,6 +7,9 @@
 	@page{margin:10;} 
 </style>
 <body>
+	<div style="position: fixed; left: 0px; top: 0px; bottom: 0px; right: 0px; bottom: 0px; text-align: center;">
+<img src="{{ $backgroundImg }}" style="width: 100%;"> 
+</div>
 	<table>
 		<tr>
 			<th></th> 

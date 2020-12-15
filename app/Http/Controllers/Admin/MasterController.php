@@ -1488,7 +1488,7 @@ class MasterController extends Controller
           return response()->json($response);// response as json
       }
       else {
-        $PollingDayTime=PollingDayTime::firstOrNew(['id'=>$id]); 
+        $PollingDayTime=PollingDayTime::firstOrNew(['block_id'=>$request->block]); 
         $PollingDayTime->block_id=$request->block; 
         $PollingDayTime->polling_day_time_e=$request->polling_day_time_english;
         $PollingDayTime->polling_day_time_l=$request->polling_day_time_local;

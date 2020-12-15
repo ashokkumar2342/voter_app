@@ -29,14 +29,16 @@ class ImportExportController extends Controller
    {
      if($request->hasFile('import_file')){  
         $path = $request->file('import_file')->getRealPath();
-        $results = Excel::load($path, function($reader) {})->get();
+        $results = Excel::load($path, function($reader) {})->get(); 
         foreach ($results as $key => $value) {
-          $saveVote= DB::select(DB::raw("call up_import_wardbandi_booth ('$value->ac_no','$value->part_no','$value->from_sr_no','$value->to_sr_no','$value->ward_id','$value->booth_id')")); 
-        }
+          if (!empty($value->part_no)) { 
+            $saveVote= DB::select(DB::raw("call up_import_wardbandi_booth ('$value->ac_no','$value->part_no','$value->from_sr_no','$value->to_sr_no','$value->district_code','$value->block_code','$value->village_code','$value->ward_no','$value->booth_no')"));
+          }
+        } 
         $response=['status'=>1,'msg'=>'Import Successfully'];
             return response()->json($response);
       }
-      $response=['status'=>0,'msg'=>'File Not Select'];
+        $response=['status'=>0,'msg'=>'File Not Select'];
             return response()->json($response); 
    }
 
@@ -74,8 +76,9 @@ class ImportExportController extends Controller
         $response['data'] =view('admin.import.district_import_data',compact('disImportedDatas'))->render();
         return response()->json($response);  
       }
-
-     return back()->with('error','Please Check your file, Something is wrong there.'); 
+      
+     $response=['status'=>0,'msg'=>'File Not Select'];
+            return response()->json($response);  
    }
    public function AssemblyExportSample()
    {
@@ -107,7 +110,8 @@ class ImportExportController extends Controller
         return response()->json($response);  
       }
 
-     return back()->with('error','Please Check your file, Something is wrong there.'); 
+     $response=['status'=>0,'msg'=>'File Not Select'];
+            return response()->json($response);  
    }
    public function BlockExportSample()
    {
@@ -139,7 +143,8 @@ class ImportExportController extends Controller
         return response()->json($response);  
       }
 
-     return back()->with('error','Please Check your file, Something is wrong there.'); 
+     $response=['status'=>0,'msg'=>'File Not Select'];
+            return response()->json($response);  
    }
    public function VillageExportSample()
    {
@@ -171,7 +176,8 @@ class ImportExportController extends Controller
         return response()->json($response);  
       }
 
-     return back()->with('error','Please Check your file, Something is wrong there.'); 
+     $response=['status'=>0,'msg'=>'File Not Select'];
+            return response()->json($response);  
    }
 
    public function VillageWardExportSample()
@@ -204,6 +210,7 @@ class ImportExportController extends Controller
         return response()->json($response);  
       }
 
-     return back()->with('error','Please Check your file, Something is wrong there.'); 
+     $response=['status'=>0,'msg'=>'File Not Select'];
+            return response()->json($response);  
    }
 }

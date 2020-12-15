@@ -134,6 +134,7 @@
               <div class="card-header">
                 <h3 class="card-title">Import Vote</h3>
                 <div class="card-tools">
+                  <a href="{{ asset('import_vote.csv') }}" class="btn btn-xs btn-warning"><i class="fa fa-download"></i> Download Sample</a>
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                   <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
                 </div>
