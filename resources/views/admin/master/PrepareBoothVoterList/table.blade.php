@@ -17,7 +17,7 @@
  	 Pending
 @endif
 @if ($booth->d_status=='Download')
-<a href="{{ route('admin.booth.voter.list.download',$booth->id) }}">Download</a>
+<a target="blank" href="{{ route('admin.booth.voter.list.download',$booth->id) }}">Download</a>
 @endif 
 	 
 </td> 

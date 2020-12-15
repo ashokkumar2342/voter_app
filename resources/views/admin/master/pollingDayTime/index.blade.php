@@ -22,7 +22,7 @@
                                     <div class="col-lg-6 form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
-                                        <select name="district" class="form-control select2" id="district_select_box" onchange="callAjax(this,'{{ route('admin.Master.DistrictWiseBlock',1) }}','block_select_box')">
+                                        <select name="district" class="form-control select2" id="district_select_box" onchange="callAjax(this,'{{ route('admin.Master.DistrictWiseBlock') }}','block_select_box')">
                                             <option selected disabled>Select District</option>
                                             @foreach ($Districts as $District)
                                             <option value="{{ $District->id }}">{{ $District->code }}--{{ $District->name_e }}</option>  

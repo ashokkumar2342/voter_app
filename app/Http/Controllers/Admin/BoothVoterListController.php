@@ -42,8 +42,10 @@ class BoothVoterListController extends Controller
             $response["msg"]=$errors[0];
         return response()->json($response);// response as json
        }
-       foreach ($request->booth as $key => $value) {  
-        \Artisan::queue('boothvotelist:generate',['district_id'=>$request->district,'block_id'=>$request->block,'booth_id'=>$value]);
+        foreach ($request->booth as $key => $value) { 
+          $booths=DB::select(DB::raw("update `booth_voter_list` set `status` = 0 where `booth_id` = $value;"));
+
+          \Artisan::queue('boothvotelist:generate',['district_id'=>$request->district,'block_id'=>$request->block,'booth_id'=>$value]);
         }
 
         $response=['status'=>1,'msg'=>'Submit Successfully'];
@@ -52,8 +54,8 @@ class BoothVoterListController extends Controller
     
     public function boothVoterListDownload($id)
      {  
-        $BoothVoterList=BoothVoterList::find($id); 
-        $documentUrl = Storage_path().$BoothVoterList->folder_path.'/'.$BoothVoterList->file_path;  
+        $BoothVoterList=BoothVoterList::where('booth_id',$id)->first(); 
+        $documentUrl = Storage_path().$BoothVoterList->folder_path.$BoothVoterList->file_name;  
         return response()->file($documentUrl); 
      }   
 }

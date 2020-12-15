@@ -110,8 +110,9 @@
 			<td width = "100%">
 				<table width = "100%">
 					<tr>
+						<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="100%">
 		 			@if ($main_page_type==1) 
-						<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="100%"> 1. (क) ग्राम पंचायत का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
+						1. (क) ग्राम पंचायत का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
 						<br>
 						<br>
 						(ख) खंड का नाम  : <b>{{ $mainpagedetail->block }}</b>
@@ -121,22 +122,20 @@
 						<br> 
 						<br> 
 						(घ) जिला परिषद व वार्ड संख्या: <b>{{ $mainpagedetail->district }}&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;{{ $mainpagedetail->zp_ward }}</b>   
-						</td> 
+						 
 		 			@elseif($main_page_type==2)
-		 				<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="100%"> {{ $mainpagedetail->election_type }} का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
+		 				{{ $mainpagedetail->election_type }} का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
 						<br>
 						<br>
-						</td>
 		 			@else
-		 				<td style="border: 1px solid black;height: 120px;word-spacing: 4px" width="100%"> {{ $mainpagedetail->election_type }} का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
-						<br>
-						<br>
-						मतदान केन्द्र संख्या : <b>{{ $mainpagedetail->booth_no }} </b>
-						<br>
-						<br>
-						मतदान केन्द्र का नाम : <b>{{ $mainpagedetail->booth_name }} </b>
-						</td>
-		 			@endif 
+		 				{{ $mainpagedetail->election_type }} का नाम व वार्ड संख्या : <b>{{ $mainpagedetail->village }} &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $mainpagedetail->ward }}</b>
+		 			@endif
+		 			@if ($mainpagedetail->booth_id>0)
+		 				<br>
+		 				<br>
+		 				मतदान केन्द्र संख्या व नाम: <b>{{ $mainpagedetail->booth_no }} - {{ $mainpagedetail->booth_name}}</b>
+		 			@endif
+		 				</td> 
 					</tr>	
 				</table>
 			</td>
