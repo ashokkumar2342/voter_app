@@ -69,7 +69,7 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 				<td>Note: 3 If this voter slip does not have a photograph or it has wrong particulars or photograph, the voter can still be allowed to vote base on alternate identity documents permitted by the State Election Commission, Haryana</td>
 			</tr>
 			<tr>
-				<td>Note: 4 Last one hour of poll is reerved for Covid-19 patient.</td>
+				<td>Note: 4 Last one hour of poll is reserved for Covid-19 patient.</td>
 			</tr>
 		</tbody>
 	</table>
