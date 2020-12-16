@@ -54,7 +54,7 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 				<td style="width: 100%; font-size:18px;word-spacing:5px">मतदाता क्रमांक संख्या : <b>{{ $voterReport->print_sr_no }}</b></td>
 			</tr>
 			<tr>
-				<td style="font-size:18px;word-spacing:5px">Polling Station No. and Name : <b>{{ $voterReport->booth_no }} -  {{ $voterReport->pb_name }}</b> </td>
+				<td style="font-size:18px;word-spacing:5px">Polling Station No. and Name : <b>{{ $voterReport->boothno }} -  {{ $voterReport->pb_name }}</b> </td>
 			</tr>
 			<tr>
 				<td style="font-size:18px;word-spacing:5px">Poll Date, Day and Time : <b>{{ $polldatetime->polling_day_time_l }}</b></td>
