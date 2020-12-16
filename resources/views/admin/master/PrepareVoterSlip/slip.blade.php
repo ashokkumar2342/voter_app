@@ -4,15 +4,15 @@
 @foreach ($voterReports as $voterReport) 
 	<table width="100%">
 		<tbody>
-			<tr style="height: 18px;">
-				<td style="text-align:center;font-size:22px;word-spacing:5px"><b>{{$slipheader}}</b></td>
+			<tr>
+				<td style="text-align:center;font-size:20px;word-spacing:5px"><b>{{$slipheader}}</b></td>
 			</tr>
 		</tbody>
 	</table>
 	<table width="100%">
 		<tbody>
-			<tr style="height: 18px;">
-				<td style="width: 100%; height: 18px;text-align:center;font-size:22px;word-spacing:5px"><b>Voter Slip</b></td>
+			<tr>
+				<td style="width: 100%; text-align:center;font-size:18px;word-spacing:5px"><b>Voter Slip</b></td>
 			</tr>
 		</tbody>
 	</table>
@@ -32,26 +32,26 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 					<img src="{{ $image }}" alt="" width="130px" height="130px">
 				</td>
 			</tr>
-			<tr style="height: 18px;">
-				<td style="height: 18px;font-size:18px;word-spacing:5px">नाम</td>
-				<td style="height: 18px;font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->name_l }}</b></td>
+			<tr>
+				<td style="font-size:18px;word-spacing:5px">नाम</td>
+				<td style="font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->name_l }}</b></td>
 			</tr>
-			<tr style="height: 18px;">
-				<td style="height: 18px;font-size:18px;word-spacing:5px">लिंग</td>
-				<td style="height: 18px;font-size:18px;word-spacing:5px"><b>{{$voterReport->genders_l}}</b></td>
-				<td style="height: 18px;font-size:18px;word-spacing:5px">EPIC No. :</td>
-				<td style="height: 18px;font-size:18px;word-spacing:5px"><b>{{ $voterReport->voter_card_no }}</b></td>
+			<tr>
+				<td style="font-size:18px;word-spacing:5px">लिंग</td>
+				<td style="font-size:18px;word-spacing:5px"><b>{{$voterReport->genders_l}}</b></td>
+				<td style="font-size:18px;word-spacing:5px">EPIC No. :</td>
+				<td style="font-size:18px;word-spacing:5px"><b>{{ $voterReport->voter_card_no }}</b></td>
 			</tr>
-			<tr style="height: 18px;">
-				<td style="height: 18px;font-size:18px;word-spacing:5px">{{ $voterReport->vrelation }}</td>
-				<td style="height: 18px;font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->father_name_l }}</b></td>
+			<tr>
+				<td style="font-size:18px;word-spacing:5px">{{ $voterReport->vrelation }}</td>
+				<td style="font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->father_name_l }}</b></td>
 			</tr>
 		</tbody>
 	</table>
 	<table width="100%">
 		<tbody>
-			<tr style="height: 18px;">
-				<td style="width: 100%; height: 16px;font-size:18px;word-spacing:5px">मतदाता क्रमांक संख्या : <b>{{ $voterReport->print_sr_no }}</b></td>
+			<tr>
+				<td style="width: 100%; font-size:18px;word-spacing:5px">मतदाता क्रमांक संख्या : <b>{{ $voterReport->print_sr_no }}</b></td>
 			</tr>
 			<tr>
 				<td style="font-size:18px;word-spacing:5px">Polling Station No. and Name : <b>{{ $voterReport->booth_no }} -  {{ $voterReport->pb_name }}</b> </td>
@@ -63,29 +63,32 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 				<td>Note: 1 This Voter Slip can also be produced as an identification document</td>
 			</tr>
 			<tr>
-				<td style="height: 36px;">Note: 2 Bringing this voter slip to the Polling Station is however not compulsory, it is issued only as convenience to electors</td>
+				<td>Note: 2 Bringing this voter slip to the Polling Station is however not compulsory, it is issued only as convenience to electors</td>
 			</tr>
-			<tr style="height: 54px;">
-				<td style="height: 54px;">Note: 3 If this voter slip does not have a photograph or it has wrong particulars or photograph, the voter can still be allowed to vote base on alternate identity documents permitted by the State Election Commission, Haryana</td>
+			<tr>
+				<td>Note: 3 If this voter slip does not have a photograph or it has wrong particulars or photograph, the voter can still be allowed to vote base on alternate identity documents permitted by the State Election Commission, Haryana</td>
+			</tr>
+			<tr>
+				<td>Note: 4 Last one hour of poll is reerved for Covid-19 patient.</td>
 			</tr>
 		</tbody>
 	</table>
-	<table style="height: 28px; width: 100%;">
+	<table style="width: 100%;">
 		<tbody>
-			<tr style="height: 32px;">
-				<td></td>
-				<td style="width: 650px">&nbsp;</td> 
-				<td style="width: 50px;text-align:center" align="center">
-@php 
-$image  =\Storage_path('/app'.$polldatetime->signature);
-@endphp
-					<img src="{{ $image }}" alt="" width="55px" height="60px" align="center">
+			<tr>
+				<td style="width: 20%;font-size: 18px"></td>
+				<td style="width: 20%">&nbsp;</td> 
+				<td style="width: 40%;text-align:center" align="center">
+				@php 
+				$image  =\Storage_path('/app'.$polldatetime->signature);
+				@endphp
+					<img src="{{ $image }}" alt="" height="50px" align="center">
 				</td>
 			</tr>
-			<tr style="height: 18px;">
-				<td style="width: 200px;font-size: 18px">&nbsp;Date : {{date('d-m-Y')}}</td>
-				<td style="width: 300px">&nbsp;</td> 
-				<td style="width: 220px;font-size: 22px">{{ $blockMcs[0]->stamp_l1 }}<br>{{ $blockMcs[0]->stamp_l2 }}</td>
+			<tr>
+				<td style="font-size: 14px">&nbsp;Date : {{date('d-m-Y')}}</td>
+				<td>&nbsp;</td> 
+				<td style="font-size: 14px" align="center">{{ $blockMcs[0]->stamp_l1 }}<br>{{ $blockMcs[0]->stamp_l2 }}</td>
 			</tr>
 		</tbody>
 	</table> 
