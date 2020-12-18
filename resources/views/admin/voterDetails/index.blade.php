@@ -13,7 +13,7 @@
         </div> 
         <div class="card card-info"> 
             <div class="card-body"> 
-                <form action="{{ route('admin.voter.details.store') }}" method="post" class="add_form" no-reset="true" select-triger="village_select_box" reset-input-text="name_english,name_local_language,f_h_name_english,f_h_name_local_language,relation,house_no_english,house_no_local_language,district_select_box,date_of_birth,age,voter_id_no,mobile_no,exampleInputFile">
+                <form action="{{ route('admin.voter.details.store') }}" method="post" class="add_form" no-reset="true" select-triger="village_select_box" reset-input-text="name_english,name_local_language,f_h_name_english,f_h_name_local_language,relation,house_no_english,house_no_local_language,district_select_box,date_of_birth,age,voter_id_no,mobile_no,exampleInputFile,Aadhaar_no">
                     {{ csrf_field() }} 
                     <div class="row">  
                         <div class="col-lg-3 form-group">
@@ -47,7 +47,7 @@
                                 <option selected disabled>Select Ward No.</option> 
                             </select>
                         </div>
-                        <div class="col-lg-6 form-group">
+                        <div class="col-lg-4 form-group">
                             <label for="exampleInputEmail1">Assembly</label>
                             <span class="fa fa-asterisk"></span>
                             <select name="assembly" class="form-control" id="assembly_select_box" onchange="callAjax(this,'{{ route('admin.voter.AssemblyWisePartNo') }}','part_no_select_box')">
@@ -55,11 +55,18 @@
                                  
                             </select>
                         </div>
-                        <div class="col-lg-6 form-group">
+                        <div class="col-lg-4 form-group">
                             <label for="exampleInputEmail1">Part No.</label>
                             <span class="fa fa-asterisk"></span>
-                            <select name="part_no" class="form-control" id="part_no_select_box">
+                            <select name="part_no" class="form-control" id="part_no_select_box" onchange="callAjax(this,'{{ route('admin.Master.WardWiseBooth') }}'+'?village_id='+$('#village_select_box').val()+'&ward_id='+$('#ward_no_select_box').val(),'booth_select_box')">
                                 <option selected disabled>Select Part No.</option> 
+                            </select>
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputEmail1">Booth No.</label>
+                            
+                            <select name="part_no" class="form-control" id="booth_select_box">
+                                <option selected disabled>Select Booth No.</option> 
                             </select>
                         </div> 
                     </div> 
@@ -129,11 +136,15 @@
                             <span class="fa fa-asterisk"></span>
                             <input type="text" name="voter_id_no" id="voter_id_no" class="form-control">
                         </div>
-                        <div class="col-lg-6 form-group">
+                        <div class="col-lg-4 form-group">
+                            <label for="exampleInputEmail1">Aadhaar No.</label> 
+                            <input type="text" name="Aadhaar_no" id="Aadhaar_no" class="form-control">
+                        </div>
+                        <div class="col-lg-4 form-group">
                             <label for="exampleInputEmail1">Mobile No.</label> 
                             <input type="text" name="mobile_no" id="mobile_no" class="form-control">
                         </div>
-                        <div class="col-lg-6 form-group">
+                        <div class="col-lg-4 form-group">
                             <label for="exampleInputFile">Image</label>
                             <div class="input-group">
                                 <div class="custom-file">
