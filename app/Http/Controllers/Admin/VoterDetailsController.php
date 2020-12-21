@@ -125,6 +125,7 @@ class VoterDetailsController extends Controller
           return response()->json($response);// response as json
       }
       else {
+            $voterListMaster=VoterListMaster::where('status',1)->first();
             $house_no=DB::select(DB::raw("Select `uf_converthno`('$request->house_no_english') as 'hno_int';")); 
             $voter=new Voter(); 
             $voter->district_id = $request->district;
@@ -133,6 +134,7 @@ class VoterDetailsController extends Controller
             $voter->ward_id = $request->ward_no;
             $voter->assembly_id = $request->assembly;
             $voter->assembly_part_id = $request->part_no;
+            $voter->booth_id = $request->booth_id;
             $voter->name_e = $request->name_english;
             $voter->name_l = $request->name_local_language;
             $voter->father_name_e = $request->f_h_name_english;
@@ -145,6 +147,9 @@ class VoterDetailsController extends Controller
             $voter->gender_id = $request->gender;
             $voter->age = $request->age;
             $voter->mobile_no = $request->mobile_no;
+            $voter->aadhar_no = $request->Aadhaar_no;
+            $voter->source ='N';
+            $voter->suppliment_no =$voterListMaster->id;
             $voter->status =1;
             $voter->save();
             //--start-image-save
