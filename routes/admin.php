@@ -14,6 +14,11 @@ Route::prefix('resitration')->group(function () {
 });
 //registration end 
 Route::get('/', 'Auth\LoginController@index')->name('admin.home');
+Route::get('search-voter', 'Auth\LoginController@searchVoter')->name('admin.search.voter'); 
+Route::get('search-voter-form/{id}', 'Auth\LoginController@searchVoterform')->name('admin.search.voter.form'); 
+Route::get('search-dis-block', 'Auth\LoginController@searchDisBlock')->name('admin.search.dis.block'); 
+Route::get('search-block-village', 'Auth\LoginController@searchBlockVillage')->name('admin.search.block.village'); 
+Route::post('search-voter-filter/{id}', 'Auth\LoginController@searchVoterFilter')->name('admin.search.voter.folter'); 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('admin.login'); 
 Route::get('admin-password/reset', 'Auth\ForgetPasswordController@sendResetLinkEmail')->name('admin.password.email');
 Route::get('passwordreset/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');

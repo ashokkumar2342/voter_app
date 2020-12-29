@@ -1,0 +1,22 @@
+<table class="table table-bordered" id="voter_datatable">
+	<thead>
+		<tr>
+			<th>header</th>
+			<th>header</th>
+			<th>header</th>
+			<th>header</th>
+			<th>header</th>
+			<th>header</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>data</td>
+			<td>data</td>
+			<td>data</td>
+			<td>data</td>
+			<td>data</td>
+			<td>data</td>
+		</tr>
+	</tbody>
+</table>

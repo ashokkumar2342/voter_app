@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin\Auth;
 use App\Admin;
 use App\Helpers\MailHelper;
 use App\Http\Controllers\Controller;
+use App\Model\BlocksMc;
+use App\Model\District;
+use App\Model\Village;
 use App\Student;
 use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -12,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 class LoginController extends Controller
 {
     /*
@@ -51,6 +55,74 @@ class LoginController extends Controller
     }
     
     
+    public function searchVoter(){
+        return view('admin.auth.search');
+    }
+    public function searchVoterform($id)
+    {
+      $Districts=District::orderBy('name_e','ASC')->get();
+      if ($id==1) {
+      return view('admin.auth.search_form_epic',compact('Districts')); 
+      }
+      elseif ($id==2) {
+      return view('admin.auth.search_form',compact('Districts')); 
+      }
+      
+    }
+    public function searchDisBlock(Request $request)
+    {
+       try{
+           
+          $BlocksMcs=BlocksMc::where('districts_id',$request->id)->get(); 
+          return view('admin.master.block.value_select_box',compact('BlocksMcs'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function searchBlockVillage(Request $request)
+    {
+       try{ 
+           
+          $Villages=Village::where('blocks_id',$request->id)->get(); 
+          return view('admin.master.village.value_select_box',compact('Villages'));
+        } catch (Exception $e) {
+            
+        }
+    }
+    public function searchVoterFilter(Request $request)
+    {
+      $rules=[ 
+              // 'village' => 'required', 
+        ];
+
+        $validator = Validator::make($request->all(),$rules);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+            $response=array();
+            $response["status"]=0;
+            $response["msg"]=$errors[0];
+            return response()->json($response);// response as json
+        }
+        // $voters =Voter:: 
+        //          where('village_id',$request->village)
+        //        ->where(function($query) use($request){ 
+        //         if (!empty($request->print_sr_no)) {
+        //         $query->where('print_sr_no', 'like','%'.$request->print_sr_no.'%'); 
+        //         }
+        //         if (!empty($request->name)) {
+        //         $query->where('name_e', 'like','%'.$request->name.'%'); 
+        //         }
+        //         if (!empty($request->father_name)) {
+        //         $query->where('father_name_e', 'like','%'.$request->father_name.'%'); 
+        //         } 
+        //        }) 
+        //        ->get(); 
+        $response= array();                       
+        $response['status']= 1;                       
+        $response['data']=view('admin.auth.result',compact('voters'))->render();
+        return $response;
+       
+    }
     public function showLoginForm(){
         return view('admin.auth.login');
     }
