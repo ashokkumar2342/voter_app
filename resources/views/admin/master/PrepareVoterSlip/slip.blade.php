@@ -34,7 +34,7 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 			</tr>
 			<tr>
 				<td style="font-size:18px;word-spacing:5px">नाम</td>
-				<td style="font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->name_l }}</b></td>
+				<td style="font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->name_l }}&nbsp;</b></td>
 			</tr>
 			<tr>
 				<td style="font-size:18px;word-spacing:5px">लिंग</td>
@@ -44,7 +44,7 @@ $image  =\Storage_path($dirpath.'/'.$name.'.jpg');
 			</tr>
 			<tr>
 				<td style="font-size:18px;word-spacing:5px">{{ $voterReport->vrelation }}</td>
-				<td style="font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->father_name_l }}</b></td>
+				<td style="font-size:18px;word-spacing:5px" colspan="3"><b>{{ $voterReport->father_name_l }}&nbsp;</b></td>
 			</tr>
 		</tbody>
 	</table>
