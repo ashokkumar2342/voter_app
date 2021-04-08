@@ -131,10 +131,10 @@ class DataTransfer extends Command
           $gender_id=3;  
         }  
         $house_e = substr(str_replace('\\',' ', $value->C_House_no),0,49);
-        $house_e = substr(str_replace('\'',' ', $value->C_House_no),0,49);
+        $house_e = substr(str_replace('\'',' ', $house_e),0,49);
 
-        $house_l = str_replace('\\',' ', $value->C_House_No_V1);
-        $house_l = str_replace('\'',' ', $value->C_House_No_V1);
+        $house_l = str_replace("\\",' ', $value->C_House_No_V1);
+        $house_l = str_replace('\'',' ', $house_l);
         
         $newId=DB::select(DB::raw("call up_save_voter_detail($o_district_id, $assembly->id, $assemblyPart->id, $value->SlNoInPart, '$value->EPIC_No', '$house_e', '$house_l','','$name_e','$name_l','$f_name_e','$f_name_l', $relation, $gender_id, $value->AGE, '$value->MOBILE_NO', 'v', $o_suppliment, $o_status, $o_village_id, $o_ward_id, '$o_print_srno', $o_booth_id);"));
         
