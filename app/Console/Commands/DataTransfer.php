@@ -77,7 +77,7 @@ class DataTransfer extends Command
         $o_district_id = 0;
         $o_status = 0;
         if(strlen($name)>2){
-          $mappinf_info=DB::select(DB::raw("select `district_id`, `village_id`, `ward_id`, ifnull(`print_sr_no`, 0) as `printsrno`, `suppliment_no`, `booth_id`, `status` from `tmp_voters_old` where `voter_card_no` = '$name' limit 1;"));
+          $mappinf_info=DB::select(DB::raw("select ifnull(`district_id`,0) as `districtid`, `village_id`, `ward_id`, ifnull(`print_sr_no`, 0) as `printsrno`, `suppliment_no`, `booth_id`, `status` from `tmp_voters_old` where `voter_card_no` = '$name' limit 1;"));
           if(empty($mappinf_info)){
             $o_village_id = 0;
           }else{
@@ -86,7 +86,7 @@ class DataTransfer extends Command
             $o_print_srno = $mappinf_info[0]->printsrno;
             $o_suppliment = $mappinf_info[0]->suppliment_no;
             $o_booth_id = $mappinf_info[0]->booth_id;
-            $o_district_id = $mappinf_info[0]->district_id;
+            $o_district_id = $mappinf_info[0]->districtid;
             $o_status = $mappinf_info[0]->status;
           }  
         }
