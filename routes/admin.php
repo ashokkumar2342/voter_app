@@ -147,7 +147,6 @@ Route::group(['middleware' => 'admin'], function() {
 	    Route::get('tahsil', 'MasterController@tahsil')->name('admin.Master.tahsil');
 	    Route::post('tahsil-store{id?}', 'MasterController@tahsilStore')->name('admin.Master.tahsil.store');
 	    Route::get('tahsilTable', 'MasterController@tahsilTable')->name('admin.Master.tahsilTable'); 
-	    Route::get('tahsilTable', 'MasterController@tahsilTable')->name('admin.Master.tahsilTable'); 
 	     	   
 	    //-----------------onchange-----------------------------//
 	    Route::get('stateWiseDistrict', 'MasterController@stateWiseDistrict')->name('admin.Master.stateWiseDistrict');   
@@ -180,11 +179,6 @@ Route::group(['middleware' => 'admin'], function() {
 //----card-----print-----------card----print-----------card-print-----           
            Route::get('voterCardPrint', 'ReportController@voterCardPrint')->name('admin.report.voterCardPrint');
            Route::get('voterCardPrintGenerate', 'ReportController@cameraTesting')->name('admin.camera.test');
-	 	 
-    });
-    Route::group(['prefix' => 'property-details'], function() {
-           Route::get('/', 'PropertyDetailsController@index')->name('admin.property.details.index');
-           
 	 	 
     });
           
