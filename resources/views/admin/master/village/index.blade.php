@@ -18,17 +18,24 @@
                             <form action="{{ route('admin.Master.village.store') }}" method="post" class="add_form" select-triger="block_select_box" no-reset="true" button-click="btn_click_by_form">
                                 {{ csrf_field() }} 
                                     <div class="row"> 
-                                    <div class="col-lg-6 form-group">
+                                    <div class="col-lg-4 form-group">
+                                        <label for="exampleInputEmail1">States</label>
+                                        <span class="fa fa-asterisk"></span>
+                                        <select name="states" id="state_select_box" class="form-control" onchange="callAjax(this,'{{ route('admin.Master.stateWiseDistrict') }}','district_select_box')">
+                                            <option selected disabled>Select States</option>
+                                            @foreach ($States as $State)
+                                            <option value="{{ $State->id }}">{{ $State->code }}--{{ $State->name_e }}</option>  
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 form-group">
                                         <label for="exampleInputEmail1">District</label>
                                         <span class="fa fa-asterisk"></span>
                                         <select name="district" class="form-control" id="district_select_box" onchange="callAjax(this,'{{ route('admin.Master.DistrictWiseBlock') }}','block_select_box')">
                                             <option selected disabled>Select District</option>
-                                            @foreach ($Districts as $District) 
-                                             <option value="{{ $District->id }}">{{ $District->name_e }}</option> 
-                                              @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-lg-6 form-group">
+                                    <div class="col-lg-4 form-group">
                                         <label for="exampleInputEmail1">Block MCS</label>
                                         <span class="fa fa-asterisk"></span>
                                         <select name="block_mcs" class="form-control" id="block_select_box" data-table="district_table" onchange="callAjax(this,'{{ route('admin.Master.villageTable') }}','village_table')">

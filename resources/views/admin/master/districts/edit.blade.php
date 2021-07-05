@@ -7,9 +7,19 @@
       </button>
     </div>
     <div class="modal-body">
-      <form action="{{ route('admin.Master.districtsStore',$Districts->id) }}" method="post" class="add_form" content-refresh="district_datatable" button-click="btn_close">
+      <form action="{{ route('admin.Master.districtsStore',$Districts->id) }}" method="post" class="add_form" select-triger="state_select_box" button-click="btn_close">
           {{ csrf_field() }}
-          <div class="card-body"> 
+          <div class="card-body">
+              <div class="form-group">
+                  <label for="exampleInputEmail1">States</label>
+                  <span class="fa fa-asterisk"></span>
+                  <select name="states" class="form-control">
+                      <option selected disabled>Select States</option>
+                      @foreach ($States as $State)
+                      <option value="{{ $State->id }}"{{ $Districts->state_id==$State->id?'selected' :'' }}>{{ $State->code }}--{{ $State->name_e }}</option>  
+                      @endforeach
+                  </select>
+              </div>
               <div class="form-group">
                   <label for="exampleInputEmail1">Districts Code</label>
                   <span class="fa fa-asterisk"></span>

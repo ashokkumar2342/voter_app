@@ -43,7 +43,7 @@ class DashboardController extends Controller
         $District=District::count(); 
         $block=BlocksMc::count(); 
         $village=Village::count(); 
-        
+        $wardVillage=WardVillage::count(); 
         return view('admin.dashboard.dashboard',compact('District','block','village','wardVillage')); 
     }  
 
